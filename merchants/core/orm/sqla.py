@@ -1,8 +1,7 @@
 from typing import Any, Literal, Optional
 
 from sqlalchemy import JSON, Enum, String
-from sqlalchemy.orm import (DeclarativeBase, Mapped, column_property,
-                            declared_attr, mapped_column)
+from sqlalchemy.orm import DeclarativeBase, Mapped, column_property, declared_attr, mapped_column
 
 from merchants.providers import factory
 
