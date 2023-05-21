@@ -1,5 +1,5 @@
 import typer
-from rich import print
+from rich import print  # pylint: disable=W0622
 
 from merchants.providers import _provider_list
 
