@@ -33,7 +33,7 @@ classifiers=[
 python = "^3.8"
 typer = {extras = ["all"], version = "*"}
 thankyou = "*"
-sqlalchemy = "2.0.17"
+sqlalchemy = "2.0.18"
 sqlalchemy-utils = "^0.41.1"
 babel = "^2.12.1"
 
