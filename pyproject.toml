@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "merchants"
-version = "0.1.0"
+version = "2024.6.0"
 description = "A gateway platform to process payments"
 authors = ["Mario Hernandez <mariofix@proton.me>"]
 readme = "README.md"
@@ -16,51 +16,68 @@ keywords = [
     "payment-hub",
     "payment-platform",
 ]
-packages = [
-    { include = "merchants" }
-]
-classifiers=[
+packages = [{ include = "merchants" }]
+classifiers = [
     "License :: OSI Approved :: MIT License",
-    "Programming Language :: Python :: 3.8",
     "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
     "Intended Audience :: Developers",
     "Topic :: Software Development :: Libraries :: Python Modules",
 ]
 
 [tool.poetry.dependencies]
-python = "^3.8"
-typer = {extras = ["all"], version = "*"}
+python = "^3.9"
+typer = { version = "^0.9.0", extras = ["all"] }
 thankyou = "*"
+certifi = "^2023.7.22"
+requests = "^2.31.0"
+pydantic-settings = "^2.0.2"
+python-dotenv = "^1.0.0"
+
+
+[tool.poetry.group.sqla]
+optional = false
+
+[tool.poetry.group.sqla.dependencies]
 sqlalchemy = "2.0.19"
 sqlalchemy-utils = "^0.41.1"
-babel = "^2.12.1"
 
+[tool.poetry.group.peewee]
+optional = false
+
+[tool.poetry.group.peewee.dependencies]
+peewee = "^3.16.2"
+
+[tool.poetry.group.dev]
+optional = false
 
 [tool.poetry.group.dev.dependencies]
-pytest = "*"
-coverage = "*"
-black = "*"
-pre-commit = "*"
+pytest = "^7.4.0"
+coverage = "^7.2.7"
+black = "^23.7.0"
+pre-commit = "^3.3.3"
+isort = "^5.12.0"
 
+
+[tool.poetry.group.docs.dependencies]
+mkdocs-git-authors-plugin = "^0.7.2"
+mkdocs-material = "^9.1.21"
+mkdocs = "^1.5.2"
 
 [tool.pytest.ini_options]
 minversion = "6.0"
 addopts = "-ra"
-testpaths = [
-    "tests",
-]
-python_files =[
-    "test*.py"
-]
+testpaths = ["tests"]
+python_files = ["test*.py"]
 
 [tool.poetry.scripts]
 merchants = 'merchants.cli:cli'
 
 [tool.black]
-line-length = 100
-target-version = ['py38']
+line-length = 119
+target-version = ['py311']
 include = '\.pyi?$'
 
 

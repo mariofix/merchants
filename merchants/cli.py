@@ -1,7 +1,7 @@
 import typer
-from rich import print  # pylint: disable=W0622
+from rich import print
 
-from merchants.providers import _provider_list
+from merchants.integrations import _provider_list
 
 cli = typer.Typer(help="Merchants CLI operations")
 

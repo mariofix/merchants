@@ -1,10 +1,8 @@
-from typing import Literal
-
-from sqlalchemy import Column, Integer, String, create_engine
+from sqlalchemy import Column, Integer, create_engine
 from sqlalchemy.orm import declarative_base, sessionmaker
 from sqlalchemy_utils import generic_repr
 
-from merchants.core.orm.sqla import PaymentMixin
+from merchants.orm.sqla import PaymentMixin
 
 SQLALCHEMY_DATABASE_URL = "sqlite:///./examples/sqlalchemy/db.sqlite3"
 
