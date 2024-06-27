@@ -41,7 +41,7 @@ python-dotenv = "^1.0.0"
 optional = false
 
 [tool.poetry.group.sqla.dependencies]
-sqlalchemy = "2.0.19"
+sqlalchemy = "2.0.31"
 sqlalchemy-utils = "^0.41.1"
 
 [tool.poetry.group.peewee]
