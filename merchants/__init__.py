@@ -1,3 +1,3 @@
-from .config import base_settings as settings
+from .config import default_settings as settings
 
 __all__ = ["settings"]

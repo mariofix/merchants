@@ -28,9 +28,9 @@ def _available_integrations() -> list:
 class MerchantsSettings:
     available_integrations: list = field(default_factory=_available_integrations)
     enabled_accounts: list = field(default_factory=list)
-    process_on_save: bool = True
+    process_on_save: bool = True  # Ejecuta el pago al momento de guardar el objeto.
 
-    load_from_database: bool = True
+    load_from_database: bool = True  # Obtiene settings desde archivo o db
 
     def __post__init__(self):
         pass
@@ -49,4 +49,4 @@ class MerchantsSettings:
         return self.enabled_accounts
 
 
-base_settings = MerchantsSettings()
+default_settings = MerchantsSettings()

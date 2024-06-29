@@ -4,7 +4,7 @@ from uuid import uuid4
 
 import peewee
 
-from ..config import base_settings
+from ..config import default_settings
 from ..core.schemas import ModelStatus
 from ..exceptions import ProcessError
 from ..integrations import create_provider
@@ -100,7 +100,7 @@ class MerchantsBaseModel(peewee.Model):
         if not self.transaction:
             self.transaction = uuid4()
 
-        if not base_settings.process_on_save:
+        if not default_settings.process_on_save:
             return super().save(*args, **kwargs)
 
         try:

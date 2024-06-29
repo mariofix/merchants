@@ -1,12 +1,16 @@
-from dataclasses import dataclass
+from enum import Enum
 
 
-@dataclass
-class ModelStatus:
-    CREATED: str = "Created"
-    PROCESSING: str = "Processing"
-    ERROR: str = "Error"
-    REJECTED: str = "Rejected"
-    COMPLETED: str = "Completed"
-    REFUNDED: str = "Refunded"
-    REVERSED: str = "Reversed"
+class ModelStatus(Enum):
+    """
+    Enumeration of possible payment statuses.
+    """
+
+    CREATED = "CREATED"
+    PROCESSING = "PROCESSING"
+    ERROR = "ERROR"
+    REJECTED = "REJEDTED"
+    COMPLETED = "COMPLETED"
+    FULL_REFUND = "FULL_REFUND"
+    PARTIAL_REFUND = "PARTIAL_REFUND"
+    REVERSED = "REVERSED"
