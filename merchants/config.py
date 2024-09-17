@@ -1,12 +1,6 @@
 import secrets
-from typing import Annotated, Any
-
-from pydantic import (
-    AnyUrl,
-    BeforeValidator,
-    HttpUrl,
-    computed_field,
-)
+from typing import List
+from pydantic import HttpUrl, computed_field
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
@@ -20,7 +14,6 @@ class Settings(BaseSettings):
     @computed_field  # type: ignore[prop-decorator]
     @property
     def server_host(self) -> str:
-        # Use HTTPS for anything other than local development
         if self.USE_HTTPS:
             return f"https://{self.DOMAIN}"
         return f"http://{self.DOMAIN}"
@@ -29,6 +22,8 @@ class Settings(BaseSettings):
     SENTRY_DSN: HttpUrl | None = None
 
     SQLALCHEMY_DATABASE_URI: str = "sqlite:///merchants.db"
+
+    ALLOWED_DOMAINS: List[str] | None = None
 
 
 settings = Settings()  # type: ignore

@@ -47,8 +47,11 @@ python-slugify = "^8.0.4"
 starlette-admin = "^0.14.1"
 
 
+[tool.poetry.group.dev.dependencies]
+pytest = "^8.3.3"
+coverage = "^7.6.1"
+
 [tool.pytest.ini_options]
-minversion = "6.0"
 addopts = "-ra"
 testpaths = ["tests"]
 python_files = ["test*.py"]

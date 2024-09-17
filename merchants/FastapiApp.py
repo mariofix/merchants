@@ -41,7 +41,7 @@ app = FastAPI(
 )
 app.add_middleware(
     DebugToolbarMiddleware,
-    panels=["merchants.AppFastapi.SQLModelPanel"],
+    panels=["merchants.FastapiApp.SQLModelPanel"],
 )
 
 admin.mount_to(app)
