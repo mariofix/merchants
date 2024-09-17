@@ -1,52 +1,34 @@
-from dataclasses import dataclass, field
+import secrets
+from typing import Annotated, Any
+
+from pydantic import (
+    AnyUrl,
+    BeforeValidator,
+    HttpUrl,
+    computed_field,
+)
+from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
-def _available_integrations() -> list:
-    return [
-        "paypal",
-        "square",
-        "stripe",
-        "payu",
-        "braintree",  # es de paypal
-        "authorizenet",
-        "twocheckout",
-        "verifone",  # compró 2checkout
-        "worldpay",
-        "fis",  # fisglobal.com compro worldpay
-        "adyen",
-        "skrill",
-        "applepay",
-        "googlepay",
-        "klarna",
-        "wepay",
-        "alipay",
-        "wix",
-    ]
+class Settings(BaseSettings):
+    model_config = SettingsConfigDict(env_file=".env", env_ignore_empty=True, extra="ignore")
+    SECRET_KEY: str = secrets.token_urlsafe(32)
+    USE_HTTPS: bool = False
+    DOMAIN: str = "tardis.local"
+    DEBUG: bool = True
+
+    @computed_field  # type: ignore[prop-decorator]
+    @property
+    def server_host(self) -> str:
+        # Use HTTPS for anything other than local development
+        if self.USE_HTTPS:
+            return f"https://{self.DOMAIN}"
+        return f"http://{self.DOMAIN}"
+
+    PROJECT_NAME: str = "Merchants"
+    SENTRY_DSN: HttpUrl | None = None
+
+    SQLALCHEMY_DATABASE_URI: str = "sqlite:///merchants.db"
 
 
-@dataclass
-class MerchantsSettings:
-    available_integrations: list = field(default_factory=_available_integrations)
-    enabled_accounts: list = field(default_factory=list)
-    process_on_save: bool = True  # Ejecuta el pago al momento de guardar el objeto.
-
-    load_from_database: bool = True  # Obtiene settings desde archivo o db
-
-    def __post__init__(self):
-        pass
-
-    def load_variants(self, config: dict) -> list:
-        from .integrations.dummy import settings as example_settings
-
-        self.enabled_accounts = [
-            {
-                "example": {
-                    "config": example_settings,
-                    "provider_class": "merchants.integrations.dummy.Provider",
-                }
-            },
-        ]
-        return self.enabled_accounts
-
-
-default_settings = MerchantsSettings()
+settings = Settings()  # type: ignore
