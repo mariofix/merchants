@@ -1,4 +1,4 @@
-# Merchants
+# Fastapi-Merchants
 
 [![PyPI version](https://badge.fury.io/py/merchants.svg)](https://badge.fury.io/py/merchants)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
@@ -6,6 +6,7 @@
 [![FastAPI](https://img.shields.io/badge/FastAPI-005571?style=for-the-badge&logo=fastapi)](https://fastapi.tiangolo.com)
 [![Downloads](https://pepy.tech/badge/merchants)](https://pepy.tech/project/merchants)
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
+[![pre-commit.ci sandbox](https://results.pre-commit.ci/badge/github/mariofix/merchants/sandbox.svg)](https://results.pre-commit.ci/latest/github/mariofix/merchants/sandbox)
 
 A unified payment processing toolkit for FastAPI applications, inspired by django-payments.
 
@@ -17,7 +18,7 @@ flexible interface for handling different payment methods.
 
 ## Features
 
-- Easy integration with FastAPI applications
+- Easy integration with Starlette/FastAPI applications
 - Support for multiple payment gateways
 - Customizable payment workflows
 - Webhook handling for payment status updates

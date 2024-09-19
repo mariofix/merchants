@@ -1,5 +1,5 @@
 import secrets
-from typing import List
+
 from pydantic import HttpUrl, computed_field
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
@@ -21,9 +21,11 @@ class Settings(BaseSettings):
     PROJECT_NAME: str = "Merchants"
     SENTRY_DSN: HttpUrl | None = None
 
-    SQLALCHEMY_DATABASE_URI: str = "sqlite:///merchants.db"
+    SQLALCHEMY_DATABASE_URL: str = "sqlite:///merchants.db"
 
-    ALLOWED_DOMAINS: List[str] | None = None
+    ALLOWED_DOMAINS: list[str] | None = None
+
+    PROCESS_ON_SAVE: bool = True
 
 
 settings = Settings()  # type: ignore

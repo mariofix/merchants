@@ -1,8 +1,9 @@
 import pytest
 from fastapi.testclient import TestClient
 from sqlmodel import Session
-from merchants.FastapiApp import app
+
 from merchants.database import engine
+from merchants.FastapiApp import app
 
 # Create a test client
 client = TestClient(app)
