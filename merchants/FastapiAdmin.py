@@ -22,7 +22,13 @@ class IntegrationAdmin(ModelView):
 
 
 class PaymentAdmin(ModelView):
-    exclude_fields_from_list = ["id", "integration_slug", "integration_payload", "integration_response", "modified_at"]
+    exclude_fields_from_list = [
+        "id",
+        "integration_slug",
+        "integration_payload",
+        "integration_response",
+        "modified_at",
+    ]
     exclude_fields_from_create = ["id"]
     exclude_fields_from_edit = ["id"]
 

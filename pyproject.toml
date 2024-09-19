@@ -47,7 +47,6 @@ sqlalchemy-utils = "^0.41.2"
 pre-commit = "^3.8.0"
 
 
-
 [tool.poetry.group.dev.dependencies]
 pytest = "^8.3.3"
 coverage = "^7.6.1"
@@ -63,6 +62,13 @@ line-length = 119
 target-version = ['py310']
 include = '\.pyi?$'
 
+[tool.ruff]
+line-length = 119
+target-version = "py310"
+
+[tool.bandit]
+exclude_dirs = ["tests"]
+skips = ["B101", "B601"]
 
 [build-system]
 requires = ["poetry-core"]

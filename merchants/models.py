@@ -1,9 +1,10 @@
 import datetime
+import enum
 from decimal import Decimal
 from typing import Any
 
 from pydantic import BaseModel, EmailStr
-from sqlalchemy import JSON, DateTime, ForeignKey, Integer, Numeric, String, event
+from sqlalchemy import JSON, DateTime, Enum, ForeignKey, Integer, Numeric, String, event
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy.sql import func
 from sqlalchemy_utils import generic_repr
@@ -45,6 +46,15 @@ class Integration(DatabaseModel):
     )
 
 
+class PaymentStatus(enum.Enum):
+    created = "created"
+    processing = "processing"
+    declined = "declined"
+    cancelled = "cancelled"
+    refunded = "refunded"
+    paid = "paid"
+
+
 @generic_repr
 class Payment(DatabaseModel):
     __tablename__ = "payment"
@@ -56,7 +66,7 @@ class Payment(DatabaseModel):
     customer_email: Mapped[EmailStr] = mapped_column(String(255), nullable=False)
     integration_slug: Mapped[str] = mapped_column(String(255), nullable=False)
     integration_id: Mapped[str] = mapped_column(String(255))
-    status: Mapped[str] = mapped_column(String(10))
+    status: Mapped[PaymentStatus] = mapped_column(Enum(PaymentStatus), default=PaymentStatus.created)
     integration_payload: Mapped[dict[str, Any] | None] = mapped_column(JSON, nullable=True)
     integration_response: Mapped[dict[str, Any] | None] = mapped_column(JSON, nullable=True)
     integration_id: Mapped[int | None] = mapped_column(Integer, ForeignKey("integration.id"))

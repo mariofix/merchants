@@ -1,8 +1,8 @@
-"""(re-7)Init
+"""(re-8)Init
 
-Revision ID: 96ae93cc9125
+Revision ID: 6d833540bc9e
 Revises:
-Create Date: 2024-09-19 04:51:55.007209
+Create Date: 2024-09-19 05:49:16.051421
 
 """
 
@@ -11,7 +11,7 @@ import sqlalchemy as sa
 from alembic import op
 
 # revision identifiers, used by Alembic.
-revision = "96ae93cc9125"
+revision = "6d833540bc9e"
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -55,7 +55,11 @@ def upgrade():
         sa.Column("customer_email", sa.String(length=255), nullable=False),
         sa.Column("integration_slug", sa.String(length=255), nullable=False),
         sa.Column("integration_id", sa.Integer(), nullable=True),
-        sa.Column("status", sa.String(length=10), nullable=False),
+        sa.Column(
+            "status",
+            sa.Enum("created", "processing", "declined", "cancelled", "refunded", "paid", name="paymentstatus"),
+            nullable=False,
+        ),
         sa.Column("integration_payload", sa.JSON(), nullable=True),
         sa.Column("integration_response", sa.JSON(), nullable=True),
         sa.Column(
