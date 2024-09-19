@@ -1,14 +1,14 @@
 """(re-7)Init
 
 Revision ID: 96ae93cc9125
-Revises: 
+Revises:
 Create Date: 2024-09-19 04:51:55.007209
 
 """
 
-from alembic import op
 import sqlalchemy as sa
 
+from alembic import op
 
 # revision identifiers, used by Alembic.
 revision = "96ae93cc9125"
