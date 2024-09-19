@@ -8,8 +8,8 @@ from merchants.version import __version__ as __merchants_version__
 app = FastAPI(
     title=settings.PROJECT_NAME,
     version=__merchants_version__,
-    description="Universal Payment Processing System",
-    debug=True,
+    description="A unified payment processing toolkit for Starlette/FastAPI applications",
+    debug=settings.DEBUG,
 )
 app.add_middleware(DebugToolbarMiddleware)
 
