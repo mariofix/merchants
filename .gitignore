@@ -3,6 +3,7 @@
 
 .vscode
 merchants_orig
+store
 ### Python ###
 # Byte-compiled / optimized / DLL files
 __pycache__/

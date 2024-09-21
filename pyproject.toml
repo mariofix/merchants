@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "fastapi-merchants"
+name = "merchants"
 version = "2024.9.16"
 description = "A unified payment processing toolkit for Starlette/FastAPI applications"
 authors = ["Mario Hernandez <mariofix@proton.me>"]
@@ -15,8 +15,10 @@ keywords = [
     "payment-processing",
     "payment-hub",
     "payment-platform",
+    "fastapi",
+    "starlette",
 ]
-packages = [{ include = "merchants" }]
+packages = [{ include = "merchants" }, { include = "alembic" }]
 classifiers = [
     "License :: OSI Approved :: MIT License",
     "Programming Language :: Python :: 3.10",
@@ -30,26 +32,25 @@ classifiers = [
 python = "^3.10"
 thankyou = "^0.0.3"
 pendulum = "^3.0.0"
-click = "^8.1.7"
-rich = "^13.7.1"
 httpx = "^0.27.0"
+python-slugify = "^8.0.4"
+
+alembic = "^1.13.2"
+sqlalchemy = "^2.0.35"
+sqlalchemy-utils = "^0.41.2"
 
 fastapi = { extras = ["all"], version = "^0.114.2" }
-uvicorn = { extras = ["standard"], version = "^0.30.6" }
-alembic = "^1.13.2"
-starlette-admin = "^0.14.1"
-sqlalchemy = "^2.0.35"
-
-black = "^24.8.0"
-fastapi-debug-toolbar = "^0.6.3"
-python-slugify = "^8.0.4"
-sqlalchemy-utils = "^0.41.2"
-pre-commit = "^3.8.0"
+starlette-admin = { version = "^0.14.1" }
+pytest-asyncio = "^0.24.0"
 
 
 [tool.poetry.group.dev.dependencies]
 pytest = "^8.3.3"
 coverage = "^7.6.1"
+black = "^24.8.0"
+pre-commit = "^3.8.0"
+rich = "^13.7.1"
+
 
 [tool.pytest.ini_options]
 addopts = "-ra"

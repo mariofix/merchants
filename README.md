@@ -60,7 +60,7 @@ Merchants is released under the MIT License. See the [LICENSE](LICENSE) file for
 
 ## Acknowledgements
 
-This project was inspired by the django-payments library and aims to provide similar functionality for FastAPI
+This project was inspired by the [django-payments](https://github.com/jazzband/django-payments) library and aims to provide similar functionality for FastAPI
 applications, some parts were made with Claude and/or ChatGPT.
 
 ## Changelog

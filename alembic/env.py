@@ -13,11 +13,11 @@ config = context.config
 if config.config_file_name is not None:
     fileConfig(config.config_file_name)
 
-from merchants.config import settings  # noqa
+from store.config import settings  # noqa
 
 # add your model's MetaData object here
 # for 'autogenerate' support
-from merchants.models import DatabaseModel  # noqa
+from store.models import DatabaseModel  # noqa
 
 target_metadata = DatabaseModel.metadata
 
@@ -28,7 +28,7 @@ target_metadata = DatabaseModel.metadata
 
 
 def get_url():
-    return str(settings.SQLALCHEMY_DATABASE_URL)
+    return str(settings.SQLALCHEMY_DATABASE_URI)
 
 
 def run_migrations_offline():
