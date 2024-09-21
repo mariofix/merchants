@@ -1,4 +1,6 @@
-# Fastapi-Merchants
+# Merchants
+
+This project is under development, not for production use.
 
 [![PyPI version](https://badge.fury.io/py/merchants.svg)](https://badge.fury.io/py/merchants)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
@@ -28,7 +30,7 @@ flexible interface for handling different payment methods.
 ## Installation
 
 ```bash
-poetry add fastapi-merchants
+poetry add merchants
 ```
 
 ## Quick Start
