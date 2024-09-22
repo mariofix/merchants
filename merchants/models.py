@@ -1,6 +1,5 @@
 import datetime
 import enum
-import importlib
 import uuid
 from decimal import Decimal
 from typing import Any
@@ -10,8 +9,7 @@ from sqlalchemy import JSON, DateTime, Enum, Numeric, String, event
 from sqlalchemy.orm import Mapped, declarative_mixin, mapped_column
 from sqlalchemy.sql import func
 
-from merchants import api as MerchantsApi
-from merchants.config import settings
+from merchants import integrations
 from merchants.crud import get_integration
 
 
@@ -52,12 +50,12 @@ class PaymentMixin:
     """
 
     ___abstract__ = True
-    merchants_token: Mapped[str] = mapped_column(String(255), nullable=False, unique=True, default=uuid.uuid4)
+    merchants_token: Mapped[str | None] = mapped_column(String(255), nullable=False, unique=True, default=uuid.uuid4)
     amount: Mapped[Decimal] = mapped_column(Numeric(10, 2), nullable=False)
     currency: Mapped[str] = mapped_column(String(3), nullable=False)
     status: Mapped[PaymentStatus] = mapped_column(Enum(PaymentStatus), default=PaymentStatus.created, index=True)
     integration_slug: Mapped[str] = mapped_column(String(255), nullable=False, index=True)
-    integration_transaction: Mapped[str] = mapped_column(String(255), index=True)
+    integration_transaction: Mapped[str | None] = mapped_column(String(255), index=True, nullable=True)
     integration_payload: Mapped[dict[str, Any] | None] = mapped_column(JSON, nullable=True)
     integration_response: Mapped[dict[str, Any] | None] = mapped_column(JSON, nullable=True)
     creation: Mapped[datetime.datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
@@ -74,32 +72,26 @@ class PaymentMixin:
         From Claude: to add the event before_insert directly on the abstract model
 
         """
-        if settings.PROCESS_ON_SAVE:
-            event.listen(cls, "before_insert", cls.event_before_insert)
+
+        event.listen(cls, "before_insert", cls.event_before_insert)
 
     @staticmethod
     def event_before_insert(mapper, connection, target):
-        if not target.merchants_token:
-            target.merchants_token = uuid.uuid4()
-
         if target.status == "created":
-            # if not target.integration_id:
-            #     integration_info = get_integration(slug=target.integration_slug)
-            # else:
-            #     integration_info = target.integration
             integration_info = get_integration(slug=target.integration_slug)
-
             try:
-                integration = importlib.import_module(integration_info.integration_class)
-            except ModuleNotFoundError as e:
-                raise e
-
-            try:
-                target.integration_response = integration.create_payment(config=integration_info.config)
+                integration_class = getattr(integrations, integration_info["integration_class"])
+                integration = integration_class()
             except Exception as e:
                 raise e
 
-            return MerchantsApi.process_payment(target)
+            new_payment = integration.create_payment()
+
+            target.integration_transaction = new_payment.get("token", None)
+            target.status = PaymentStatus.processing
+            target.integration_response = new_payment
+
+            return target
 
 
 # Pydantic Models

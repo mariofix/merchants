@@ -1,27 +1,43 @@
-from abc import ABC, abstractmethod
+import secrets
+from dataclasses import dataclass
 
-# from dataclasses import dataclass
-
-
-class BaseIntegration(ABC):
-    name: str
-
-    @abstractmethod
-    def charge(self):
-        raise NotImplementedError("You need to inherit this class and implement your own charge()")
-
-    @abstractmethod
-    def refund(self):
-        raise NotImplementedError("You need to inherit this class and implement your own refund()")
+from ..base import BaseIntegration
 
 
-# no me gusta esto
+@dataclass
 class DummyIntegration(BaseIntegration):
-    name = "Dummy"
+    name: str = "Dummy"
+    version: str = "0.0.1"
+    author: str = "mariofix"
 
-    def charge(self): ...
+    def process(self):
+        data = {
+            "token": secrets.token_urlsafe(32),
+            "headers": None,
+            "data": None,
+        }
+        return data
 
     def refund(self): ...
 
 
-dummy = DummyIntegration()
+@dataclass
+class StripeCheckoutIntegration(BaseIntegration):
+    name: str = "Stripe Checkout"
+    version: str = "0.0.1"
+    author: str = "mariofix"
+    api_key: str = "sk_test_26PHem9AhJZvU623DfE1x4sd"
+
+    def process(self):
+        import stripe
+
+        stripe.api_key = self.api_key
+
+        data = {
+            "token": secrets.token_urlsafe(32),
+            "headers": None,
+            "data": None,
+        }
+        return data
+
+    def refund(self): ...
