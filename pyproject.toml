@@ -53,7 +53,7 @@ pytest = "^8.3.3"
 pytest-asyncio = "^0.24.0"
 coverage = "^7.6.1"
 black = "^24.8.0"
-pre-commit = "^3.8.0"
+pre-commit = "^4.0.0"
 rich = "^13.7.1"
 mkdocs-material = "^9.5.35"
 mkdocstrings = { version = "^0.26.1", extras = ["python"] }
