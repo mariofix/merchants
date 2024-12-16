@@ -50,7 +50,7 @@ all = ["stripe"]
 
 [tool.poetry.group.dev.dependencies]
 pytest = "^8.3.3"
-pytest-asyncio = "^0.24.0"
+pytest-asyncio = "^0.25.0"
 coverage = "^7.6.1"
 black = "^24.8.0"
 pre-commit = "^4.0.0"
