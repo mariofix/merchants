@@ -37,7 +37,7 @@ python-slugify = "^8.0.4"
 
 alembic = "^1.13.2"
 sqlalchemy = "^2.0.35"
-sqlalchemy-utils = "^0.41.2"
+sqlalchemy-utils = "^0.42.0"
 
 fastapi = { extras = ["all"], version = "^0.115.0" }
 starlette-admin = { version = "^0.14.1" }
