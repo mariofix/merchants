@@ -30,6 +30,8 @@ classifiers = [
 
 [tool.poetry.dependencies]
 python = "^3.10"
+pydantic = "^2.0"
+requests = "^2.28"
 thankyou = "^0.0.3"
 pendulum = "^3.0.0"
 httpx = "^0.28.0"
