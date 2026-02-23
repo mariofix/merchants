@@ -22,7 +22,7 @@ jobs:
       - name: Install everything
         run: |
           python -m pip install --upgrade pip
-          pip install .[all]
+          pip install .[dev,cli,flow,khipu,docs]
 
       - name: Run tests
         run: pytest --cov=merchants --cov-report=term-missing
