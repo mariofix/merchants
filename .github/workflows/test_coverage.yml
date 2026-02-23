@@ -27,13 +27,14 @@ jobs:
           pip install .[dev,cli,flow,khipu,docs]
 
       - name: Run tests
-        run: pytest --cov=merchants --cov-report=term-missing
+        run: pytest --cov=merchants --cov-report=term-missing --cov-report=xml:coverage.xml
 
       - name: Upload coverage artifact
+        if: matrix.python-version == '3.12'
         uses: actions/upload-artifact@v4
         with:
-          name: coverage-${{ matrix.python-version }}
-          path: .coverage
+          name: coverage-3.12
+          path: coverage.xml
           retention-days: 1
 
   sonar:
@@ -44,29 +45,15 @@ jobs:
     steps:
       - uses: actions/checkout@v5
         with:
-          fetch-depth: 0 # Sonar needs full history for blame/SCM data
+          fetch-depth: 0
 
-      - name: Set up Python
-        uses: actions/setup-python@v6
-        with:
-          python-version: "3.12"
-
-      - name: Install coverage
-        run: pip install coverage
-
-      - name: Download all coverage artifacts
+      - name: Download coverage
         uses: actions/download-artifact@v4
         with:
-          pattern: coverage-*
-          merge-multiple: false
-          path: coverage-reports
+          name: coverage-3.12
+          path: .
 
-      - name: Merge coverage and export XML
-        run: |
-          coverage combine coverage-reports/.coverage*
-          coverage xml -o coverage.xml
-
-      - name: SonarQube Scan
+      - name: SonarCloud Scan
         uses: SonarSource/sonarqube-scan-action@v5
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
