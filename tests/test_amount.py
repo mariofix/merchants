@@ -1,4 +1,5 @@
 """Tests for amount formatting utilities."""
+
 from decimal import Decimal
 
 import pytest

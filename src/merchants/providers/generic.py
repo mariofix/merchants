@@ -1,4 +1,5 @@
 """Generic HTTP provider – calls arbitrary REST endpoints."""
+
 from __future__ import annotations
 
 from decimal import Decimal

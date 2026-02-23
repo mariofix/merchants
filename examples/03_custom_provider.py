@@ -7,6 +7,7 @@ Implement the ``Provider`` ABC to integrate any payment gateway.
 This example shows a minimal provider for a fictitious gateway called "AcmePay"
 that accepts JSON over HTTPS.
 """
+
 from __future__ import annotations
 
 import json

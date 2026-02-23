@@ -1,4 +1,5 @@
 """Flow.cl provider – wraps the ``pyflowcl`` package."""
+
 from __future__ import annotations
 
 import json
@@ -11,13 +12,11 @@ from merchants.providers import Provider, UserError
 
 try:
     from pyflowcl.Clients import ApiClient
+    from pyflowcl.exceptions import GenericError
     from pyflowcl.Payment import create as flow_create
     from pyflowcl.Payment import getStatus as flow_get_status
-    from pyflowcl.exceptions import GenericError
 except ImportError as exc:  # pragma: no cover
-    raise ImportError(
-        "pyflowcl is required for FlowProvider. Install it with: pip install pyflowcl"
-    ) from exc
+    raise ImportError("pyflowcl is required for FlowProvider. Install it with: pip install pyflowcl") from exc
 
 # Flow status codes: 1=Paid, 2=Rejected, 3=Pending, 4=Cancelled
 _FLOW_STATE_MAP: dict[int, PaymentState] = {
@@ -129,6 +128,7 @@ class FlowProvider(Provider):
         except ValueError:
             # form-encoded: token=xxx
             from urllib.parse import parse_qs
+
             qs = parse_qs(payload.decode(errors="replace"))
             token = (qs.get("token") or [""])[0]
             data = {"token": token}

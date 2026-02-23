@@ -1,4 +1,5 @@
 """Pluggable provider integrations."""
+
 from __future__ import annotations
 
 from abc import ABC, abstractmethod
@@ -129,10 +130,7 @@ def get_provider(key_or_instance: str | Provider) -> Provider:
         return _REGISTRY[key_or_instance]
     except KeyError:
         available = list(_REGISTRY.keys())
-        raise KeyError(
-            f"Provider {key_or_instance!r} not registered. "
-            f"Available: {available}"
-        ) from None
+        raise KeyError(f"Provider {key_or_instance!r} not registered. " f"Available: {available}") from None
 
 
 def list_providers() -> list[str]:

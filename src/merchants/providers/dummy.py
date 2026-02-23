@@ -1,4 +1,5 @@
 """Dummy provider – returns sensible random data for local dev and testing."""
+
 from __future__ import annotations
 
 import random
@@ -33,9 +34,7 @@ class DummyProvider(Provider):
     name = "Dummy"
     author = "merchants team"
     version = "1.0.0"
-    description = (
-        "Local development provider that returns random data without calling any real API."
-    )
+    description = "Local development provider that returns random data without calling any real API."
     url = ""
 
     _TERMINAL_STATES = [

@@ -6,6 +6,7 @@ Shows the quickest way to get a checkout redirect URL using the Stripe provider.
 Run this script with a real Stripe test key to try it out, or use the DummyProvider
 (no credentials needed) to simulate a payment locally.
 """
+
 from decimal import Decimal
 
 import merchants

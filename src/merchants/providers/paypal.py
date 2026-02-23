@@ -1,4 +1,5 @@
 """PayPal-like provider stub demonstrating decimal-string amount handling."""
+
 from __future__ import annotations
 
 import json
