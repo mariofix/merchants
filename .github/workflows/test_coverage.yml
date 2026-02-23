@@ -29,31 +29,8 @@ jobs:
       - name: Run tests
         run: pytest --cov=merchants --cov-report=term-missing --cov-report=xml:coverage.xml
 
-      - name: Upload coverage artifact
-        if: matrix.python-version == '3.12'
-        uses: actions/upload-artifact@v4
+      - name: Upload coverage to Codacy
+        uses: codacy/codacy-coverage-reporter-action@v1
         with:
-          name: coverage-3.12
-          path: coverage.xml
-          retention-days: 1
-
-  sonar:
-    needs: tests
-    runs-on: ubuntu-slim
-    permissions:
-      contents: read
-    steps:
-      - uses: actions/checkout@v5
-        with:
-          fetch-depth: 0
-
-      - name: Download coverage
-        uses: actions/download-artifact@v4
-        with:
-          name: coverage-3.12
-          path: .
-
-      - name: SonarCloud Scan
-        uses: SonarSource/sonarqube-scan-action@v6
-        env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          project-token: ${{ secrets.CODACY_PROJECT_TOKEN }}
+          coverage-reports: coverage.xml
