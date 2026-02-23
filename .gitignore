@@ -1,10 +1,10 @@
 # Created by https://www.toptal.com/developers/gitignore/api/python
 # Edit at https://www.toptal.com/developers/gitignore?templates=python
 
-.vscode
-merchants_orig
-store
 ### Python ###
+original_stuff/
+.editorconfig
+.vscode/
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
@@ -107,6 +107,7 @@ ipython_config.py
 #   commonly ignored for libraries.
 #   https://python-poetry.org/docs/basic-usage/#commit-your-poetrylock-file-to-version-control
 poetry.lock
+uv.lock
 
 # pdm
 #   Similar to Pipfile.lock, it is generally recommended to include pdm.lock in version control.
@@ -165,6 +166,10 @@ cython_debug/
 #  and can be added to the global gitignore or merged into this file.  For a more nuclear
 #  option (not recommended) you can uncomment the following to ignore the entire idea folder.
 #.idea/
+
+### Python Patch ###
+# Poetry local configuration file - https://python-poetry.org/docs/configuration/#local-configuration
+poetry.toml
 
 # ruff
 .ruff_cache/

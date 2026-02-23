@@ -1,12 +1,15 @@
-[tool.poetry]
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
 name = "merchants"
-version = "2024.9.16"
-description = "A unified payment processing toolkit for Starlette/FastAPI applications"
-authors = ["Mario Hernandez <mariofix@proton.me>"]
+dynamic = ["version"]
+description = "A unified payment processing toolkit"
 readme = "README.md"
-license = "MIT"
-repository = "https://github.com/mariofix/merchants"
-homepage = "https://mariofix.github.io/merchants"
+license = { file = "LICENSE" }
+requires-python = ">=3.10,<4.0"
+dependencies = ["pydantic>=2.0", "requests>=2.28", "pre-commit (>=4.5.1,<5.0.0)"]
 keywords = [
     "payment",
     "psp",
@@ -15,10 +18,9 @@ keywords = [
     "payment-processing",
     "payment-hub",
     "payment-platform",
-    "fastapi",
-    "starlette",
+    "cli",
+    "api",
 ]
-packages = [{ include = "merchants" }, { include = "alembic" }]
 classifiers = [
     "License :: OSI Approved :: MIT License",
     "Programming Language :: Python :: 3.10",
@@ -28,57 +30,37 @@ classifiers = [
     "Topic :: Software Development :: Libraries :: Python Modules",
 ]
 
-[tool.poetry.dependencies]
-python = "^3.10"
-thankyou = "^0.0.3"
-pendulum = "^3.0.0"
-httpx = "^0.28.0"
-python-slugify = "^8.0.4"
+[tool.poetry]
+package-mode = false
 
-alembic = "^1.13.2"
-sqlalchemy = "^2.0.35"
-sqlalchemy-utils = "^0.41.2"
+[project.urls]
+Source = "https://github.com/mariofix/merchants"
 
-fastapi = { extras = ["all"], version = "^0.115.0" }
-starlette-admin = { version = "^0.14.1" }
+[project.optional-dependencies]
+flow = ["pyflowcl>=2024.1"]
+khipu = ["khipu-tools>=2024.1"]
+cli = ["typer>=0.9"]
+dev = ["pytest-cov", "black", "isort"]
+docs = ["mkdocs>=1.6", "mkdocs-material>=9.5", "mkdocstrings[python]>=0.25"]
 
-stripe = { version = "^12.0.0", optional = true }
+[project.scripts]
+merchants = "merchants.cli:app"
 
-[tool.poetry.extras]
-stripe = ["stripe"]
-all = ["stripe"]
+[tool.setuptools.dynamic]
+version = { attr = "merchants.version.__version__" }
 
-[tool.poetry.group.dev.dependencies]
-pytest = "^8.3.3"
-pytest-asyncio = "^0.26.0"
-coverage = "^7.6.1"
-black = "^24.8.0"
-pre-commit = "^4.0.0"
-rich = "^14.0.0"
-mkdocs-material = "^9.5.35"
-mkdocstrings = { version = "^0.30.0", extras = ["python"] }
-fastapi-debug-toolbar = "^0.6.3"
-
-[build-system]
-requires = ["poetry-core"]
-build-backend = "poetry.core.masonry.api"
-
+[tool.setuptools.packages.find]
+where = ["src"]
 
 [tool.pytest.ini_options]
-addopts = "-ra"
 testpaths = ["tests"]
-python_files = ["test*.py"]
-
+addopts = "-v"
 
 [tool.black]
 line-length = 119
 target-version = ['py310']
-include = '\.pyi?$'
 
-[tool.ruff]
-line-length = 119
-target-version = "py310"
-
-[tool.bandit]
-exclude_dirs = ["tests"]
-skips = ["B101", "B601"]
+[tool.isort]
+profile = "black"
+multi_line_output = 3
+py_version = 310
