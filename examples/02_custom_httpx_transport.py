@@ -10,6 +10,7 @@ like connection pooling, timeouts, retries, and proxies from httpx.
 
 Install httpx first:  pip install httpx
 """
+
 from __future__ import annotations
 
 from typing import Any

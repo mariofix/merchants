@@ -15,6 +15,7 @@ Then run::
     merchants payments get <payment_id> --provider dummy
     merchants payments webhook --file payload.json --provider dummy
 """
+
 from __future__ import annotations
 
 import json
@@ -24,7 +25,12 @@ from pathlib import Path
 
 import typer
 
-from merchants.providers import Provider, describe_providers, get_provider, list_providers
+from merchants.providers import (
+    Provider,
+    describe_providers,
+    get_provider,
+    list_providers,
+)
 from merchants.version import __version__
 
 app = typer.Typer(
@@ -44,6 +50,7 @@ app.add_typer(payments_app, name="payments")
 # ---------------------------------------------------------------------------
 # Provider resolution helper
 # ---------------------------------------------------------------------------
+
 
 def _resolve_provider(key: str) -> Provider:
     """Resolve a provider by key.
@@ -65,6 +72,7 @@ def _resolve_provider(key: str) -> Provider:
     # 2. Built-in providers from environment
     if key == "dummy":
         from merchants.providers.dummy import DummyProvider
+
         return DummyProvider()
 
     if key == "stripe":
@@ -73,6 +81,7 @@ def _resolve_provider(key: str) -> Provider:
             typer.echo("STRIPE_API_KEY environment variable is not set.", err=True)
             raise typer.Exit(1)
         from merchants.providers.stripe import StripeProvider
+
         return StripeProvider(api_key=api_key)
 
     if key == "paypal":
@@ -81,6 +90,7 @@ def _resolve_provider(key: str) -> Provider:
             typer.echo("PAYPAL_ACCESS_TOKEN environment variable is not set.", err=True)
             raise typer.Exit(1)
         from merchants.providers.paypal import PayPalProvider
+
         return PayPalProvider(access_token=token)
 
     if key == "generic":
@@ -93,6 +103,7 @@ def _resolve_provider(key: str) -> Provider:
             )
             raise typer.Exit(1)
         from merchants.providers.generic import GenericProvider
+
         return GenericProvider(checkout_url, payment_url)
 
     typer.echo(
@@ -106,6 +117,7 @@ def _resolve_provider(key: str) -> Provider:
 # ---------------------------------------------------------------------------
 # Top-level commands
 # ---------------------------------------------------------------------------
+
 
 @app.command()
 def version() -> None:
@@ -190,6 +202,7 @@ def info(
 # payments sub-commands
 # ---------------------------------------------------------------------------
 
+
 @payments_app.command("checkout")
 def payments_checkout(
     provider_key: str = typer.Option(
@@ -197,7 +210,7 @@ def payments_checkout(
         "--provider",
         "-p",
         help="Provider key (e.g. 'stripe', 'dummy'). "
-             "Built-in providers read credentials from environment variables.",
+        "Built-in providers read credentials from environment variables.",
         metavar="KEY",
     ),
     amount: str = typer.Option(..., "--amount", "-a", help="Payment amount (e.g. '19.99')."),
@@ -216,7 +229,7 @@ def payments_checkout(
         None,
         "--metadata",
         "-m",
-        help="JSON string of key-value metadata (e.g. '{\"key\": \"value\"}').",
+        help='JSON string of key-value metadata (e.g. \'{"key": "value"}\').',
     ),
     output: str = typer.Option(
         "text",
@@ -248,9 +261,7 @@ def payments_checkout(
     from merchants.providers import UserError
 
     try:
-        session = provider.create_checkout(
-            amount_decimal, currency, success_url, cancel_url, meta or None
-        )
+        session = provider.create_checkout(amount_decimal, currency, success_url, cancel_url, meta or None)
     except UserError as exc:
         typer.echo(f"Payment error: {exc}", err=True)
         raise typer.Exit(1)
@@ -366,7 +377,11 @@ def payments_webhook(
     ),
 ) -> None:
     """Parse and optionally verify a webhook payload."""
-    from merchants.webhooks import WebhookVerificationError, parse_event, verify_signature
+    from merchants.webhooks import (
+        WebhookVerificationError,
+        parse_event,
+        verify_signature,
+    )
 
     # Read payload
     if file is not None:

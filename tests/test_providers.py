@@ -1,4 +1,5 @@
 """Tests for provider selection, registry, and state normalisation."""
+
 from decimal import Decimal
 from unittest.mock import MagicMock
 
@@ -77,8 +78,10 @@ class TestStripeProvider:
         transport = self._make_transport(200, body)
         provider = StripeProvider("sk_test_key", transport=transport)
         session = provider.create_checkout(
-            Decimal("19.99"), "USD",
-            "https://example.com/ok", "https://example.com/cancel",
+            Decimal("19.99"),
+            "USD",
+            "https://example.com/ok",
+            "https://example.com/cancel",
         )
         assert session.redirect_url == "https://stripe.com/pay/cs_test_123"
         assert session.provider == "stripe"
@@ -92,8 +95,10 @@ class TestStripeProvider:
         provider = StripeProvider("bad_key", transport=transport)
         with pytest.raises(UserError):
             provider.create_checkout(
-                Decimal("9.99"), "USD",
-                "https://example.com/ok", "https://example.com/cancel",
+                Decimal("9.99"),
+                "USD",
+                "https://example.com/ok",
+                "https://example.com/cancel",
             )
 
     def test_zero_decimal_currency(self):
@@ -102,8 +107,10 @@ class TestStripeProvider:
         transport = self._make_transport(200, body)
         provider = StripeProvider("sk_test_key", transport=transport)
         provider.create_checkout(
-            Decimal("1000"), "JPY",
-            "https://example.com/ok", "https://example.com/cancel",
+            Decimal("1000"),
+            "JPY",
+            "https://example.com/ok",
+            "https://example.com/cancel",
         )
         payload = transport.send.call_args.kwargs["json"]
         assert payload["line_items"][0]["price_data"]["unit_amount"] == 1000
@@ -126,8 +133,10 @@ class TestPayPalProvider:
         transport = self._make_transport(201, body)
         provider = PayPalProvider("token_xyz", transport=transport)
         session = provider.create_checkout(
-            Decimal("29.99"), "EUR",
-            "https://example.com/ok", "https://example.com/cancel",
+            Decimal("29.99"),
+            "EUR",
+            "https://example.com/ok",
+            "https://example.com/cancel",
         )
         assert session.redirect_url == "https://paypal.com/approve/ORDER-123"
         # Verify decimal string was sent
@@ -140,8 +149,10 @@ class TestPayPalProvider:
         provider = PayPalProvider("bad_token", transport=transport)
         with pytest.raises(UserError):
             provider.create_checkout(
-                Decimal("10.00"), "USD",
-                "https://example.com/ok", "https://example.com/cancel",
+                Decimal("10.00"),
+                "USD",
+                "https://example.com/ok",
+                "https://example.com/cancel",
             )
 
 
@@ -160,8 +171,10 @@ class TestGenericProvider:
             transport=transport,
         )
         session = provider.create_checkout(
-            Decimal("5.00"), "GBP",
-            "https://example.com/ok", "https://example.com/cancel",
+            Decimal("5.00"),
+            "GBP",
+            "https://example.com/ok",
+            "https://example.com/cancel",
         )
         assert session.session_id == "sess_abc"
 
@@ -177,13 +190,17 @@ class TestGenericProvider:
         assert status.state == PaymentState.SUCCEEDED
         assert status.payment_id == "pay_123"
 
+
 class TestDummyProvider:
     def test_create_checkout_returns_session(self):
         from merchants.providers.dummy import DummyProvider
+
         provider = DummyProvider()
         session = provider.create_checkout(
-            Decimal("9.99"), "USD",
-            "https://example.com/ok", "https://example.com/cancel",
+            Decimal("9.99"),
+            "USD",
+            "https://example.com/ok",
+            "https://example.com/cancel",
         )
         assert session.session_id.startswith("dummy_sess_")
         assert "dummy-pay.example.com" in session.redirect_url
@@ -193,12 +210,14 @@ class TestDummyProvider:
 
     def test_get_payment_returns_terminal_state(self):
         from merchants.providers.dummy import DummyProvider
+
         provider = DummyProvider()
         status = provider.get_payment("dummy_sess_abc")
         assert status.is_final
 
     def test_get_payment_always_state(self):
         from merchants.providers.dummy import DummyProvider
+
         provider = DummyProvider(always_state=PaymentState.SUCCEEDED)
         status = provider.get_payment("any_id")
         assert status.state == PaymentState.SUCCEEDED
@@ -206,14 +225,15 @@ class TestDummyProvider:
 
     def test_parse_webhook(self):
         import json
+
         from merchants.providers.dummy import DummyProvider
+
         provider = DummyProvider()
         payload = json.dumps({"event_type": "payment.done", "payment_id": "pay_xyz"}).encode()
         event = provider.parse_webhook(payload, {})
         assert event.event_type == "payment.done"
         assert event.payment_id == "pay_xyz"
         assert event.provider == "dummy"
-
 
 
 def _make_dummy_provider(key: str) -> Provider:

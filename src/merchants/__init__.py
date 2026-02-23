@@ -1,4 +1,5 @@
 """merchants – framework-agnostic hosted-checkout payment SDK."""
+
 from __future__ import annotations
 
 from merchants.amount import from_minor_units, to_decimal_string, to_minor_units

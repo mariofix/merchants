@@ -1,4 +1,5 @@
 """Tests for pydantic models."""
+
 from decimal import Decimal
 
 import pytest

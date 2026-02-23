@@ -1,4 +1,5 @@
 """Tests for version.py and provider metadata (ProviderInfo, get_info)."""
+
 import json
 from unittest.mock import MagicMock
 
@@ -238,12 +239,18 @@ class TestCLIPaymentsCheckout:
         result = runner.invoke(
             app,
             [
-                "payments", "checkout",
-                "--provider", "dummy",
-                "--amount", "19.99",
-                "--currency", "USD",
-                "--success-url", "https://example.com/ok",
-                "--cancel-url", "https://example.com/cancel",
+                "payments",
+                "checkout",
+                "--provider",
+                "dummy",
+                "--amount",
+                "19.99",
+                "--currency",
+                "USD",
+                "--success-url",
+                "https://example.com/ok",
+                "--cancel-url",
+                "https://example.com/cancel",
             ],
         )
         assert result.exit_code == 0
@@ -255,13 +262,20 @@ class TestCLIPaymentsCheckout:
         result = runner.invoke(
             app,
             [
-                "payments", "checkout",
-                "--provider", "dummy",
-                "--amount", "9.50",
-                "--currency", "EUR",
-                "--success-url", "https://example.com/ok",
-                "--cancel-url", "https://example.com/cancel",
-                "--output", "json",
+                "payments",
+                "checkout",
+                "--provider",
+                "dummy",
+                "--amount",
+                "9.50",
+                "--currency",
+                "EUR",
+                "--success-url",
+                "https://example.com/ok",
+                "--cancel-url",
+                "https://example.com/cancel",
+                "--output",
+                "json",
             ],
         )
         assert result.exit_code == 0
@@ -276,14 +290,22 @@ class TestCLIPaymentsCheckout:
         result = runner.invoke(
             app,
             [
-                "payments", "checkout",
-                "--provider", "dummy",
-                "--amount", "5.00",
-                "--currency", "USD",
-                "--success-url", "https://example.com/ok",
-                "--cancel-url", "https://example.com/cancel",
-                "--metadata", '{"order_id": "ORD-42"}',
-                "--output", "json",
+                "payments",
+                "checkout",
+                "--provider",
+                "dummy",
+                "--amount",
+                "5.00",
+                "--currency",
+                "USD",
+                "--success-url",
+                "https://example.com/ok",
+                "--cancel-url",
+                "https://example.com/cancel",
+                "--metadata",
+                '{"order_id": "ORD-42"}',
+                "--output",
+                "json",
             ],
         )
         assert result.exit_code == 0
@@ -294,12 +316,18 @@ class TestCLIPaymentsCheckout:
         result = runner.invoke(
             app,
             [
-                "payments", "checkout",
-                "--provider", "dummy",
-                "--amount", "not-a-number",
-                "--currency", "USD",
-                "--success-url", "https://example.com/ok",
-                "--cancel-url", "https://example.com/cancel",
+                "payments",
+                "checkout",
+                "--provider",
+                "dummy",
+                "--amount",
+                "not-a-number",
+                "--currency",
+                "USD",
+                "--success-url",
+                "https://example.com/ok",
+                "--cancel-url",
+                "https://example.com/cancel",
             ],
         )
         assert result.exit_code == 1
@@ -308,13 +336,20 @@ class TestCLIPaymentsCheckout:
         result = runner.invoke(
             app,
             [
-                "payments", "checkout",
-                "--provider", "dummy",
-                "--amount", "5.00",
-                "--currency", "USD",
-                "--success-url", "https://example.com/ok",
-                "--cancel-url", "https://example.com/cancel",
-                "--metadata", "{bad json}",
+                "payments",
+                "checkout",
+                "--provider",
+                "dummy",
+                "--amount",
+                "5.00",
+                "--currency",
+                "USD",
+                "--success-url",
+                "https://example.com/ok",
+                "--cancel-url",
+                "https://example.com/cancel",
+                "--metadata",
+                "{bad json}",
             ],
         )
         assert result.exit_code == 1
@@ -330,12 +365,18 @@ class TestCLIPaymentsCheckout:
         result = runner.invoke(
             app,
             [
-                "payments", "checkout",
-                "--provider", "dummy",
-                "--amount", "1.00",
-                "--currency", "USD",
-                "--success-url", "https://example.com/ok",
-                "--cancel-url", "https://example.com/cancel",
+                "payments",
+                "checkout",
+                "--provider",
+                "dummy",
+                "--amount",
+                "1.00",
+                "--currency",
+                "USD",
+                "--success-url",
+                "https://example.com/ok",
+                "--cancel-url",
+                "https://example.com/cancel",
             ],
         )
         assert result.exit_code == 1
@@ -344,12 +385,18 @@ class TestCLIPaymentsCheckout:
         result = runner.invoke(
             app,
             [
-                "payments", "checkout",
-                "--provider", "no_such_provider",
-                "--amount", "1.00",
-                "--currency", "USD",
-                "--success-url", "https://example.com/ok",
-                "--cancel-url", "https://example.com/cancel",
+                "payments",
+                "checkout",
+                "--provider",
+                "no_such_provider",
+                "--amount",
+                "1.00",
+                "--currency",
+                "USD",
+                "--success-url",
+                "https://example.com/ok",
+                "--cancel-url",
+                "https://example.com/cancel",
             ],
         )
         assert result.exit_code == 1
@@ -359,12 +406,18 @@ class TestCLIPaymentsCheckout:
         result = runner.invoke(
             app,
             [
-                "payments", "checkout",
-                "--provider", "stripe",
-                "--amount", "1.00",
-                "--currency", "USD",
-                "--success-url", "https://example.com/ok",
-                "--cancel-url", "https://example.com/cancel",
+                "payments",
+                "checkout",
+                "--provider",
+                "stripe",
+                "--amount",
+                "1.00",
+                "--currency",
+                "USD",
+                "--success-url",
+                "https://example.com/ok",
+                "--cancel-url",
+                "https://example.com/cancel",
             ],
         )
         assert result.exit_code == 1
@@ -374,12 +427,18 @@ class TestCLIPaymentsCheckout:
         result = runner.invoke(
             app,
             [
-                "payments", "checkout",
-                "--provider", "paypal",
-                "--amount", "1.00",
-                "--currency", "USD",
-                "--success-url", "https://example.com/ok",
-                "--cancel-url", "https://example.com/cancel",
+                "payments",
+                "checkout",
+                "--provider",
+                "paypal",
+                "--amount",
+                "1.00",
+                "--currency",
+                "USD",
+                "--success-url",
+                "https://example.com/ok",
+                "--cancel-url",
+                "https://example.com/cancel",
             ],
         )
         assert result.exit_code == 1
@@ -390,12 +449,18 @@ class TestCLIPaymentsCheckout:
         result = runner.invoke(
             app,
             [
-                "payments", "checkout",
-                "--provider", "generic",
-                "--amount", "1.00",
-                "--currency", "USD",
-                "--success-url", "https://example.com/ok",
-                "--cancel-url", "https://example.com/cancel",
+                "payments",
+                "checkout",
+                "--provider",
+                "generic",
+                "--amount",
+                "1.00",
+                "--currency",
+                "USD",
+                "--success-url",
+                "https://example.com/ok",
+                "--cancel-url",
+                "https://example.com/cancel",
             ],
         )
         assert result.exit_code == 1
@@ -475,9 +540,7 @@ class TestCLIPaymentsWebhook:
         return json.dumps(data).encode()
 
     def test_webhook_from_file_text(self, tmp_path):
-        payload = self._payload(
-            {"event_type": "payment.done", "payment_id": "pay_wh1", "status": "succeeded"}
-        )
+        payload = self._payload({"event_type": "payment.done", "payment_id": "pay_wh1", "status": "succeeded"})
         p = tmp_path / "webhook.json"
         p.write_bytes(payload)
 
@@ -519,12 +582,18 @@ class TestCLIPaymentsWebhook:
         result = runner.invoke(
             app,
             [
-                "payments", "webhook",
-                "--file", str(p),
-                "--provider", "dummy",
-                "--secret", secret,
-                "--signature", sig,
-                "--output", "json",
+                "payments",
+                "webhook",
+                "--file",
+                str(p),
+                "--provider",
+                "dummy",
+                "--secret",
+                secret,
+                "--signature",
+                sig,
+                "--output",
+                "json",
             ],
         )
         assert result.exit_code == 0
@@ -539,10 +608,14 @@ class TestCLIPaymentsWebhook:
         result = runner.invoke(
             app,
             [
-                "payments", "webhook",
-                "--file", str(p),
-                "--secret", "correct_secret",
-                "--signature", "sha256=badhash",
+                "payments",
+                "webhook",
+                "--file",
+                str(p),
+                "--secret",
+                "correct_secret",
+                "--signature",
+                "sha256=badhash",
             ],
         )
         assert result.exit_code == 1
@@ -556,19 +629,21 @@ class TestCLIPaymentsWebhook:
 
     def test_webhook_registered_provider(self, tmp_path):
         register_provider(DummyProvider())
-        payload = self._payload(
-            {"event_type": "payment.simulated", "payment_id": "pay_rp"}
-        )
+        payload = self._payload({"event_type": "payment.simulated", "payment_id": "pay_rp"})
         p = tmp_path / "wh_reg.json"
         p.write_bytes(payload)
 
         result = runner.invoke(
             app,
             [
-                "payments", "webhook",
-                "--file", str(p),
-                "--provider", "dummy",
-                "--output", "json",
+                "payments",
+                "webhook",
+                "--file",
+                str(p),
+                "--provider",
+                "dummy",
+                "--output",
+                "json",
             ],
         )
         assert result.exit_code == 0

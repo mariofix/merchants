@@ -1,4 +1,5 @@
 """Khipu provider – wraps the ``khipu-tools`` package."""
+
 from __future__ import annotations
 
 import json
@@ -13,9 +14,7 @@ try:
     import khipu_tools
     from khipu_tools import KhipuClient
 except ImportError as exc:  # pragma: no cover
-    raise ImportError(
-        "khipu-tools is required for KhipuProvider. Install it with: pip install khipu-tools"
-    ) from exc
+    raise ImportError("khipu-tools is required for KhipuProvider. Install it with: pip install khipu-tools") from exc
 
 # Khipu payment statuses
 _KHIPU_STATE_MAP: dict[str, PaymentState] = {
@@ -123,6 +122,7 @@ class KhipuProvider(Provider):
             data: dict[str, Any] = json.loads(payload)
         except ValueError:
             from urllib.parse import parse_qs
+
             qs = parse_qs(payload.decode(errors="replace"))
             data = {k: v[0] for k, v in qs.items()}
 
