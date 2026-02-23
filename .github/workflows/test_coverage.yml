@@ -15,10 +15,12 @@ jobs:
       contents: read
     steps:
       - uses: actions/checkout@v5
+
       - name: Set up Python ${{ matrix.python-version }}
         uses: actions/setup-python@v6
         with:
           python-version: ${{ matrix.python-version }}
+
       - name: Install everything
         run: |
           python -m pip install --upgrade pip
@@ -26,3 +28,45 @@ jobs:
 
       - name: Run tests
         run: pytest --cov=merchants --cov-report=term-missing
+
+      - name: Upload coverage artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-${{ matrix.python-version }}
+          path: .coverage
+          retention-days: 1
+
+  sonar:
+    needs: tests
+    runs-on: ubuntu-slim
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          fetch-depth: 0 # Sonar needs full history for blame/SCM data
+
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+
+      - name: Install coverage
+        run: pip install coverage
+
+      - name: Download all coverage artifacts
+        uses: actions/download-artifact@v4
+        with:
+          pattern: coverage-*
+          merge-multiple: false
+          path: coverage-reports
+
+      - name: Merge coverage and export XML
+        run: |
+          coverage combine coverage-reports/.coverage*
+          coverage xml -o coverage.xml
+
+      - name: SonarQube Scan
+        uses: SonarSource/sonarqube-scan-action@v5
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
