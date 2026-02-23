@@ -35,6 +35,7 @@ classifiers = [
 
 [tool.poetry]
 package-mode = true
+version = "2026.2.1"
 
 [project.urls]
 Source = "https://github.com/mariofix/merchants"
@@ -55,11 +56,11 @@ merchants = "merchants.cli:app"
 version = { attr = "merchants.version.__version__" }
 
 [tool.setuptools.packages.find]
-where = ["src"]
+where = ["merchants"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
-addopts = "-v --cov=src/merchants --cov-report=term-missing"
+addopts = "-v --cov=merchants/ --cov-report=term-missing"
 
 [tool.black]
 line-length = 119
@@ -74,7 +75,7 @@ py_version = 313
 
 [tool.coverage.run]
 relative_files = true
-source = ["src/merchants"]
+source = ["merchants/"]
 
 [tool.coverage.report]
 show_missing = true
