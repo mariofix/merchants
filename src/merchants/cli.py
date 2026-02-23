@@ -1,4 +1,4 @@
-"""merchants CLI – a Typer/Click example for the merchants SDK.
+"""merchants CLI - a Typer/Click example for the merchants SDK.
 
 Install the CLI extra to use this app::
 
@@ -35,7 +35,7 @@ from merchants.version import __version__
 
 app = typer.Typer(
     name="merchants",
-    help="merchants – framework-agnostic hosted-checkout payment SDK.",
+    help="merchants - framework-agnostic hosted-checkout payment SDK.",
     no_args_is_help=True,
 )
 
@@ -117,6 +117,7 @@ def _resolve_provider(key: str) -> Provider:
 # ---------------------------------------------------------------------------
 # Top-level commands
 # ---------------------------------------------------------------------------
+_HELP_TEXT_OUTPUT = "Output format: 'table' or 'json'."
 
 
 @app.command()
@@ -131,7 +132,7 @@ def providers(
         "table",
         "--output",
         "-o",
-        help="Output format: 'table' or 'json'.",
+        help=_HELP_TEXT_OUTPUT,
         metavar="FORMAT",
     ),
 ) -> None:
@@ -173,7 +174,7 @@ def info(
         "text",
         "--output",
         "-o",
-        help="Output format: 'text' or 'json'.",
+        help=_HELP_TEXT_OUTPUT,
         metavar="FORMAT",
     ),
 ) -> None:
@@ -235,7 +236,7 @@ def payments_checkout(
         "text",
         "--output",
         "-o",
-        help="Output format: 'text' or 'json'.",
+        help=_HELP_TEXT_OUTPUT,
         metavar="FORMAT",
     ),
 ) -> None:
@@ -302,7 +303,7 @@ def payments_get(
         "text",
         "--output",
         "-o",
-        help="Output format: 'text' or 'json'.",
+        help=_HELP_TEXT_OUTPUT,
         metavar="FORMAT",
     ),
 ) -> None:
@@ -372,7 +373,7 @@ def payments_webhook(
         "text",
         "--output",
         "-o",
-        help="Output format: 'text' or 'json'.",
+        help=_HELP_TEXT_OUTPUT,
         metavar="FORMAT",
     ),
 ) -> None:
