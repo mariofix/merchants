@@ -34,7 +34,7 @@ classifiers = [
 ]
 
 [tool.poetry]
-package-mode = false
+package-mode = true
 
 [project.urls]
 Source = "https://github.com/mariofix/merchants"
