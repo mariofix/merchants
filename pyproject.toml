@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "merchants"
-dynamic = ["version"]
+version = "2026.2.2"
 description = "A unified payment processing toolkit"
 readme = "README.md"
 license = { file = "LICENSE" }
@@ -35,7 +35,6 @@ classifiers = [
 
 [tool.poetry]
 package-mode = true
-version = "2026.2.1"
 
 [project.urls]
 Source = "https://github.com/mariofix/merchants"
@@ -52,11 +51,6 @@ docs = ["mkdocs", "mkdocs-material", "mkdocstrings[python]"]
 [project.scripts]
 merchants = "merchants.cli:app"
 
-[tool.setuptools.dynamic]
-version = { attr = "merchants.version.__version__" }
-
-[tool.setuptools.packages.find]
-where = ["merchants"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
