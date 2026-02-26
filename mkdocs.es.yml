@@ -1,8 +1,9 @@
 site_name: merchants
-site_description: SDK de pagos independiente del framework para Python
-site_url: https://mariofix.github.io/merchants/es/
-repo_name: mariofix/merchants
-repo_url: https://github.com/mariofix/merchants
+site_description: SDK de pagos con hosted-checkout independiente del framework para Python
+site_url: https://mariofix.github.io/merchnts-cp/es/
+repo_name: mariofix/merchnts-cp
+repo_url: https://github.com/mariofix/merchnts-cp
+edit_uri: edit/main/docs/es/
 docs_dir: docs/es
 
 theme:
@@ -40,10 +41,10 @@ theme:
 extra:
   alternate:
     - name: English
-      link: /merchants/
+      link: /merchnts-cp/
       lang: en
     - name: Español (LATAM)
-      link: /merchants/es/
+      link: /merchnts-cp/es/
       lang: es
 
 plugins:
@@ -89,25 +90,25 @@ nav:
   - Instalación: installation.md
   - Inicio Rápido: quickstart.md
   - Guía de Usuario:
-      - Proveedores:
-          - providers/index.md
-          - Stripe: providers/stripe.md
-          - PayPal: providers/paypal.md
-          - Flow.cl: providers/flow.md
-          - Khipu: providers/khipu.md
-          - Genérico: providers/generic.md
-          - Prueba: providers/dummy.md
-          - Proveedor Personalizado: providers/custom.md
-      - Estrategias de Autenticación: auth.md
-      - Transporte Personalizado: transport.md
-      - Utilidades de Montos: amounts.md
-      - Webhooks: webhooks.md
+    - Proveedores:
+      - providers/index.md
+      - Stripe: providers/stripe.md
+      - PayPal: providers/paypal.md
+      - Flow.cl: providers/flow.md
+      - Khipu: providers/khipu.md
+      - Genérico: providers/generic.md
+      - Prueba: providers/dummy.md
+      - Proveedor Personalizado: providers/custom.md
+    - Estrategias de Autenticación: auth.md
+    - Transporte Personalizado: transport.md
+    - Utilidades de Montos: amounts.md
+    - Webhooks: webhooks.md
   - Referencia de API:
-      - api-reference/index.md
-      - Cliente: api-reference/client.md
-      - Modelos: api-reference/models.md
-      - Proveedores: api-reference/providers.md
-      - Autenticación: api-reference/auth.md
-      - Transporte: api-reference/transport.md
-      - Montos: api-reference/amount.md
-      - Webhooks: api-reference/webhooks.md
+    - api-reference/index.md
+    - Cliente: api-reference/client.md
+    - Modelos: api-reference/models.md
+    - Proveedores: api-reference/providers.md
+    - Autenticación: api-reference/auth.md
+    - Transporte: api-reference/transport.md
+    - Montos: api-reference/amount.md
+    - Webhooks: api-reference/webhooks.md

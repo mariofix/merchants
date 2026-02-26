@@ -54,7 +54,10 @@ class AcmePayProvider(Provider):
         self._transport = transport or RequestsTransport()
 
     def _headers(self) -> dict[str, str]:
-        return {"Authorization": f"Bearer {self._api_key}", "Content-Type": "application/json"}
+        return {
+            "Authorization": f"Bearer {self._api_key}",
+            "Content-Type": "application/json",
+        }
 
     def create_checkout(
         self,
@@ -78,7 +81,9 @@ class AcmePayProvider(Provider):
         )
         if not resp.ok:
             msg = resp.body.get("error", "") if isinstance(resp.body, dict) else ""
-            raise UserError(msg or f"AcmePay error {resp.status_code}", code=str(resp.status_code))
+            raise UserError(
+                msg or f"AcmePay error {resp.status_code}", code=str(resp.status_code)
+            )
 
         body: dict[str, Any] = resp.body if isinstance(resp.body, dict) else {}
         return CheckoutSession(

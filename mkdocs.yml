@@ -1,8 +1,9 @@
 site_name: merchants
-site_description: A unified payment processing toolkit
-site_url: https://mariofix.github.io/merchants/
-repo_name: mariofix/merchants
-repo_url: https://github.com/mariofix/merchants
+site_description: Framework-agnostic hosted-checkout payment SDK for Python
+site_url: https://mariofix.github.io/merchnts-cp/
+repo_name: mariofix/merchnts-cp
+repo_url: https://github.com/mariofix/merchnts-cp
+edit_uri: edit/main/docs/
 
 exclude_docs: |
   es/
@@ -90,25 +91,25 @@ nav:
   - Installation: installation.md
   - Quick Start: quickstart.md
   - User Guide:
-      - Providers:
-          - providers/index.md
-          - Stripe: providers/stripe.md
-          - PayPal: providers/paypal.md
-          - Flow.cl: providers/flow.md
-          - Khipu: providers/khipu.md
-          - Generic: providers/generic.md
-          - Dummy: providers/dummy.md
-          - Custom Provider: providers/custom.md
-      - Auth Strategies: auth.md
-      - Custom Transport: transport.md
-      - Amount Helpers: amounts.md
-      - Webhooks: webhooks.md
+    - Providers:
+      - providers/index.md
+      - Stripe: providers/stripe.md
+      - PayPal: providers/paypal.md
+      - Flow.cl: providers/flow.md
+      - Khipu: providers/khipu.md
+      - Generic: providers/generic.md
+      - Dummy: providers/dummy.md
+      - Custom Provider: providers/custom.md
+    - Auth Strategies: auth.md
+    - Custom Transport: transport.md
+    - Amount Helpers: amounts.md
+    - Webhooks: webhooks.md
   - API Reference:
-      - api-reference/index.md
-      - Client: api-reference/client.md
-      - Models: api-reference/models.md
-      - Providers: api-reference/providers.md
-      - Auth: api-reference/auth.md
-      - Transport: api-reference/transport.md
-      - Amount: api-reference/amount.md
-      - Webhooks: api-reference/webhooks.md
+    - api-reference/index.md
+    - Client: api-reference/client.md
+    - Models: api-reference/models.md
+    - Providers: api-reference/providers.md
+    - Auth: api-reference/auth.md
+    - Transport: api-reference/transport.md
+    - Amount: api-reference/amount.md
+    - Webhooks: api-reference/webhooks.md

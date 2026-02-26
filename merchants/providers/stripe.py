@@ -12,7 +12,19 @@ from merchants.providers import Provider, UserError, normalise_state
 from merchants.transport import RequestsTransport, Transport
 
 # Stripe uses 2 decimal places for most currencies (0 for JPY, etc.)
-_ZERO_DECIMAL_CURRENCIES = {"jpy", "bif", "clp", "gnf", "mga", "pyg", "rwf", "ugx", "vnd", "xaf", "xof"}
+_ZERO_DECIMAL_CURRENCIES = {
+    "jpy",
+    "bif",
+    "clp",
+    "gnf",
+    "mga",
+    "pyg",
+    "rwf",
+    "ugx",
+    "vnd",
+    "xaf",
+    "xof",
+}
 
 
 class StripeProvider(Provider):
@@ -91,8 +103,15 @@ class StripeProvider(Provider):
             json=payload,
         )
         if not resp.ok:
-            body_msg = resp.body.get("error", {}).get("message", "") if isinstance(resp.body, dict) else ""
-            raise UserError(body_msg or f"Stripe error {resp.status_code}", code=str(resp.status_code))
+            body_msg = (
+                resp.body.get("error", {}).get("message", "")
+                if isinstance(resp.body, dict)
+                else ""
+            )
+            raise UserError(
+                body_msg or f"Stripe error {resp.status_code}",
+                code=str(resp.status_code),
+            )
 
         body: dict[str, Any] = resp.body if isinstance(resp.body, dict) else {}
         return CheckoutSession(
@@ -116,7 +135,11 @@ class StripeProvider(Provider):
         currency = str(body.get("currency", ""))
         amount_minor = body.get("amount")
         decimals = self._currency_decimals(currency)
-        amount_decimal = from_minor_units(int(amount_minor), decimals=decimals) if amount_minor is not None else None
+        amount_decimal = (
+            from_minor_units(int(amount_minor), decimals=decimals)
+            if amount_minor is not None
+            else None
+        )
         return PaymentStatus(
             payment_id=payment_id,
             state=normalise_state(raw_state),

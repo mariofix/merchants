@@ -16,7 +16,9 @@ try:
     from pyflowcl.Payment import create as flow_create
     from pyflowcl.Payment import getStatus as flow_get_status
 except ImportError as exc:  # pragma: no cover
-    raise ImportError("pyflowcl is required for FlowProvider. Install it with: pip install pyflowcl") from exc
+    raise ImportError(
+        "pyflowcl is required for FlowProvider. Install it with: pip install pyflowcl"
+    ) from exc
 
 # Flow status codes: 1=Paid, 2=Rejected, 3=Pending, 4=Cancelled
 _FLOW_STATE_MAP: dict[int, PaymentState] = {
@@ -88,7 +90,11 @@ class FlowProvider(Provider):
         except GenericError as exc:
             raise UserError(str(exc)) from exc
 
-        redirect_url = f"{response.url}?token={response.token}" if response.url and response.token else ""
+        redirect_url = (
+            f"{response.url}?token={response.token}"
+            if response.url and response.token
+            else ""
+        )
         return CheckoutSession(
             session_id=str(response.token or ""),
             redirect_url=redirect_url,

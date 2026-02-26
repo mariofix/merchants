@@ -40,8 +40,6 @@ def from_minor_units(minor: int, decimals: int = 2) -> Decimal:
     Decimal('19.99')
     """
     factor = Decimal(10) ** decimals
-    if factor == 0:
-        return Decimal(0)
     return (Decimal(minor) / factor).quantize(
         Decimal("0." + "0" * decimals) if decimals > 0 else Decimal("1"),
         rounding=ROUND_HALF_UP,

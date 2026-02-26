@@ -14,7 +14,9 @@ try:
     import khipu_tools
     from khipu_tools import KhipuClient
 except ImportError as exc:  # pragma: no cover
-    raise ImportError("khipu-tools is required for KhipuProvider. Install it with: pip install khipu-tools") from exc
+    raise ImportError(
+        "khipu-tools is required for KhipuProvider. Install it with: pip install khipu-tools"
+    ) from exc
 
 # Khipu payment statuses
 _KHIPU_STATE_MAP: dict[str, PaymentState] = {

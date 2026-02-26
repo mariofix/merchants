@@ -9,7 +9,9 @@ from merchants.models import PaymentState, PaymentStatus, WebhookEvent
 
 class TestPaymentStatus:
     def test_is_final_succeeded(self):
-        s = PaymentStatus(payment_id="p1", state=PaymentState.SUCCEEDED, provider="test")
+        s = PaymentStatus(
+            payment_id="p1", state=PaymentState.SUCCEEDED, provider="test"
+        )
         assert s.is_final is True
         assert s.is_success is True
 
@@ -19,7 +21,9 @@ class TestPaymentStatus:
         assert s.is_success is False
 
     def test_is_final_cancelled(self):
-        s = PaymentStatus(payment_id="p1", state=PaymentState.CANCELLED, provider="test")
+        s = PaymentStatus(
+            payment_id="p1", state=PaymentState.CANCELLED, provider="test"
+        )
         assert s.is_final is True
 
     def test_is_final_refunded(self):
@@ -32,7 +36,9 @@ class TestPaymentStatus:
         assert s.is_success is False
 
     def test_not_final_processing(self):
-        s = PaymentStatus(payment_id="p1", state=PaymentState.PROCESSING, provider="test")
+        s = PaymentStatus(
+            payment_id="p1", state=PaymentState.PROCESSING, provider="test"
+        )
         assert s.is_final is False
 
     def test_not_final_unknown(self):

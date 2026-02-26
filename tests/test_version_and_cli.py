@@ -114,7 +114,9 @@ class TestProviderGetInfo:
     def test_generic_provider_info(self):
         t = MagicMock()
         t.send.return_value = HttpResponse(200, {}, {})
-        p = GenericProvider("https://a.com/checkout", "https://a.com/pay/{payment_id}", transport=t)
+        p = GenericProvider(
+            "https://a.com/checkout", "https://a.com/pay/{payment_id}", transport=t
+        )
         info = p.get_info()
         assert info.key == "generic"
         assert info.name == "Generic"
@@ -484,7 +486,15 @@ class TestCLIPaymentsGet:
     def test_get_dummy_json(self):
         result = runner.invoke(
             app,
-            ["payments", "get", "pay_abc123", "--provider", "dummy", "--output", "json"],
+            [
+                "payments",
+                "get",
+                "pay_abc123",
+                "--provider",
+                "dummy",
+                "--output",
+                "json",
+            ],
         )
         assert result.exit_code == 0
         data = json.loads(result.output)
@@ -522,7 +532,15 @@ class TestCLIPaymentsGet:
 
         result = runner.invoke(
             app,
-            ["payments", "get", "pay_registered", "--provider", "dummy", "--output", "json"],
+            [
+                "payments",
+                "get",
+                "pay_registered",
+                "--provider",
+                "dummy",
+                "--output",
+                "json",
+            ],
         )
         assert result.exit_code == 0
         data = json.loads(result.output)
@@ -540,7 +558,13 @@ class TestCLIPaymentsWebhook:
         return json.dumps(data).encode()
 
     def test_webhook_from_file_text(self, tmp_path):
-        payload = self._payload({"event_type": "payment.done", "payment_id": "pay_wh1", "status": "succeeded"})
+        payload = self._payload(
+            {
+                "event_type": "payment.done",
+                "payment_id": "pay_wh1",
+                "status": "succeeded",
+            }
+        )
         p = tmp_path / "webhook.json"
         p.write_bytes(payload)
 
@@ -559,7 +583,16 @@ class TestCLIPaymentsWebhook:
 
         result = runner.invoke(
             app,
-            ["payments", "webhook", "--file", str(p), "--provider", "dummy", "--output", "json"],
+            [
+                "payments",
+                "webhook",
+                "--file",
+                str(p),
+                "--provider",
+                "dummy",
+                "--output",
+                "json",
+            ],
         )
         assert result.exit_code == 0
         data = json.loads(result.output)
@@ -574,7 +607,10 @@ class TestCLIPaymentsWebhook:
 
         secret = "mysecret"
         payload = self._payload({"event_type": "payment.done", "payment_id": "pay_sig"})
-        sig = "sha256=" + hmac_mod.new(secret.encode(), payload, hashlib.sha256).hexdigest()
+        sig = (
+            "sha256="
+            + hmac_mod.new(secret.encode(), payload, hashlib.sha256).hexdigest()
+        )
 
         p = tmp_path / "signed.json"
         p.write_bytes(payload)
@@ -629,7 +665,9 @@ class TestCLIPaymentsWebhook:
 
     def test_webhook_registered_provider(self, tmp_path):
         register_provider(DummyProvider())
-        payload = self._payload({"event_type": "payment.simulated", "payment_id": "pay_rp"})
+        payload = self._payload(
+            {"event_type": "payment.simulated", "payment_id": "pay_rp"}
+        )
         p = tmp_path / "wh_reg.json"
         p.write_bytes(payload)
 

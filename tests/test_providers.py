@@ -229,7 +229,9 @@ class TestDummyProvider:
         from merchants.providers.dummy import DummyProvider
 
         provider = DummyProvider()
-        payload = json.dumps({"event_type": "payment.done", "payment_id": "pay_xyz"}).encode()
+        payload = json.dumps(
+            {"event_type": "payment.done", "payment_id": "pay_xyz"}
+        ).encode()
         event = provider.parse_webhook(payload, {})
         assert event.event_type == "payment.done"
         assert event.payment_id == "pay_xyz"
