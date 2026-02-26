@@ -1,0 +1,113 @@
+site_name: merchants
+site_description: SDK de pagos independiente del framework para Python
+site_url: https://mariofix.github.io/merchants/es/
+repo_name: mariofix/merchants
+repo_url: https://github.com/mariofix/merchants
+docs_dir: docs/es
+
+theme:
+  name: material
+  language: es
+  palette:
+    - scheme: default
+      primary: indigo
+      accent: indigo
+      toggle:
+        icon: material/brightness-7
+        name: Cambiar a modo oscuro
+    - scheme: slate
+      primary: indigo
+      accent: indigo
+      toggle:
+        icon: material/brightness-4
+        name: Cambiar a modo claro
+  features:
+    - navigation.tabs
+    - navigation.tabs.sticky
+    - navigation.sections
+    - navigation.expand
+    - navigation.path
+    - navigation.indexes
+    - navigation.top
+    - search.suggest
+    - search.highlight
+    - content.tabs.link
+    - content.code.annotate
+    - content.code.copy
+  icon:
+    repo: fontawesome/brands/github
+
+extra:
+  alternate:
+    - name: English
+      link: /merchants/
+      lang: en
+    - name: Español (LATAM)
+      link: /merchants/es/
+      lang: es
+
+plugins:
+  - search:
+      lang: es
+  - mkdocstrings:
+      handlers:
+        python:
+          options:
+            docstring_style: google
+            show_source: true
+            show_root_heading: true
+            show_root_full_path: false
+            show_category_heading: true
+            show_if_no_docstring: false
+            members_order: source
+            separate_signature: true
+            show_signature_annotations: true
+
+markdown_extensions:
+  - admonition
+  - pymdownx.details
+  - pymdownx.superfences
+  - pymdownx.highlight:
+      anchor_linenums: true
+      line_spans: __span
+      pygments_lang_class: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - pymdownx.tabbed:
+      alternate_style: true
+  - attr_list
+  - md_in_html
+  - tables
+  - toc:
+      permalink: true
+
+extra_css:
+  - stylesheets/extra.css
+
+nav:
+  - Inicio: index.md
+  - Instalación: installation.md
+  - Inicio Rápido: quickstart.md
+  - Guía de Usuario:
+      - Proveedores:
+          - providers/index.md
+          - Stripe: providers/stripe.md
+          - PayPal: providers/paypal.md
+          - Flow.cl: providers/flow.md
+          - Khipu: providers/khipu.md
+          - Genérico: providers/generic.md
+          - Prueba: providers/dummy.md
+          - Proveedor Personalizado: providers/custom.md
+      - Estrategias de Autenticación: auth.md
+      - Transporte Personalizado: transport.md
+      - Utilidades de Montos: amounts.md
+      - Webhooks: webhooks.md
+  - Referencia de API:
+      - api-reference/index.md
+      - Cliente: api-reference/client.md
+      - Modelos: api-reference/models.md
+      - Proveedores: api-reference/providers.md
+      - Autenticación: api-reference/auth.md
+      - Transporte: api-reference/transport.md
+      - Montos: api-reference/amount.md
+      - Webhooks: api-reference/webhooks.md

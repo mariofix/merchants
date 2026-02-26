@@ -1,0 +1,75 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "merchants"
+version = "2026.2.2"
+description = "A unified payment processing toolkit"
+readme = "README.md"
+license = { file = "LICENSE" }
+requires-python = ">=3.10,<4.0"
+dependencies = ["pydantic>=2.0", "requests>=2.28"]
+keywords = [
+    "payment",
+    "psp",
+    "payment-gateway",
+    "payment-integration",
+    "payment-processing",
+    "payment-hub",
+    "payment-platform",
+    "cli",
+    "api",
+]
+classifiers = [
+    "License :: OSI Approved :: MIT License",
+    "Development Status :: 4 - Beta",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Intended Audience :: Developers",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+]
+
+[tool.poetry]
+package-mode = true
+
+[project.urls]
+Source = "https://github.com/mariofix/merchants"
+Homepage = "https://pypi.org/project/merchants/"
+
+
+[project.optional-dependencies]
+flow = ["pyflowcl>=2024.1"]
+khipu = ["khipu-tools>=2024.1"]
+cli = ["typer"]
+dev = ["pytest-cov", "black", "isort", "pre-commit"]
+docs = ["mkdocs", "mkdocs-material", "mkdocstrings[python]"]
+
+[project.scripts]
+merchants = "merchants.cli:app"
+
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-v --cov=merchants/ --cov-report=term-missing"
+
+[tool.black]
+line-length = 119
+target-version = ['py310', 'py311', 'py312', 'py313']
+
+
+[tool.isort]
+profile = "black"
+multi_line_output = 3
+py_version = 313
+
+
+[tool.coverage.run]
+relative_files = true
+source = ["merchants/"]
+
+[tool.coverage.report]
+show_missing = true

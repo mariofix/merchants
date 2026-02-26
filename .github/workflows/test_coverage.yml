@@ -1,0 +1,36 @@
+name: Tests&Coverage
+
+on:
+  push:
+    branches: ["sandbox"]
+
+jobs:
+  tests:
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.10", "3.11", "3.12", "3.13"]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v6
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Install everything
+        run: pip install .[dev,cli,flow,khipu,docs] coverage
+
+      - name: Run tests
+        run: |
+          pytest --cov=src/merchants --cov-report=term-missing
+          coverage xml -i
+
+      - name: Upload coverage to Codacy
+        uses: codacy/codacy-coverage-reporter-action@v1
+        with:
+          project-token: ${{ secrets.CODACY_PROJECT_TOKEN }}
+          coverage-reports: coverage.xml
