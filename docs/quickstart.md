@@ -5,7 +5,7 @@ This guide shows the essential steps to go from installation to a working paymen
 ## 1. Install merchants
 
 ```bash
-pip install merchants
+pip install merchants-sdk
 ```
 
 ## 2. Choose a Provider

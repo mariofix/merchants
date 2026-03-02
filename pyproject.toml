@@ -1,10 +1,6 @@
-[build-system]
-requires = ["setuptools>=68", "wheel"]
-build-backend = "setuptools.build_meta"
-
 [project]
-name = "merchants"
-version = "2026.2.2"
+name = "merchants-sdk"
+version = "2026.2.4"
 description = "Framework-agnostic hosted-checkout payment SDK"
 readme = "README.md"
 license = { file = "LICENSE" }
@@ -22,8 +18,17 @@ dev = [
     "responses>=0.25",
     "typer>=0.9",
     "pre-commit",
+    "mkdocs>=1.6",
+    "mkdocs-material>=9.5",
+    "mkdocstrings[python]>=0.25",
 ]
-docs = ["mkdocs>=1.6", "mkdocs-material>=9.5", "mkdocstrings[python]>=0.25"]
+
+[tool.poetry]
+packages = [{ include = "merchants" }]
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"
 
 [project.scripts]
 merchants = "merchants.cli:app"
@@ -34,7 +39,7 @@ testpaths = ["tests"]
 addopts = "-v"
 
 [tool.ruff]
-line-length = 100
+line-length = 119
 target-version = "py310"
 
 [tool.ruff.lint]

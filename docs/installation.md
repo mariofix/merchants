@@ -14,7 +14,7 @@
 Install the core package with support for Stripe and PayPal stubs:
 
 ```bash
-pip install merchants
+pip install merchants-sdk
 ```
 
 ## Optional Provider Extras
@@ -24,7 +24,7 @@ Some providers depend on additional packages. Install them as extras:
 === "Flow.cl"
 
     ```bash
-    pip install "merchants[flow]"
+    pip install "merchants-sdk[flow]"
     ```
 
     Installs [`pyflowcl`](https://pypi.org/project/pyflowcl/) for [Flow.cl](https://www.flow.cl) payments (Chile).
@@ -32,7 +32,7 @@ Some providers depend on additional packages. Install them as extras:
 === "Khipu"
 
     ```bash
-    pip install "merchants[khipu]"
+    pip install "merchants-sdk[khipu]"
     ```
 
     Installs [`khipu-tools`](https://pypi.org/project/khipu-tools/) for [Khipu](https://khipu.com) payments (Chile).
@@ -40,7 +40,7 @@ Some providers depend on additional packages. Install them as extras:
 === "All extras"
 
     ```bash
-    pip install "merchants[flow,khipu]"
+    pip install "merchants-sdk[flow,khipu]"
     ```
 
 ## Development
@@ -48,8 +48,8 @@ Some providers depend on additional packages. Install them as extras:
 To work on merchants locally, clone the repository and install in editable mode with dev dependencies:
 
 ```bash
-git clone https://github.com/mariofix/merchnts-cp.git
-cd merchnts-cp
+git clone https://github.com/mariofix/merchants.git
+cd merchants
 pip install -e ".[dev]"
 ```
 

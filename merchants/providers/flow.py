@@ -1,4 +1,4 @@
-"""Flow.cl provider – wraps the ``pyflowcl`` package."""
+"""Flow.cl provider - wraps the ``pyflowcl`` package."""
 
 from __future__ import annotations
 
@@ -46,7 +46,7 @@ class FlowProvider(Provider):
     key = "flow"
     name = "Flow.cl"
     author = "merchants team"
-    version = "1.0.0"
+    version = "3.0.1"
     description = "Flow.cl payment gateway for Chile, powered by pyflowcl."
     url = "https://www.flow.cl"
 

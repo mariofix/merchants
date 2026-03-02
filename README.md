@@ -5,29 +5,19 @@ A framework-agnostic Python SDK for hosted-checkout payment flows.
 ## Features
 
 - **Hosted checkout only** – redirect users to a provider-hosted payment page; no card data ever touches your server.
-- **Built-in providers** – Stripe, PayPal, [Flow.cl](https://www.flow.cl) (`pip install merchants[flow]`), [Khipu](https://khipu.com) (`pip install merchants[khipu]`), and a `DummyProvider` for local dev.
+- **Built-in providers** – Stripe, PayPal, [Flow.cl](https://www.flow.cl) (`pip install merchants-sdk[flow]`), [Khipu](https://khipu.com) (`pip install merchants-sdk[khipu]`), and a `DummyProvider` for local dev.
 - **Provider metadata** – every provider exposes `name`, `author`, `version`, `description`, and `url` via `ProviderInfo` (Pydantic model), enabling downstream applications to inspect and parse the registry.
-- **CLI** – a Typer-powered command-line interface for listing providers and inspecting their metadata (`pip install "merchants[cli]"`).
+- **CLI** – a Typer-powered command-line interface for listing providers and inspecting their metadata (`pip install merchants-sdk[cli]`).
 - **Pluggable transport** – default `requests.Session` backend; inject any `Transport` (e.g. httpx) for testing or custom HTTP clients.
 - **Flexible auth** – API-key header auth and token (Bearer) auth strategies.
 - **Pydantic models** – `CheckoutSession`, `PaymentStatus`, `WebhookEvent` with full type hints.
 - **Amount helpers** – `to_decimal_string`, `to_minor_units`, `from_minor_units`.
-- **Webhook utilities** – HMAC-SHA256 constant-time signature verification and best-effort event parsing.
-
-## Requirements
-
-- Python ≥ 3.10
-- `pydantic >= 2.0`
-- `requests >= 2.28`
 
 ## Installation
 
 ```bash
-pip install merchants              # core (Stripe + PayPal stubs)
-pip install "merchants[flow]"      # + Flow.cl via pyflowcl
-pip install "merchants[khipu]"     # + Khipu via khipu-tools
-pip install "merchants[cli]"       # + CLI (typer)
-pip install -e ".[dev]"            # local development
+pip install merchants-sdk              # core (Stripe + PayPal stubs)
+pip install "merchants-sdk[cli]"       # + CLI (typer)
 ```
 
 ## Quick Start
@@ -76,11 +66,11 @@ client = Client(provider=StripeProvider(api_key="sk_test_…"))
 from merchants.providers.paypal import PayPalProvider
 client = Client(provider=PayPalProvider(access_token="token_…"))
 
-# Flow.cl  (pip install merchants[flow])
+# Flow.cl  (pip install merchants-sdk[flow])
 from merchants.providers.flow import FlowProvider
 client = Client(provider=FlowProvider(api_key="…", api_secret="…"))
 
-# Khipu  (pip install merchants[khipu])
+# Khipu  (pip install merchants-sdk[khipu])
 from merchants.providers.khipu import KhipuProvider
 client = Client(provider=KhipuProvider(api_key="…"))
 
@@ -213,7 +203,7 @@ print(json.dumps([i.model_dump() for i in describe_providers()], indent=2))
 Install the CLI extra and use the `merchants` command:
 
 ```bash
-pip install "merchants[cli]"
+pip install "merchants-sdk[cli]"
 merchants --help
 ```
 
@@ -459,18 +449,3 @@ The `examples/` directory contains runnable scripts:
 | `01_simple_client.py` | Basic client setup with DummyProvider and Stripe |
 | `02_custom_httpx_transport.py` | Custom httpx-backed transport |
 | `03_custom_provider.py` | Building your own provider |
-
-## Development
-
-```bash
-pip install -e ".[dev]"
-pytest
-```
-
-The package version is maintained in a single place: `src/merchants/version.py`.
-Update `__version__` there and it propagates to the package metadata, `merchants.__version__`,
-and the `merchants version` CLI command automatically.
-
-## License
-
-MIT

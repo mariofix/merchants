@@ -1,5 +1,5 @@
 """
-Example 2 – Custom httpx transport
+Example 2 - Custom httpx transport
 ====================================
 
 The SDK ships with a ``requests``-based transport, but you can plug in any

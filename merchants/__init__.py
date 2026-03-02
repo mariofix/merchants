@@ -1,4 +1,4 @@
-"""merchants – framework-agnostic hosted-checkout payment SDK."""
+"""merchants - framework-agnostic hosted-checkout payment SDK."""
 
 from __future__ import annotations
 

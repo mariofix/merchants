@@ -7,7 +7,7 @@ The `KhipuProvider` integrates with [Khipu](https://khipu.com), a Chilean bank-t
 Install merchants with the `khipu` extra:
 
 ```bash
-pip install "merchants[khipu]"
+pip install "merchants-sdk[khipu]"
 ```
 
 !!! note "Requires khipu-tools"

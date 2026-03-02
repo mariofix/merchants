@@ -10,7 +10,7 @@ The `PayPalProvider` integrates with the PayPal Orders API. It sends amounts as 
 No extra dependencies required:
 
 ```bash
-pip install merchants
+pip install merchants-sdk
 ```
 
 ## Usage

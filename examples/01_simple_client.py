@@ -1,5 +1,5 @@
 """
-Example 1 – Simple client setup
+Example 1 - Simple client setup
 ================================
 
 Shows the quickest way to get a checkout redirect URL using the Stripe provider.

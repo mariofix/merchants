@@ -27,8 +27,8 @@ The repository uses **one `mkdocs.yml` per language**, each pointing to its own 
 
 | Config file | Language | Docs directory | Published at |
 |---|---|---|---|
-| `mkdocs.yml` | English (default) | `docs/` | `/merchnts-cp/` |
-| `mkdocs.es.yml` | Spanish | `docs/es/` | `/merchnts-cp/es/` |
+| `mkdocs.yml` | English (default) | `docs/` | `/merchants/` |
+| `mkdocs.es.yml` | Spanish | `docs/es/` | `/merchants/es/` |
 
 A language switcher (globe icon) is shown in the header of every page, linking between versions.
 
@@ -107,8 +107,8 @@ mkdocs gh-deploy -f mkdocs.es.yml -d site/es --remote-branch gh-pages
 
 Your docs will be available at:
 
-- English: `https://mariofix.github.io/merchnts-cp/`
-- Spanish: `https://mariofix.github.io/merchnts-cp/es/`
+- English: `https://mariofix.github.io/merchants/`
+- Spanish: `https://mariofix.github.io/merchants/es/`
 
 ## Updating the Docs
 
@@ -160,7 +160,7 @@ Copy `mkdocs.es.yml` to `mkdocs.pt.yml` and update:
 
 ```yaml
 site_description: "..."        # translated description
-site_url: .../merchnts-cp/pt/
+site_url: .../merchants/pt/
 edit_uri: edit/main/docs/pt/
 docs_dir: docs/pt
 theme:
@@ -178,13 +178,13 @@ Add an entry to the `extra.alternate` list in **both** `mkdocs.yml` and `mkdocs.
 extra:
   alternate:
     - name: English
-      link: /merchnts-cp/
+      link: /merchants/
       lang: en
     - name: Español
-      link: /merchnts-cp/es/
+      link: /merchants/es/
       lang: es
     - name: Português
-      link: /merchnts-cp/pt/
+      link: /merchants/pt/
       lang: pt
 ```
 
@@ -234,31 +234,3 @@ Hard-refresh the browser (`Ctrl+Shift+R` / `Cmd+Shift+R`) or restart `mkdocs ser
 
 **Spanish deploy overwrites English**
 Always deploy English first with `mkdocs gh-deploy`, then deploy other languages using `-d site/<lang>`.
-
-## Alternative Tools — Zensical
-
-[Zensical](https://zensical.org/) is a modern static site generator created by the same team behind
-**Material for MkDocs**. It was analyzed as a potential replacement for the current MkDocs setup.
-
-### Key findings (as of February 2026)
-
-| Criterion | MkDocs + Material | Zensical |
-|---|---|---|
-| Maturity | Stable (≥ 1.6) | Alpha (0.0.23) |
-| Config format | YAML (`mkdocs.yml`) | TOML (`zensical.toml`) |
-| API reference via `mkdocstrings` | ✅ Supported | ❌ Not yet available |
-| Multi-language support | ✅ Built-in | ✅ Built-in |
-| Python ≥ 3.10 required | ✅ | ✅ |
-| Plugin ecosystem | Mature | Early stage |
-
-### Recommendation
-
-**Stay with MkDocs + Material + mkdocstrings for now.**
-
-The primary blocker is that Zensical does not yet offer a `mkdocstrings` equivalent.
-This project relies on `mkdocstrings[python]` to auto-generate API reference pages directly
-from Python docstrings (`:::` directives throughout `docs/api-reference/`).
-Switching would break all API reference documentation until Zensical adds comparable plugin support.
-
-Revisit this decision once Zensical reaches a stable release and provides a plugin for API
-reference generation.

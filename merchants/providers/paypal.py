@@ -21,7 +21,7 @@ class PayPalProvider(Provider):
     - PayPal-style status strings in state normalisation.
 
     .. note::
-        This is a stub – it does not call the real PayPal API.
+        This is a stub - it does not call the real PayPal API.
         Replace ``base_url`` and inject a real transport to connect to PayPal.
 
     Args:

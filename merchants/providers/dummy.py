@@ -1,4 +1,4 @@
-"""Dummy provider – returns sensible random data for local dev and testing."""
+"""Dummy provider - returns sensible random data for local dev and testing."""
 
 from __future__ import annotations
 

@@ -1,5 +1,5 @@
 """
-Example 3 – Building your own provider
+Example 3 - Building your own provider
 ========================================
 
 Implement the ``Provider`` ABC to integrate any payment gateway.
