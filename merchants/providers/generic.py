@@ -6,7 +6,7 @@ from decimal import Decimal
 from typing import Any
 
 from merchants.amount import to_decimal_string
-from merchants.models import CheckoutSession, PaymentState, PaymentStatus, WebhookEvent
+from merchants.models import CheckoutSession, PaymentStatus, WebhookEvent
 from merchants.providers import Provider, UserError, normalise_state
 from merchants.transport import RequestsTransport, Transport
 

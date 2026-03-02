@@ -11,7 +11,6 @@ from merchants.models import CheckoutSession, PaymentState, PaymentStatus, Webho
 from merchants.providers import Provider, UserError
 
 try:
-    import khipu_tools
     from khipu_tools import KhipuClient
 except ImportError as exc:  # pragma: no cover
     raise ImportError(

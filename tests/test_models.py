@@ -2,8 +2,6 @@
 
 from decimal import Decimal
 
-import pytest
-
 from merchants.models import PaymentState, PaymentStatus, WebhookEvent
 
 

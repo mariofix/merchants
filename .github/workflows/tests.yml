@@ -26,7 +26,7 @@ jobs:
 
       - name: Run tests
         run: |
-          pytest --cov=src/merchants --cov-report=term-missing
+          pytest --cov=merchants --cov-report=term-missing
 
       # - name: Upload coverage to Codacy
       #   uses: codacy/codacy-coverage-reporter-action@v1

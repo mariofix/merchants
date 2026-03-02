@@ -2,8 +2,6 @@
 
 from decimal import Decimal
 
-import pytest
-
 from merchants.amount import from_minor_units, to_decimal_string, to_minor_units
 
 
