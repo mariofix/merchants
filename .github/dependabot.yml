@@ -4,16 +4,21 @@ updates:
     directory: "/"
     schedule:
       interval: "weekly"
-    groups:
-      python-dependencies:
-        patterns:
-          - "*"
-
+    allow:
+      - dependency-type: "all"
+    assignees:
+      - "mariofix"
+    commit-message:
+      prefix: "poetry prod"
+      prefix-development: "poetry dev"
+      include: "scope"
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
       interval: "weekly"
-    groups:
-      github-actions:
-        patterns:
-          - "*"
+    allow:
+      - dependency-type: "all"
+    commit-message:
+      prefix: "actions prod"
+      prefix-development: "actions dev"
+      include: "scope"
