@@ -51,7 +51,8 @@ class TestProviderInfo:
         assert info.name == "Test"
         assert info.author == "me"
         assert info.version == "1.0.0"
-        assert info.description == ""
+        # when no description is given, it autofills with the name
+        assert info.description == "Test"
         assert info.url == ""
 
     def test_optional_fields(self):
@@ -90,8 +91,8 @@ class TestProviderGetInfo:
         assert isinstance(info, ProviderInfo)
         assert info.key == "dummy"
         assert info.name == "Dummy"
-        assert info.author == "merchants team"
-        assert info.version == "1.0.0"
+        assert info.author == "mariofix"
+        assert info.version == "2026.3.0"
         assert info.description != ""
 
     def test_stripe_provider_info(self):
@@ -216,7 +217,7 @@ class TestCLIInfo:
         assert result.exit_code == 0
         assert "dummy" in result.output
         assert "Dummy" in result.output
-        assert "merchants team" in result.output
+        assert "mariofix" in result.output
 
     def test_info_json(self):
         result = runner.invoke(app, ["info", "dummy", "--output", "json"])
