@@ -1,5 +1,4 @@
 """Flow.cl provider - wraps the ``pyflowcl`` package."""
-
 from __future__ import annotations
 
 import json
@@ -12,9 +11,9 @@ from merchants.providers import Provider, UserError
 
 try:
     from pyflowcl.Clients import ApiClient
-    from pyflowcl.exceptions import GenericError
     from pyflowcl.Payment import create as flow_create
     from pyflowcl.Payment import getStatus as flow_get_status
+    from pyflowcl.exceptions import GenericError
 except ImportError as exc:  # pragma: no cover
     raise ImportError(
         "pyflowcl is required for FlowProvider. Install it with: pip install pyflowcl"
@@ -46,7 +45,7 @@ class FlowProvider(Provider):
     key = "flow"
     name = "Flow.cl"
     author = "merchants team"
-    version = "3.0.1"
+    version = "1.0.0"
     description = "Flow.cl payment gateway for Chile, powered by pyflowcl."
     url = "https://www.flow.cl"
 
@@ -74,6 +73,7 @@ class FlowProvider(Provider):
         success_url: str,
         cancel_url: str,
         metadata: dict[str, Any] | None = None,
+        **kwargs: Any,
     ) -> CheckoutSession:
         # Flow expects integer amounts in CLP
         amount_int = to_minor_units(amount, decimals=0)
@@ -90,11 +90,7 @@ class FlowProvider(Provider):
         except GenericError as exc:
             raise UserError(str(exc)) from exc
 
-        redirect_url = (
-            f"{response.url}?token={response.token}"
-            if response.url and response.token
-            else ""
-        )
+        redirect_url = f"{response.url}?token={response.token}" if response.url and response.token else ""
         return CheckoutSession(
             session_id=str(response.token or ""),
             redirect_url=redirect_url,
@@ -134,7 +130,6 @@ class FlowProvider(Provider):
         except ValueError:
             # form-encoded: token=xxx
             from urllib.parse import parse_qs
-
             qs = parse_qs(payload.decode(errors="replace"))
             token = (qs.get("token") or [""])[0]
             data = {"token": token}

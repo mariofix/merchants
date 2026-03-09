@@ -1,12 +1,11 @@
 """Pluggable provider integrations."""
-
 from __future__ import annotations
 
 from abc import ABC, abstractmethod
 from decimal import Decimal
 from typing import Any
 
-from pydantic import BaseModel
+from pydantic import BaseModel, model_validator
 
 from merchants.models import CheckoutSession, PaymentState, PaymentStatus, WebhookEvent
 
@@ -24,7 +23,7 @@ class ProviderInfo(BaseModel):
     """Structured metadata for a payment provider.
 
     Downstream applications can use this model to introspect the provider
-    registry — e.g. serialise to JSON, render in a UI, or drive routing logic.
+    registry - e.g. serialise to JSON, render in a UI, or drive routing logic.
 
     Attributes:
         key: Short machine-readable identifier (e.g. ``"stripe"``).
@@ -42,6 +41,12 @@ class ProviderInfo(BaseModel):
     description: str = ""
     url: str = ""
 
+    @model_validator(mode="after")
+    def _set_default_description(self) -> "ProviderInfo":
+        if not self.description:
+            self.description = self.name
+        return self
+
 
 class Provider(ABC):
     """Abstract base class for payment provider integrations."""
@@ -58,6 +63,24 @@ class Provider(ABC):
     description: str = ""
     #: Documentation or homepage URL.
     url: str = ""
+    #: Whether this provider accepts a webhook notification URL.
+    #: Subclasses that support server-to-server webhook callbacks should
+    #: override this to ``True`` so that :meth:`PaymentMixin.create` will
+    #: automatically inject the calculated ``notify_url`` into the provider
+    #: call.  Internal providers (e.g. ``saldo``, ``cafeteria``) should
+    #: leave this as ``False``.
+    accepts_notify_url: bool = False
+
+    def __init__(
+        self,
+        *,
+        key: str | None = None,
+        name: str | None = None,
+        description: str | None = None,
+    ) -> None:
+        for attr, value in (("key", key), ("name", name), ("description", description)):
+            if value is not None:
+                setattr(self, attr, value)
 
     def get_info(self) -> ProviderInfo:
         """Return a :class:`ProviderInfo` populated from this provider's class attributes."""
@@ -78,8 +101,12 @@ class Provider(ABC):
         success_url: str,
         cancel_url: str,
         metadata: dict[str, Any] | None = None,
+        **kwargs: Any,
     ) -> CheckoutSession:
         """Create a hosted-checkout session.
+
+        Args:
+            kwargs: Provider-specific keyword arguments (e.g. ``notify_url``).
 
         Returns:
             :class:`~merchants.models.CheckoutSession` with a ``redirect_url``.
@@ -131,7 +158,8 @@ def get_provider(key_or_instance: str | Provider) -> Provider:
     except KeyError:
         available = list(_REGISTRY.keys())
         raise KeyError(
-            f"Provider {key_or_instance!r} not registered. " f"Available: {available}"
+            f"Provider {key_or_instance!r} not registered. "
+            f"Available: {available}"
         ) from None
 
 

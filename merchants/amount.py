@@ -1,5 +1,4 @@
 """Amount handling utilities."""
-
 from __future__ import annotations
 
 from decimal import ROUND_HALF_UP, Decimal

@@ -1,5 +1,4 @@
 """PayPal-like provider stub demonstrating decimal-string amount handling."""
-
 from __future__ import annotations
 
 import json
@@ -34,9 +33,7 @@ class PayPalProvider(Provider):
     name = "PayPal"
     author = "merchants team"
     version = "1.0.0"
-    description = (
-        "PayPal payment gateway integration (stub). Sends amounts as decimal strings."
-    )
+    description = "PayPal payment gateway integration (stub). Sends amounts as decimal strings."
     url = "https://developer.paypal.com"
 
     def __init__(
@@ -63,6 +60,7 @@ class PayPalProvider(Provider):
         success_url: str,
         cancel_url: str,
         metadata: dict[str, Any] | None = None,
+        **kwargs: Any,
     ) -> CheckoutSession:
         payload: dict[str, Any] = {
             "intent": "CAPTURE",
@@ -86,13 +84,8 @@ class PayPalProvider(Provider):
             json=payload,
         )
         if not resp.ok:
-            body_msg = (
-                resp.body.get("message", "") if isinstance(resp.body, dict) else ""
-            )
-            raise UserError(
-                body_msg or f"PayPal error {resp.status_code}",
-                code=str(resp.status_code),
-            )
+            body_msg = resp.body.get("message", "") if isinstance(resp.body, dict) else ""
+            raise UserError(body_msg or f"PayPal error {resp.status_code}", code=str(resp.status_code))
 
         body: dict[str, Any] = resp.body if isinstance(resp.body, dict) else {}
         redirect_url = ""

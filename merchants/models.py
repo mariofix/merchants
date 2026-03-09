@@ -1,5 +1,4 @@
 """Pydantic models for the merchants SDK."""
-
 from __future__ import annotations
 
 from decimal import Decimal
@@ -31,6 +30,7 @@ class CheckoutSession(BaseModel):
     currency: str
     metadata: dict[str, Any] = Field(default_factory=dict)
     raw: dict[str, Any] = Field(default_factory=dict)
+    initial_state: PaymentState = PaymentState.PENDING
 
 
 class PaymentStatus(BaseModel):

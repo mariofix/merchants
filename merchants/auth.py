@@ -1,5 +1,4 @@
 """Auth strategies for the merchants SDK."""
-
 from __future__ import annotations
 
 from abc import ABC, abstractmethod

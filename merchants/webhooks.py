@@ -1,7 +1,7 @@
 """Webhook verification and parsing utilities."""
-
 from __future__ import annotations
 
+import base64
 import hashlib
 import hmac
 import json
@@ -43,10 +43,64 @@ def verify_signature(
     # Strip optional prefix from provided signature
     provided = signature
     if provided.startswith(header_prefix):
-        provided = provided[len(header_prefix) :]
+        provided = provided[len(header_prefix):]
 
     if not hmac.compare_digest(expected_hex, provided):
         raise WebhookVerificationError("Webhook signature verification failed.")
+
+
+def verify_khipu_signature(
+    payload: bytes,
+    secret: str | bytes,
+    header_value: str,
+) -> str:
+    """Verify a Khipu v3.0 webhook signature (``x-khipu-signature`` header).
+
+    Khipu signs webhooks with HMAC-SHA256 using the format
+    ``t=<unix_ms>,s=<base64_signature>``.  The signed message is
+    ``"<timestamp>.<body>"``.
+
+    Args:
+        payload: Raw request body bytes (the JSON as sent by Khipu — must
+            not be re-serialised or whitespace-modified).
+        secret: Merchant secret (the Khipu receiver secret key).
+        header_value: The full ``x-khipu-signature`` header value,
+            e.g. ``"t=1711965600393,s=GYzp…Tdg="``.
+
+    Returns:
+        The extracted timestamp string (useful for replay-attack checks).
+
+    Raises:
+        WebhookVerificationError: If the header is malformed or the
+            signature does not match.
+    """
+    if isinstance(secret, str):
+        secret = secret.encode()
+
+    # Parse "t=<timestamp>,s=<signature>"
+    t_value: str | None = None
+    s_value: str | None = None
+    for part in header_value.split(","):
+        key, _, val = part.partition("=")
+        if key == "t":
+            t_value = val
+        elif key == "s":
+            s_value = val
+
+    if not t_value or not s_value:
+        raise WebhookVerificationError(
+            "Malformed x-khipu-signature header: missing t= or s= component."
+        )
+
+    # Build the signed string: "<timestamp>.<body>"
+    to_hash = f"{t_value}.".encode() + payload
+    expected_digest = hmac.new(secret, to_hash, hashlib.sha256).digest()
+    expected_b64 = base64.b64encode(expected_digest).decode()
+
+    if not hmac.compare_digest(expected_b64, s_value):
+        raise WebhookVerificationError("Khipu webhook signature verification failed.")
+
+    return t_value
 
 
 def parse_event(

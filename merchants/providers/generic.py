@@ -1,12 +1,11 @@
-"""Generic HTTP provider – calls arbitrary REST endpoints."""
-
+"""Generic HTTP provider - calls arbitrary REST endpoints."""
 from __future__ import annotations
 
 from decimal import Decimal
 from typing import Any
 
 from merchants.amount import to_decimal_string
-from merchants.models import CheckoutSession, PaymentStatus, WebhookEvent
+from merchants.models import CheckoutSession, PaymentState, PaymentStatus, WebhookEvent
 from merchants.providers import Provider, UserError, normalise_state
 from merchants.transport import RequestsTransport, Transport
 
@@ -28,9 +27,7 @@ class GenericProvider(Provider):
     name = "Generic"
     author = "merchants team"
     version = "1.0.0"
-    description = (
-        "Generic REST endpoint provider for custom or in-house payment gateways."
-    )
+    description = "Generic REST endpoint provider for custom or in-house payment gateways."
     url = ""
 
     def __init__(
@@ -53,6 +50,7 @@ class GenericProvider(Provider):
         success_url: str,
         cancel_url: str,
         metadata: dict[str, Any] | None = None,
+        **kwargs: Any,
     ) -> CheckoutSession:
         payload: dict[str, Any] = {
             "amount": to_decimal_string(amount),
@@ -68,9 +66,7 @@ class GenericProvider(Provider):
             json=payload,
         )
         if not resp.ok:
-            raise UserError(
-                f"Provider returned {resp.status_code}", code=str(resp.status_code)
-            )
+            raise UserError(f"Provider returned {resp.status_code}", code=str(resp.status_code))
 
         body: dict[str, Any] = resp.body if isinstance(resp.body, dict) else {}
         return CheckoutSession(

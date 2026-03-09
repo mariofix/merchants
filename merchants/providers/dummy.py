@@ -1,9 +1,9 @@
 """Dummy provider - returns sensible random data for local dev and testing."""
-
 from __future__ import annotations
 
 import random
 import string
+import uuid
 from decimal import Decimal
 from typing import Any
 
@@ -33,7 +33,9 @@ class DummyProvider(Provider):
     name = "Dummy"
     author = "merchants team"
     version = "1.0.0"
-    description = "Local development provider that returns random data without calling any real API."
+    description = (
+        "Local development provider that returns random data without calling any real API."
+    )
     url = ""
 
     _TERMINAL_STATES = [
@@ -58,6 +60,7 @@ class DummyProvider(Provider):
         success_url: str,
         cancel_url: str,
         metadata: dict[str, Any] | None = None,
+        **kwargs: Any,
     ) -> CheckoutSession:
         session_id = _rand_id("dummy_sess_")
         return CheckoutSession(

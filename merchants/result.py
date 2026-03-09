@@ -1,5 +1,4 @@
 """Result types: Success[T] and Failure[E]."""
-
 from __future__ import annotations
 
 from dataclasses import dataclass
