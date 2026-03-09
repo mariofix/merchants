@@ -1,7 +1,7 @@
 [project]
 name = "merchants-sdk"
-version = "2026.2.4"
-description = "Framework-agnostic hosted-checkout payment SDK"
+version = "2026.3.0"
+description = "Payments for people who have better things to do."
 readme = "README.md"
 license = { file = "LICENSE" }
 requires-python = ">=3.10"

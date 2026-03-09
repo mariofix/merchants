@@ -1,4 +1,5 @@
 """Flow.cl provider - wraps the ``pyflowcl`` package."""
+
 from __future__ import annotations
 
 import json
@@ -44,8 +45,8 @@ class FlowProvider(Provider):
 
     key = "flow"
     name = "Flow.cl"
-    author = "merchants team"
-    version = "1.0.0"
+    author = "mariofix"
+    version = "2026.3.0"
     description = "Flow.cl payment gateway for Chile, powered by pyflowcl."
     url = "https://www.flow.cl"
 
@@ -90,7 +91,11 @@ class FlowProvider(Provider):
         except GenericError as exc:
             raise UserError(str(exc)) from exc
 
-        redirect_url = f"{response.url}?token={response.token}" if response.url and response.token else ""
+        redirect_url = (
+            f"{response.url}?token={response.token}"
+            if response.url and response.token
+            else ""
+        )
         return CheckoutSession(
             session_id=str(response.token or ""),
             redirect_url=redirect_url,
@@ -130,6 +135,7 @@ class FlowProvider(Provider):
         except ValueError:
             # form-encoded: token=xxx
             from urllib.parse import parse_qs
+
             qs = parse_qs(payload.decode(errors="replace"))
             token = (qs.get("token") or [""])[0]
             data = {"token": token}

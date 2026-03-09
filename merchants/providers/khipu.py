@@ -1,4 +1,5 @@
 """Khipu provider - wraps the ``khipu-tools`` package."""
+
 from __future__ import annotations
 
 import json
@@ -46,8 +47,8 @@ class KhipuProvider(Provider):
 
     key = "khipu"
     name = "Khipu"
-    author = "merchants team"
-    version = "1.0.0"
+    author = "mariofix"
+    version = "2016.3.0"
     description = "Khipu payment gateway for Chile, powered by khipu-tools."
     url = "https://khipu.com"
     accepts_notify_url = True
@@ -87,7 +88,8 @@ class KhipuProvider(Provider):
     ) -> CheckoutSession:
         logger.debug(
             "khipu.py: KhipuProvider.create_checkout called with amount=%s currency=%s",
-            amount, currency,
+            amount,
+            currency,
         )
         params: dict[str, Any] = {
             "amount": to_decimal_string(amount),
@@ -128,7 +130,9 @@ class KhipuProvider(Provider):
         )
 
     def get_payment(self, payment_id: str) -> PaymentStatus:
-        logger.debug("khipu.py: KhipuProvider.get_payment called with payment_id=%s", payment_id)
+        logger.debug(
+            "khipu.py: KhipuProvider.get_payment called with payment_id=%s", payment_id
+        )
         try:
             result = khipu_tools.Payments.get(payment_id=payment_id)
         except Exception as exc:
@@ -172,7 +176,9 @@ class KhipuProvider(Provider):
         logger.debug("khipu.py: KhipuProvider.parse_webhook called")
 
         # Verify signature when a webhook secret is configured
-        sig_header = headers.get("X-Khipu-Signature") or headers.get("x-khipu-signature", "")
+        sig_header = headers.get("X-Khipu-Signature") or headers.get(
+            "x-khipu-signature", ""
+        )
         if self._webhook_secret and sig_header:
             verify_khipu_signature(payload, self._webhook_secret, sig_header)
         elif self._webhook_secret and not sig_header:
@@ -184,6 +190,7 @@ class KhipuProvider(Provider):
             data: dict[str, Any] = json.loads(payload)
         except ValueError:
             from urllib.parse import parse_qs
+
             qs = parse_qs(payload.decode(errors="replace"))
             data = {k: v[0] for k, v in qs.items()}
 

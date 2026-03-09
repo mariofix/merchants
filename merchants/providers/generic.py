@@ -1,4 +1,5 @@
 """Generic HTTP provider - calls arbitrary REST endpoints."""
+
 from __future__ import annotations
 
 from decimal import Decimal
@@ -25,9 +26,11 @@ class GenericProvider(Provider):
 
     key = "generic"
     name = "Generic"
-    author = "merchants team"
-    version = "1.0.0"
-    description = "Generic REST endpoint provider for custom or in-house payment gateways."
+    author = "mariofix"
+    version = "2026.3.0"
+    description = (
+        "Generic REST endpoint provider for custom or in-house payment gateways."
+    )
     url = ""
 
     def __init__(
@@ -66,7 +69,9 @@ class GenericProvider(Provider):
             json=payload,
         )
         if not resp.ok:
-            raise UserError(f"Provider returned {resp.status_code}", code=str(resp.status_code))
+            raise UserError(
+                f"Provider returned {resp.status_code}", code=str(resp.status_code)
+            )
 
         body: dict[str, Any] = resp.body if isinstance(resp.body, dict) else {}
         return CheckoutSession(
