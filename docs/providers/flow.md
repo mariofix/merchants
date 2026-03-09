@@ -7,7 +7,7 @@ The `FlowProvider` integrates with [Flow.cl](https://www.flow.cl), a Chilean pay
 Install merchants with the `flow` extra:
 
 ```bash
-pip install "merchants[flow]"
+pip install "merchants-sdk[flow]"
 ```
 
 !!! note "Requires pyflowcl"

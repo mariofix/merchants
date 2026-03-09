@@ -24,7 +24,7 @@ Algunos proveedores dependen de paquetes adicionales. Instálalos como extras:
 === "Flow.cl"
 
     ```bash
-    pip install "merchants[flow]"
+    pip install "merchants-sdk[flow]"
     ```
 
     Instala [`pyflowcl`](https://pypi.org/project/pyflowcl/) para pagos en [Flow.cl](https://www.flow.cl) (Chile).
@@ -32,7 +32,7 @@ Algunos proveedores dependen de paquetes adicionales. Instálalos como extras:
 === "Khipu"
 
     ```bash
-    pip install "merchants[khipu]"
+    pip install "merchants-sdk[khipu]"
     ```
 
     Instala [`khipu-tools`](https://pypi.org/project/khipu-tools/) para pagos en [Khipu](https://khipu.com) (Chile).
@@ -40,7 +40,7 @@ Algunos proveedores dependen de paquetes adicionales. Instálalos como extras:
 === "Todos los extras"
 
     ```bash
-    pip install "merchants[flow,khipu]"
+    pip install "merchants-sdk[flow,khipu]"
     ```
 
 ## Desarrollo

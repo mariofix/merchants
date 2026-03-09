@@ -10,7 +10,7 @@ The `StripeProvider` integrates with Stripe's Checkout Sessions API. It converts
 No extra dependencies required:
 
 ```bash
-pip install merchants
+pip install merchants-sdk
 ```
 
 ## Usage

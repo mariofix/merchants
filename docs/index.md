@@ -1,6 +1,6 @@
 # merchants
 
-*Framework-agnostic hosted-checkout payment SDK for Python. Simple, fast, and provider-independent.*
+*Payments for people who have better things to do.*
 
 ---
 
@@ -65,7 +65,7 @@ print(session.redirect_url)  # redirect your user here
 ## Installation
 
 ```bash
-pip install merchants
+pip install merchants-sdk
 ```
 
 See the [Installation](installation.md) page for all options including optional provider extras.
