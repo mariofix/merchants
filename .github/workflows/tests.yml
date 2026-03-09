@@ -1,35 +1,69 @@
 name: Tests&Coverage
+permissions:
+  contents: read
 
 on:
   push:
-    branches: ["main"]
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
 
 jobs:
   tests:
     strategy:
       fail-fast: false
       matrix:
-        python-version: ["3.10", "3.11", "3.12", "3.13"]
-    runs-on: ubuntu-latest
-    permissions:
-      contents: read
+        python-version: ["3.10", "3.11", "3.12", "3.13", "3.14"]
+        poetry-version: ["2.3.1"]
+        os: [ubuntu-latest]
+    runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0 # Required for better coverage reporting
 
       - name: Set up Python ${{ matrix.python-version }}
         uses: actions/setup-python@v6
         with:
           python-version: ${{ matrix.python-version }}
+          # cache: "poetry" # Enable poetry caching
 
-      - name: Install everything
-        run: pip install .[dev,cli,flow,khipu]
+      - name: Set Up Poetry
+        uses: abatilo/actions-poetry@v4
+        with:
+          poetry-version: ${{ matrix.poetry-version }}
 
-      - name: Run tests
+      - name: Install dependencies
         run: |
-          pytest --cov=merchants --cov-report=term-missing
+          poetry config virtualenvs.create true
+          poetry install --all-extras --no-interaction
 
-      # - name: Upload coverage to Codacy
-      #   uses: codacy/codacy-coverage-reporter-action@v1
-      #   with:
-      #     project-token: ${{ secrets.CODACY_PROJECT_TOKEN }}
-      #     coverage-reports: coverage.xml
+      - name: Run tests with coverage
+        env:
+          PYTHONPATH: ${{ github.workspace }}
+        run: |
+          poetry run coverage erase
+          poetry run coverage run -m pytest
+          poetry run coverage xml
+
+      - name: Coveralls GitHub Action
+        uses: coverallsapp/github-action@v2
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Run codacy-coverage-reporter
+        uses: codacy/codacy-coverage-reporter-action@v1
+        with:
+          project-token: ${{ secrets.CODACY_PROJECT_TOKEN }}
+          coverage-reports: "coverage.xml"
+          language: "python"
+
+      - name: Upload coverage artifact
+        uses: actions/upload-artifact@v7
+        with:
+          name: coverage-${{ matrix.python-version }}
+          path: coverage.xml
+          retention-days: 14
