@@ -6,7 +6,7 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
-        <meta name="description" content="Framework-agnostic hosted-checkout payment SDK for Python">
+        <meta name="description" content="Payments for people who have better things to do.">
       
       
       
@@ -1597,17 +1597,27 @@
 </span><span id="__span-2-5"><a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="nb">print</span><span class="p">(</span><span class="n">status</span><span class="o">.</span><span class="n">currency</span><span class="p">)</span>    <span class="c1"># &quot;CLP&quot;</span>
 </span></code></pre></div>
 <h2 id="webhook-parsing">Webhook Parsing<a class="headerlink" href="#webhook-parsing" title="Permanent link">&para;</a></h2>
-<p>Khipu sends <code>application/x-www-form-urlencoded</code> or JSON payloads. Both are handled automatically:</p>
-<div class="language-python highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="kn">import</span><span class="w"> </span><span class="nn">merchants</span>
-</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>
-</span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="n">event</span> <span class="o">=</span> <span class="n">merchants</span><span class="o">.</span><span class="n">parse_event</span><span class="p">(</span><span class="n">payload</span><span class="p">,</span> <span class="n">provider</span><span class="o">=</span><span class="s2">&quot;khipu&quot;</span><span class="p">)</span>
-</span><span id="__span-3-4"><a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="nb">print</span><span class="p">(</span><span class="n">event</span><span class="o">.</span><span class="n">event_type</span><span class="p">)</span>   <span class="c1"># &quot;payment.notification&quot;</span>
-</span><span id="__span-3-5"><a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="nb">print</span><span class="p">(</span><span class="n">event</span><span class="o">.</span><span class="n">payment_id</span><span class="p">)</span>   <span class="c1"># Khipu payment ID</span>
-</span><span id="__span-3-6"><a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a><span class="nb">print</span><span class="p">(</span><span class="n">event</span><span class="o">.</span><span class="n">state</span><span class="p">)</span>        <span class="c1"># e.g. PaymentState.SUCCEEDED</span>
+<p><code>KhipuProvider.parse_webhook</code> handles Khipu v3.0 JSON payloads. When <code>webhook_secret</code> is configured, it verifies the <code>x-khipu-signature</code> header using HMAC-SHA256 before parsing.</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="c1"># Use provider&#39;s parse_webhook for signature verification</span>
+</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="n">provider</span> <span class="o">=</span> <span class="n">KhipuProvider</span><span class="p">(</span>
+</span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>    <span class="n">api_key</span><span class="o">=</span><span class="s2">&quot;YOUR_RECEIVER_API_KEY&quot;</span><span class="p">,</span>
+</span><span id="__span-3-4"><a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a>    <span class="n">webhook_secret</span><span class="o">=</span><span class="s2">&quot;YOUR_WEBHOOK_SECRET&quot;</span><span class="p">,</span>
+</span><span id="__span-3-5"><a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="p">)</span>
+</span><span id="__span-3-6"><a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a><span class="n">client</span> <span class="o">=</span> <span class="n">Client</span><span class="p">(</span><span class="n">provider</span><span class="o">=</span><span class="n">provider</span><span class="p">)</span>
+</span><span id="__span-3-7"><a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a>
+</span><span id="__span-3-8"><a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a><span class="c1"># Access the provider directly to use parse_webhook</span>
+</span><span id="__span-3-9"><a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a><span class="n">event</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">_provider</span><span class="o">.</span><span class="n">parse_webhook</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">body</span><span class="p">,</span> <span class="nb">dict</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">headers</span><span class="p">))</span>
+</span><span id="__span-3-10"><a id="__codelineno-3-10" name="__codelineno-3-10" href="#__codelineno-3-10"></a><span class="nb">print</span><span class="p">(</span><span class="n">event</span><span class="o">.</span><span class="n">event_type</span><span class="p">)</span>   <span class="c1"># &quot;payment.conciliated&quot; or &quot;payment.notification&quot;</span>
+</span><span id="__span-3-11"><a id="__codelineno-3-11" name="__codelineno-3-11" href="#__codelineno-3-11"></a><span class="nb">print</span><span class="p">(</span><span class="n">event</span><span class="o">.</span><span class="n">payment_id</span><span class="p">)</span>   <span class="c1"># Khipu payment ID</span>
+</span><span id="__span-3-12"><a id="__codelineno-3-12" name="__codelineno-3-12" href="#__codelineno-3-12"></a><span class="nb">print</span><span class="p">(</span><span class="n">event</span><span class="o">.</span><span class="n">state</span><span class="p">)</span>        <span class="c1"># e.g. PaymentState.SUCCEEDED</span>
 </span></code></pre></div>
 <div class="admonition info">
-<p class="admonition-title">Form-encoded and JSON both supported</p>
-<p>Khipu may send either a JSON body or a URL-encoded form body depending on the API version. <code>KhipuProvider.parse_webhook</code> automatically detects and handles both formats.</p>
+<p class="admonition-title">JSON and form-encoded both supported</p>
+<p><code>KhipuProvider.parse_webhook</code> automatically detects and handles both JSON and URL-encoded form bodies. The v3.0 API sends JSON.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">State detection from <code>conciliation_date</code></p>
+<p>In v3.0, the payment state is determined by the presence of <code>conciliation_date</code> in the payload. If present, the state is <code>SUCCEEDED</code> and the event type is <code>"payment.conciliated"</code>. Otherwise <code>payment_status</code> is used with the standard state map.</p>
 </div>
 <h2 id="parameters">Parameters<a class="headerlink" href="#parameters" title="Permanent link">&para;</a></h2>
 <table>
@@ -1637,6 +1647,12 @@
 <td><code>str</code></td>
 <td><code>""</code></td>
 <td>Webhook URL Khipu will POST when payment is confirmed</td>
+</tr>
+<tr>
+<td><code>webhook_secret</code></td>
+<td><code>str</code></td>
+<td><code>""</code></td>
+<td>Webhook signing secret for HMAC-SHA256 signature verification</td>
 </tr>
 </tbody>
 </table>

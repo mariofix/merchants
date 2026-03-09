@@ -6,7 +6,7 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
-        <meta name="description" content="Framework-agnostic hosted-checkout payment SDK for Python">
+        <meta name="description" content="Payments for people who have better things to do.">
       
       
       
@@ -1095,6 +1095,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#khipu-webhook-verification" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Khipu Webhook Verification
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#using-providers-parse_webhook" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -1523,6 +1534,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#khipu-webhook-verification" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Khipu Webhook Verification
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#using-providers-parse_webhook" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -1771,11 +1793,30 @@
 </span><span id="__span-3-23"><a id="__codelineno-3-23" name="__codelineno-3-23" href="#__codelineno-3-23"></a>
 </span><span id="__span-3-24"><a id="__codelineno-3-24" name="__codelineno-3-24" href="#__codelineno-3-24"></a>    <span class="k">return</span> <span class="n">HttpResponse</span><span class="p">(</span><span class="n">status</span><span class="o">=</span><span class="mi">200</span><span class="p">)</span>
 </span></code></pre></div>
+<h2 id="khipu-webhook-verification">Khipu Webhook Verification<a class="headerlink" href="#khipu-webhook-verification" title="Permanent link">&para;</a></h2>
+<p>Khipu v3.0 uses a different signature scheme. Use <code>verify_khipu_signature</code> for the <code>x-khipu-signature</code> header:</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">merchants.webhooks</span><span class="w"> </span><span class="kn">import</span> <span class="n">verify_khipu_signature</span><span class="p">,</span> <span class="n">WebhookVerificationError</span>
+</span><span id="__span-4-2"><a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>
+</span><span id="__span-4-3"><a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="k">try</span><span class="p">:</span>
+</span><span id="__span-4-4"><a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a>    <span class="n">timestamp</span> <span class="o">=</span> <span class="n">verify_khipu_signature</span><span class="p">(</span>
+</span><span id="__span-4-5"><a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a>        <span class="n">payload</span><span class="o">=</span><span class="n">request</span><span class="o">.</span><span class="n">body</span><span class="p">,</span>
+</span><span id="__span-4-6"><a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a>        <span class="n">secret</span><span class="o">=</span><span class="s2">&quot;YOUR_WEBHOOK_SECRET&quot;</span><span class="p">,</span>
+</span><span id="__span-4-7"><a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a>        <span class="n">header_value</span><span class="o">=</span><span class="n">request</span><span class="o">.</span><span class="n">headers</span><span class="p">[</span><span class="s2">&quot;x-khipu-signature&quot;</span><span class="p">],</span>
+</span><span id="__span-4-8"><a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a>    <span class="p">)</span>
+</span><span id="__span-4-9"><a id="__codelineno-4-9" name="__codelineno-4-9" href="#__codelineno-4-9"></a>    <span class="c1"># timestamp is the unix millisecond string from the header (for replay-attack checks)</span>
+</span><span id="__span-4-10"><a id="__codelineno-4-10" name="__codelineno-4-10" href="#__codelineno-4-10"></a><span class="k">except</span> <span class="n">WebhookVerificationError</span><span class="p">:</span>
+</span><span id="__span-4-11"><a id="__codelineno-4-11" name="__codelineno-4-11" href="#__codelineno-4-11"></a>    <span class="k">return</span> <span class="mi">400</span>
+</span></code></pre></div>
+<p>The header format is <code>t=&lt;unix_ms&gt;,s=&lt;base64_signature&gt;</code>. The signed message is <code>"&lt;timestamp&gt;.&lt;body&gt;"</code>.</p>
+<div class="admonition tip">
+<p class="admonition-title">Use <code>KhipuProvider</code> for integrated verification</p>
+<p>When using <code>KhipuProvider</code> with <code>webhook_secret</code> set, <code>parse_webhook</code> calls <code>verify_khipu_signature</code> automatically before parsing the event. You do not need to call it manually.</p>
+</div>
 <h2 id="using-providers-parse_webhook">Using Provider's <code>parse_webhook</code><a class="headerlink" href="#using-providers-parse_webhook" title="Permanent link">&para;</a></h2>
 <p>For provider-specific parsing (including state maps defined in the provider), use the provider's own method via the client:</p>
-<div class="language-python highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="c1"># Access the provider directly if needed</span>
-</span><span id="__span-4-2"><a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="n">provider</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">_provider</span>
-</span><span id="__span-4-3"><a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="n">event</span> <span class="o">=</span> <span class="n">provider</span><span class="o">.</span><span class="n">parse_webhook</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">body</span><span class="p">,</span> <span class="nb">dict</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">headers</span><span class="p">))</span>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="c1"># Access the provider directly if needed</span>
+</span><span id="__span-5-2"><a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="n">provider</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">_provider</span>
+</span><span id="__span-5-3"><a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="n">event</span> <span class="o">=</span> <span class="n">provider</span><span class="o">.</span><span class="n">parse_webhook</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">body</span><span class="p">,</span> <span class="nb">dict</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">headers</span><span class="p">))</span>
 </span></code></pre></div>
 <div class="admonition tip">
 <p class="admonition-title">Use <code>event.raw</code> for provider-specific fields</p>
