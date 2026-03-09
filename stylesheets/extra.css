@@ -1,0 +1,15 @@
+:root {
+  --md-primary-fg-color: #3f51b5;
+  --md-primary-fg-color--light: #7986cb;
+  --md-primary-fg-color--dark: #283593;
+  --md-accent-fg-color: #3f51b5;
+}
+
+.md-typeset .admonition,
+.md-typeset details {
+  border-radius: 4px;
+}
+
+.md-typeset code {
+  border-radius: 3px;
+}
