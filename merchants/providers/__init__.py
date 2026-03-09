@@ -1,4 +1,5 @@
 """Pluggable provider integrations."""
+
 from __future__ import annotations
 
 from abc import ABC, abstractmethod
@@ -42,7 +43,7 @@ class ProviderInfo(BaseModel):
     url: str = ""
 
     @model_validator(mode="after")
-    def _set_default_description(self) -> "ProviderInfo":
+    def _set_default_description(self) -> ProviderInfo:
         if not self.description:
             self.description = self.name
         return self
@@ -158,8 +159,7 @@ def get_provider(key_or_instance: str | Provider) -> Provider:
     except KeyError:
         available = list(_REGISTRY.keys())
         raise KeyError(
-            f"Provider {key_or_instance!r} not registered. "
-            f"Available: {available}"
+            f"Provider {key_or_instance!r} not registered. " f"Available: {available}"
         ) from None
 
 

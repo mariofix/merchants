@@ -1,4 +1,5 @@
 """Main Client entry point for the merchants SDK."""
+
 from __future__ import annotations
 
 from decimal import Decimal

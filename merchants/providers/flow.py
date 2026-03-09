@@ -12,9 +12,9 @@ from merchants.providers import Provider, UserError
 
 try:
     from pyflowcl.Clients import ApiClient
+    from pyflowcl.exceptions import GenericError
     from pyflowcl.Payment import create as flow_create
     from pyflowcl.Payment import getStatus as flow_get_status
-    from pyflowcl.exceptions import GenericError
 except ImportError as exc:  # pragma: no cover
     raise ImportError(
         "pyflowcl is required for FlowProvider. Install it with: pip install pyflowcl"
