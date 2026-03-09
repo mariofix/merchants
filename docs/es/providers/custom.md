@@ -46,7 +46,7 @@ class MiProveedor(Provider):
 
 ## Ejemplo Completo con Llamadas HTTP
 
-Consulta [`examples/03_custom_provider.py`](https://github.com/mariofix/merchnts-cp/blob/main/examples/03_custom_provider.py) para un proveedor completo que:
+Consulta [`examples/03_custom_provider.py`](https://github.com/mariofix/merchants/blob/main/examples/03_custom_provider.py) para un proveedor completo que:
 
 - Envuelve una API REST JSON con `requests`.
 - Lanza `UserError` en respuestas no-2xx.

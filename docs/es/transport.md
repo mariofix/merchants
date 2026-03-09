@@ -71,7 +71,7 @@ class HttpxTransport(Transport):
         )
 ```
 
-Usalo con cualquier proveedor:
+Úsalo con cualquier proveedor:
 
 ```python
 from merchants import Client

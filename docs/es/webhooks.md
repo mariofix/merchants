@@ -111,6 +111,29 @@ def webhook_view(request):
     return HttpResponse(status=200)
 ```
 
+## Verificación de Webhooks de Khipu
+
+Khipu v3.0 usa un esquema de firma diferente. Usa `verify_khipu_signature` para el header `x-khipu-signature`:
+
+```python
+from merchants.webhooks import verify_khipu_signature, WebhookVerificationError
+
+try:
+    timestamp = verify_khipu_signature(
+        payload=request.body,
+        secret="TU_SECRETO_DE_WEBHOOK",
+        header_value=request.headers["x-khipu-signature"],
+    )
+    # timestamp es la cadena Unix en milisegundos del header (para verificar ataques de replay)
+except WebhookVerificationError:
+    return 400
+```
+
+El formato del header es `t=<unix_ms>,s=<firma_base64>`. El mensaje firmado es `"<timestamp>.<body>"`.
+
+!!! tip "Usa `KhipuProvider` para la verificación integrada"
+    Al usar `KhipuProvider` con `webhook_secret` configurado, `parse_webhook` llama a `verify_khipu_signature` automáticamente antes de parsear el evento. No es necesario llamarlo manualmente.
+
 ## Uso del `parse_webhook` del Proveedor
 
 Para parseo específico del proveedor (incluyendo los mapas de estados definidos en el proveedor), usa el método propio del proveedor a través del cliente:

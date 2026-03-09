@@ -5,7 +5,7 @@ Esta guía muestra los pasos esenciales para pasar de la instalación a un redir
 ## 1. Instala merchants
 
 ```bash
-pip install merchants
+pip install merchants-sdk
 ```
 
 ## 2. Elige un Proveedor

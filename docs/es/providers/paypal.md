@@ -10,7 +10,7 @@
 No se requieren dependencias adicionales:
 
 ```bash
-pip install merchants
+pip install merchants-sdk
 ```
 
 ## Uso

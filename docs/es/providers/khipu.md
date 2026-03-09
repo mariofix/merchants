@@ -7,7 +7,7 @@
 Instala merchants con el extra `khipu`:
 
 ```bash
-pip install "merchants[khipu]"
+pip install "merchants-sdk[khipu]"
 ```
 
 !!! note "Requiere khipu-tools"
@@ -48,19 +48,28 @@ print(status.currency)  # "CLP"
 
 ## Parseo de Webhooks
 
-Khipu envía payloads `application/x-www-form-urlencoded` o JSON. Ambos se manejan automáticamente:
+`KhipuProvider.parse_webhook` maneja los payloads JSON de Khipu v3.0. Cuando `webhook_secret` está configurado, verifica el header `x-khipu-signature` usando HMAC-SHA256 antes de parsear.
 
 ```python
-import merchants
+# Usa parse_webhook del proveedor para la verificación de firma
+provider = KhipuProvider(
+    api_key="TU_API_KEY_DE_RECEPTOR",
+    webhook_secret="TU_SECRETO_DE_WEBHOOK",
+)
+client = Client(provider=provider)
 
-event = merchants.parse_event(payload, provider="khipu")
-print(event.event_type)   # "payment.notification"
+# Accede al proveedor directamente para usar parse_webhook
+event = client._provider.parse_webhook(request.body, dict(request.headers))
+print(event.event_type)   # "payment.conciliated" o "payment.notification"
 print(event.payment_id)   # ID del pago Khipu
 print(event.state)        # ej. PaymentState.SUCCEEDED
 ```
 
 !!! info "Soporta form-encoded y JSON"
-    Khipu puede enviar el cuerpo en JSON o como formulario URL-encoded dependiendo de la versión de la API. `KhipuProvider.parse_webhook` detecta y maneja ambos formatos automáticamente.
+    `KhipuProvider.parse_webhook` detecta y maneja automáticamente tanto los cuerpos JSON como los URL-encoded. La API v3.0 envía JSON.
+
+!!! note "Detección del estado a partir de `conciliation_date`"
+    En v3.0, el estado del pago se determina por la presencia de `conciliation_date` en el payload. Si está presente, el estado es `SUCCEEDED` y el tipo de evento es `"payment.conciliated"`. De lo contrario, se usa `payment_status` con el mapa de estados estándar.
 
 ## Parámetros
 
@@ -68,7 +77,8 @@ print(event.state)        # ej. PaymentState.SUCCEEDED
 |---|---|---|---|
 | `api_key` | `str` | requerido | API key de receptor Khipu |
 | `subject` | `str` | `"Order"` | Asunto del pago por defecto enviado a Khipu |
-| `notify_url` | `str` | `""` | URL de webhook que Khipu llamará al confirmar el pago |
+| `notify_url` | `str` | `""` | URL de webhook que Khipu invocará al confirmar el pago |
+| `webhook_secret` | `str` | `""` | Secreto de firma del webhook para la verificación HMAC-SHA256 |
 
 ## Mapeo de Estados
 

@@ -14,7 +14,7 @@
 Instala el paquete principal con soporte para Stripe y PayPal:
 
 ```bash
-pip install merchants
+pip install merchants-sdk
 ```
 
 ## Extras de Proveedores Opcionales
@@ -48,8 +48,8 @@ Algunos proveedores dependen de paquetes adicionales. Instálalos como extras:
 Para trabajar en merchants localmente, clona el repositorio e instala en modo editable con las dependencias de desarrollo:
 
 ```bash
-git clone https://github.com/mariofix/merchnts-cp.git
-cd merchnts-cp
+git clone https://github.com/mariofix/merchants.git
+cd merchants
 pip install -e ".[dev]"
 ```
 

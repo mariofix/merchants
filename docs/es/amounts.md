@@ -25,7 +25,7 @@ to_decimal_string(19.999)         # "20.00"  (redondeo half-up)
 ```
 
 !!! warning "Evita entradas `float`"
-    Pasar un `float` (ej. `19.99`) puede introducir imprecisión de punto flotante. Preferí entradas `str` o `Decimal` para resultados exactos.
+    Pasar un `float` (ej. `19.99`) puede introducir imprecisión de punto flotante. Prefiere entradas `str` o `Decimal` para resultados exactos.
 
 ## `to_minor_units`
 
