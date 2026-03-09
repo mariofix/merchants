@@ -48,19 +48,28 @@ print(status.currency)    # "CLP"
 
 ## Webhook Parsing
 
-Khipu sends `application/x-www-form-urlencoded` or JSON payloads. Both are handled automatically:
+`KhipuProvider.parse_webhook` handles Khipu v3.0 JSON payloads. When `webhook_secret` is configured, it verifies the `x-khipu-signature` header using HMAC-SHA256 before parsing.
 
 ```python
-import merchants
+# Use provider's parse_webhook for signature verification
+provider = KhipuProvider(
+    api_key="YOUR_RECEIVER_API_KEY",
+    webhook_secret="YOUR_WEBHOOK_SECRET",
+)
+client = Client(provider=provider)
 
-event = merchants.parse_event(payload, provider="khipu")
-print(event.event_type)   # "payment.notification"
+# Access the provider directly to use parse_webhook
+event = client._provider.parse_webhook(request.body, dict(request.headers))
+print(event.event_type)   # "payment.conciliated" or "payment.notification"
 print(event.payment_id)   # Khipu payment ID
 print(event.state)        # e.g. PaymentState.SUCCEEDED
 ```
 
-!!! info "Form-encoded and JSON both supported"
-    Khipu may send either a JSON body or a URL-encoded form body depending on the API version. `KhipuProvider.parse_webhook` automatically detects and handles both formats.
+!!! info "JSON and form-encoded both supported"
+    `KhipuProvider.parse_webhook` automatically detects and handles both JSON and URL-encoded form bodies. The v3.0 API sends JSON.
+
+!!! note "State detection from `conciliation_date`"
+    In v3.0, the payment state is determined by the presence of `conciliation_date` in the payload. If present, the state is `SUCCEEDED` and the event type is `"payment.conciliated"`. Otherwise `payment_status` is used with the standard state map.
 
 ## Parameters
 
@@ -69,6 +78,7 @@ print(event.state)        # e.g. PaymentState.SUCCEEDED
 | `api_key` | `str` | required | Khipu receiver API key |
 | `subject` | `str` | `"Order"` | Default payment subject sent to Khipu |
 | `notify_url` | `str` | `""` | Webhook URL Khipu will POST when payment is confirmed |
+| `webhook_secret` | `str` | `""` | Webhook signing secret for HMAC-SHA256 signature verification |
 
 ## State Mapping
 

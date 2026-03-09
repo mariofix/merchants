@@ -1,5 +1,5 @@
 site_name: merchants
-site_description: Framework-agnostic hosted-checkout payment SDK for Python
+site_description: Payments for people who have better things to do.
 site_url: https://mariofix.github.io/merchants/
 repo_name: mariofix/merchants
 repo_url: https://github.com/mariofix/merchants

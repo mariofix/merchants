@@ -1,23 +1,18 @@
 # merchants
 
-A framework-agnostic Python SDK for hosted-checkout payment flows.
+Payments for people who have better things to do.
 
 ## Features
 
 - **Hosted checkout only** – redirect users to a provider-hosted payment page; no card data ever touches your server.
-- **Built-in providers** – Stripe, PayPal, [Flow.cl](https://www.flow.cl) (`pip install merchants-sdk[flow]`), [Khipu](https://khipu.com) (`pip install merchants-sdk[khipu]`), and a `DummyProvider` for local dev.
-- **Provider metadata** – every provider exposes `name`, `author`, `version`, `description`, and `url` via `ProviderInfo` (Pydantic model), enabling downstream applications to inspect and parse the registry.
-- **CLI** – a Typer-powered command-line interface for listing providers and inspecting their metadata (`pip install merchants-sdk[cli]`).
+- **Built-in providers** – Stripe, PayPal, [Flow.cl](https://www.flow.cl) (`pip install merchants-sdk[flow]` or `pip install pyflowcl`), [Khipu](https://khipu.com) (`pip install merchants-sdk[khipu]` or `pip install khipu-tools`), and a `DummyProvider` for local dev.
 - **Pluggable transport** – default `requests.Session` backend; inject any `Transport` (e.g. httpx) for testing or custom HTTP clients.
 - **Flexible auth** – API-key header auth and token (Bearer) auth strategies.
-- **Pydantic models** – `CheckoutSession`, `PaymentStatus`, `WebhookEvent` with full type hints.
-- **Amount helpers** – `to_decimal_string`, `to_minor_units`, `from_minor_units`.
 
 ## Installation
 
 ```bash
-pip install merchants-sdk              # core (Stripe + PayPal stubs)
-pip install "merchants-sdk[cli]"       # + CLI (typer)
+pip install merchants-sdk              # core (Stripe, PayPal, Flow, Khipu)
 ```
 
 ## Quick Start
@@ -196,137 +191,6 @@ for info in describe_providers():
 # Serialise the entire registry to JSON
 import json
 print(json.dumps([i.model_dump() for i in describe_providers()], indent=2))
-```
-
-## CLI
-
-Install the CLI extra and use the `merchants` command:
-
-```bash
-pip install "merchants-sdk[cli]"
-merchants --help
-```
-
-```
- merchants – framework-agnostic hosted-checkout payment SDK.
-
-╭─ Commands ───────────────────────────────────────────────────────────╮
-│ version     Show the merchants package version.                      │
-│ providers   List all registered payment providers.                   │
-│ info        Show metadata for a registered provider.                 │
-│ payments    Create checkout sessions, retrieve payment status, …     │
-╰──────────────────────────────────────────────────────────────────────╯
-```
-
-**Show the package version:**
-
-```bash
-merchants version
-# merchants 0.1.0
-```
-
-**List registered providers (table or JSON):**
-
-```bash
-merchants providers
-# Key          Name       Author           Version
-# -------------------------------------------------------
-# dummy        Dummy      merchants team   1.0.0
-
-merchants providers --output json
-# [{"key": "dummy", "name": "Dummy", ...}]
-```
-
-**Show metadata for a specific provider:**
-
-```bash
-merchants info dummy
-# Key         : dummy
-# Name        : Dummy
-# Author      : merchants team
-# Version     : 1.0.0
-# Description : Local development provider …
-# URL         :
-
-merchants info stripe --output json
-# {"key": "stripe", "name": "Stripe", ...}
-```
-
-**Create a checkout session:**
-
-```bash
-# DummyProvider – no credentials needed, great for testing
-merchants payments checkout \
-  --provider dummy \
-  --amount 19.99 \
-  --currency USD \
-  --success-url https://example.com/ok \
-  --cancel-url https://example.com/cancel
-# Session ID  : dummy_sess_abc123
-# Redirect URL: https://dummy-pay.example.com/pay/dummy_sess_abc123?...
-# Provider    : dummy
-# Amount      : 19.99 USD
-
-# With metadata and JSON output
-merchants payments checkout \
-  --provider dummy \
-  --amount 49.99 \
-  --currency EUR \
-  --success-url https://example.com/ok \
-  --cancel-url https://example.com/cancel \
-  --metadata '{"order_id": "ORD-42"}' \
-  --output json
-```
-
-Built-in providers read credentials from environment variables:
-
-| Provider | Environment variable(s) |
-|---|---|
-| `stripe` | `STRIPE_API_KEY` |
-| `paypal` | `PAYPAL_ACCESS_TOKEN` |
-| `generic` | `GENERIC_CHECKOUT_URL`, `GENERIC_PAYMENT_URL` |
-
-```bash
-STRIPE_API_KEY=sk_test_… merchants payments checkout \
-  --provider stripe --amount 9.99 --currency USD \
-  --success-url https://example.com/ok \
-  --cancel-url https://example.com/cancel
-```
-
-**Get payment status:**
-
-```bash
-merchants payments get pay_abc123 --provider dummy
-# Payment ID  : pay_abc123
-# State       : succeeded
-# Provider    : dummy
-# Final       : yes
-# Success     : yes
-
-merchants payments get pay_abc123 --provider dummy --output json
-```
-
-**Parse and verify a webhook:**
-
-```bash
-# Parse a webhook payload from a file
-merchants payments webhook --file payload.json --provider stripe
-
-# Verify HMAC-SHA256 signature before parsing
-merchants payments webhook \
-  --file payload.json \
-  --provider stripe \
-  --secret whsec_… \
-  --signature "sha256=abc123…"
-# Event ID    : evt_…
-# Event Type  : payment_intent.succeeded
-# Payment ID  : pi_…
-# State       : succeeded
-# Provider    : stripe
-# Verified    : yes
-
-# Or pipe from stdin
-cat payload.json | merchants payments webhook --provider stripe
 ```
 
 ## Checkout Creation

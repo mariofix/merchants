@@ -58,17 +58,22 @@ print(event.state)        # e.g. PaymentState.SUCCEEDED
 | Parameter | Type | Default | Description |
 |---|---|---|---|
 | `api_key` | `str` | required | Flow.cl API key |
-| `api_secret` | `str` | required | Flow.cl API secret |
-| `sandbox` | `bool` | `False` | Use Flow sandbox environment |
+| `api_secret` | `str` | required | Flow.cl API secret (used for HMAC-SHA256 request signing) |
+| `api_url` | `str` | `"https://www.flow.cl/api"` | Override the base API URL |
+| `subject` | `str` | `"Order"` | Default payment subject / description |
+| `confirmation_url` | `str` | `""` | URL Flow calls after payment is processed |
 
-!!! tip "Test in sandbox first"
-    Set `sandbox=True` to direct all requests to Flow's sandbox environment. Get sandbox credentials from your [Flow.cl merchant account](https://www.flow.cl).
+!!! tip "Test with Flow's sandbox"
+    Set `api_url="https://sandbox.flow.cl/api"` to direct requests to the Flow sandbox environment. Get sandbox credentials from your [Flow.cl merchant account](https://www.flow.cl).
+
+!!! warning "Flow webhooks require `confirmation_url`"
+    Flow uses `confirmation_url` for server-to-server payment notifications. When the webhook fires, call `client.payments.get(token)` to retrieve the actual payment state, as `parse_webhook` always returns `PaymentState.UNKNOWN`.
 
 ## State Mapping
 
-| Flow status | `PaymentState` |
-|---|---|
-| `1` (pending) | `PENDING` |
-| `2` (paid) | `SUCCEEDED` |
-| `3` (rejected) | `FAILED` |
-| `4` (cancelled) | `CANCELLED` |
+| Flow numeric status | Description | `PaymentState` |
+|---|---|---|
+| `1` | Paid | `SUCCEEDED` |
+| `2` | Rejected | `FAILED` |
+| `3` | Pending | `PENDING` |
+| `4` | Cancelled | `CANCELLED` |
