@@ -1,16 +1,16 @@
 
 <!doctype html>
-<html lang="es" class="no-js">
+<html lang="en" class="no-js">
   <head>
     
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
-        <meta name="description" content="SDK de pagos con hosted-checkout independiente del framework para Python">
+        <meta name="description" content="Payments for people who have better things to do.">
       
       
       
-        <link rel="canonical" href="https://mariofix.github.io/merchants/es/providers/paypal/">
+        <link rel="canonical" href="https://mariofix.github.io/merchants/providers/paypal/">
       
       
         <link rel="prev" href="../stripe/">
@@ -86,8 +86,8 @@
     <div data-md-component="skip">
       
         
-        <a href="#proveedor-paypal" class="md-skip">
-          Saltar a contenido
+        <a href="#paypal-provider" class="md-skip">
+          Skip to content
         </a>
       
     </div>
@@ -101,7 +101,7 @@
   
 
 <header class="md-header md-header--shadow md-header--lifted" data-md-component="header">
-  <nav class="md-header__inner md-grid" aria-label="Cabecera">
+  <nav class="md-header__inner md-grid" aria-label="Header">
     <a href="../.." title="merchants" class="md-header__button md-logo" aria-label="merchants" data-md-component="logo">
       
   
@@ -135,9 +135,9 @@
     
     
     
-    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Cambiar a modo oscuro"  type="radio" name="__palette" id="__palette_0">
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
     
-      <label class="md-header__button md-icon" title="Cambiar a modo oscuro" for="__palette_1" hidden>
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
       </label>
     
@@ -145,9 +145,9 @@
     
     
     
-    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Cambiar a modo claro"  type="radio" name="__palette" id="__palette_1">
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
     
-      <label class="md-header__button md-icon" title="Cambiar a modo claro" for="__palette_0" hidden>
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
       </label>
     
@@ -162,7 +162,7 @@
       <div class="md-header__option">
   <div class="md-select">
     
-    <button class="md-header__button md-icon" aria-label="Seleccionar idioma">
+    <button class="md-header__button md-icon" aria-label="Select language">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m12.87 15.07-2.54-2.51.03-.03A17.5 17.5 0 0 0 14.07 6H17V4h-7V2H8v2H1v2h11.17C11.5 7.92 10.44 9.75 9 11.35 8.07 10.32 7.3 9.19 6.69 8h-2c.73 1.63 1.73 3.17 2.98 4.56l-5.09 5.02L4 19l5-5 3.11 3.11zM18.5 10h-2L12 22h2l1.12-3h4.75L21 22h2zm-2.62 7 1.62-4.33L19.12 17z"/></svg>
     </button>
     <div class="md-select__inner">
@@ -196,16 +196,16 @@
   <label class="md-search__overlay" for="__search"></label>
   <div class="md-search__inner" role="search">
     <form class="md-search__form" name="search">
-      <input type="text" class="md-search__input" name="query" aria-label="Búsqueda" placeholder="Búsqueda" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
       <label class="md-search__icon md-icon" for="__search">
         
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
         
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
       </label>
-      <nav class="md-search__options" aria-label="Buscar">
+      <nav class="md-search__options" aria-label="Search">
         
-        <button type="reset" class="md-search__icon md-icon" title="Limpiar" aria-label="Limpiar" tabindex="-1">
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
           
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
         </button>
@@ -218,7 +218,7 @@
       <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
         <div class="md-search-result" data-md-component="search-result">
           <div class="md-search-result__meta">
-            Inicializando búsqueda
+            Initializing search
           </div>
           <ol class="md-search-result__list" role="presentation"></ol>
         </div>
@@ -230,7 +230,7 @@
     
     
       <div class="md-header__source">
-        <a href="https://github.com/mariofix/merchants" title="Ir al repositorio" class="md-source" data-md-component="source">
+        <a href="https://github.com/mariofix/merchants" title="Go to repository" class="md-source" data-md-component="source">
   <div class="md-source__icon md-icon">
     
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
@@ -245,7 +245,7 @@
   
     
       
-<nav class="md-tabs" aria-label="Pestañas" data-md-component="tabs">
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
   <div class="md-grid">
     <ul class="md-tabs__list">
       
@@ -261,7 +261,7 @@
   
     
   
-  Inicio
+  Home
 
       </a>
     </li>
@@ -280,7 +280,7 @@
   
     
   
-  Instalación
+  Installation
 
       </a>
     </li>
@@ -299,7 +299,7 @@
   
     
   
-  Inicio Rápido
+  Quick Start
 
       </a>
     </li>
@@ -331,7 +331,7 @@
   
     
   
-  Guía de Usuario
+  User Guide
 
         </a>
       </li>
@@ -356,7 +356,7 @@
   
     
   
-  Referencia de API
+  API Reference
 
         </a>
       </li>
@@ -390,7 +390,7 @@
   
 
 
-<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navegación" data-md-level="0">
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
   <label class="md-nav__title" for="__drawer">
     <a href="../.." title="merchants" class="md-nav__button md-logo" aria-label="merchants" data-md-component="logo">
       
@@ -402,7 +402,7 @@
   </label>
   
     <div class="md-nav__source">
-      <a href="https://github.com/mariofix/merchants" title="Ir al repositorio" class="md-source" data-md-component="source">
+      <a href="https://github.com/mariofix/merchants" title="Go to repository" class="md-source" data-md-component="source">
   <div class="md-source__icon md-icon">
     
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
@@ -429,7 +429,7 @@
   <span class="md-ellipsis">
     
   
-    Inicio
+    Home
   
 
     
@@ -456,7 +456,7 @@
   <span class="md-ellipsis">
     
   
-    Instalación
+    Installation
   
 
     
@@ -483,7 +483,7 @@
   <span class="md-ellipsis">
     
   
-    Inicio Rápido
+    Quick Start
   
 
     
@@ -543,7 +543,7 @@
   <span class="md-ellipsis">
     
   
-    Guía de Usuario
+    User Guide
   
 
     
@@ -559,7 +559,7 @@
             <span class="md-nav__icon md-icon"></span>
             
   
-    Guía de Usuario
+    User Guide
   
 
           </label>
@@ -621,7 +621,7 @@
   <span class="md-ellipsis">
     
   
-    Proveedores
+    Providers
   
 
     
@@ -643,7 +643,7 @@
             <span class="md-nav__icon md-icon"></span>
             
   
-    Proveedores
+    Providers
   
 
           </label>
@@ -732,7 +732,7 @@
       
         
 
-<nav class="md-nav md-nav--secondary" aria-label="Tabla de contenidos">
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
   
   
   
@@ -741,15 +741,15 @@
   
     <label class="md-nav__title" for="__toc">
       <span class="md-nav__icon md-icon"></span>
-      Tabla de contenidos
+      Table of contents
     </label>
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#instalacion" class="md-nav__link">
+  <a href="#installation" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Instalación
+        Installation
       
     </span>
   </a>
@@ -757,10 +757,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#uso" class="md-nav__link">
+  <a href="#usage" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Uso
+        Usage
       
     </span>
   </a>
@@ -768,10 +768,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#manejo-de-montos" class="md-nav__link">
+  <a href="#amount-handling" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Manejo de Montos
+        Amount Handling
       
     </span>
   </a>
@@ -779,10 +779,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#estado-del-pago" class="md-nav__link">
+  <a href="#payment-status" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Estado del Pago
+        Payment Status
       
     </span>
   </a>
@@ -790,10 +790,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#parseo-de-webhooks" class="md-nav__link">
+  <a href="#webhook-parsing" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Parseo de Webhooks
+        Webhook Parsing
       
     </span>
   </a>
@@ -801,10 +801,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#parametros" class="md-nav__link">
+  <a href="#parameters" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Parámetros
+        Parameters
       
     </span>
   </a>
@@ -812,10 +812,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#mapeo-de-estados" class="md-nav__link">
+  <a href="#state-mapping" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Mapeo de Estados
+        State Mapping
       
     </span>
   </a>
@@ -901,7 +901,7 @@
   <span class="md-ellipsis">
     
   
-    Genérico
+    Generic
   
 
     
@@ -929,7 +929,7 @@
   <span class="md-ellipsis">
     
   
-    Prueba
+    Dummy
   
 
     
@@ -957,7 +957,7 @@
   <span class="md-ellipsis">
     
   
-    Proveedor Personalizado
+    Custom Provider
   
 
     
@@ -993,7 +993,7 @@
   <span class="md-ellipsis">
     
   
-    Estrategias de Autenticación
+    Auth Strategies
   
 
     
@@ -1021,7 +1021,7 @@
   <span class="md-ellipsis">
     
   
-    Transporte Personalizado
+    Custom Transport
   
 
     
@@ -1049,7 +1049,7 @@
   <span class="md-ellipsis">
     
   
-    Utilidades de Montos
+    Amount Helpers
   
 
     
@@ -1151,7 +1151,7 @@
   <span class="md-ellipsis">
     
   
-    Referencia de API
+    API Reference
   
 
     
@@ -1173,7 +1173,7 @@
             <span class="md-nav__icon md-icon"></span>
             
   
-    Referencia de API
+    API Reference
   
 
           </label>
@@ -1195,7 +1195,7 @@
   <span class="md-ellipsis">
     
   
-    Cliente
+    Client
   
 
     
@@ -1223,7 +1223,7 @@
   <span class="md-ellipsis">
     
   
-    Modelos
+    Models
   
 
     
@@ -1251,7 +1251,7 @@
   <span class="md-ellipsis">
     
   
-    Proveedores
+    Providers
   
 
     
@@ -1279,7 +1279,7 @@
   <span class="md-ellipsis">
     
   
-    Autenticación
+    Auth
   
 
     
@@ -1307,7 +1307,7 @@
   <span class="md-ellipsis">
     
   
-    Transporte
+    Transport
   
 
     
@@ -1335,7 +1335,7 @@
   <span class="md-ellipsis">
     
   
-    Montos
+    Amount
   
 
     
@@ -1397,7 +1397,7 @@
                   <div class="md-sidebar__inner">
                     
 
-<nav class="md-nav md-nav--secondary" aria-label="Tabla de contenidos">
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
   
   
   
@@ -1406,15 +1406,15 @@
   
     <label class="md-nav__title" for="__toc">
       <span class="md-nav__icon md-icon"></span>
-      Tabla de contenidos
+      Table of contents
     </label>
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#instalacion" class="md-nav__link">
+  <a href="#installation" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Instalación
+        Installation
       
     </span>
   </a>
@@ -1422,10 +1422,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#uso" class="md-nav__link">
+  <a href="#usage" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Uso
+        Usage
       
     </span>
   </a>
@@ -1433,10 +1433,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#manejo-de-montos" class="md-nav__link">
+  <a href="#amount-handling" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Manejo de Montos
+        Amount Handling
       
     </span>
   </a>
@@ -1444,10 +1444,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#estado-del-pago" class="md-nav__link">
+  <a href="#payment-status" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Estado del Pago
+        Payment Status
       
     </span>
   </a>
@@ -1455,10 +1455,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#parseo-de-webhooks" class="md-nav__link">
+  <a href="#webhook-parsing" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Parseo de Webhooks
+        Webhook Parsing
       
     </span>
   </a>
@@ -1466,10 +1466,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#parametros" class="md-nav__link">
+  <a href="#parameters" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Parámetros
+        Parameters
       
     </span>
   </a>
@@ -1477,10 +1477,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#mapeo-de-estados" class="md-nav__link">
+  <a href="#state-mapping" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Mapeo de Estados
+        State Mapping
       
     </span>
   </a>
@@ -1505,7 +1505,7 @@
   
 
 
-  <nav class="md-path" aria-label="Navegación" >
+  <nav class="md-path" aria-label="Navigation" >
     <ol class="md-path__list">
       
         
@@ -1515,7 +1515,7 @@
       <a href="../.." class="md-path__link">
         
   <span class="md-ellipsis">
-    Inicio
+    Home
   </span>
 
       </a>
@@ -1538,7 +1538,7 @@
         <a href="../" class="md-path__link">
           
   <span class="md-ellipsis">
-    Guía de Usuario
+    User Guide
   </span>
 
         </a>
@@ -1559,7 +1559,7 @@
         <a href="../" class="md-path__link">
           
   <span class="md-ellipsis">
-    Proveedores
+    Providers
   </span>
 
         </a>
@@ -1581,17 +1581,17 @@
   
 
 
-<h1 id="proveedor-paypal">Proveedor PayPal<a class="headerlink" href="#proveedor-paypal" title="Permanent link">&para;</a></h1>
-<p><code>PayPalProvider</code> se integra con la API de Órdenes de PayPal. Envía los montos como <strong>cadenas decimales</strong> (ej. <code>"19.99"</code>) según lo requiere PayPal.</p>
+<h1 id="paypal-provider">PayPal Provider<a class="headerlink" href="#paypal-provider" title="Permanent link">&para;</a></h1>
+<p>The <code>PayPalProvider</code> integrates with the PayPal Orders API. It sends amounts as <strong>decimal strings</strong> (e.g. <code>"19.99"</code>) as required by PayPal.</p>
 <div class="admonition note">
-<p class="admonition-title">Implementación de referencia</p>
-<p>Esta es una implementación de referencia que demuestra el patrón de integración de PayPal. Reemplaza <code>base_url</code> e inyecta un transporte real para conectarte a la API de PayPal en producción.</p>
+<p class="admonition-title">Note</p>
+<p>This is a stub that demonstrates the PayPal integration pattern. Replace <code>base_url</code> and inject a real transport to connect to the live PayPal API.</p>
 </div>
-<h2 id="instalacion">Instalación<a class="headerlink" href="#instalacion" title="Permanent link">&para;</a></h2>
-<p>No se requieren dependencias adicionales:</p>
+<h2 id="installation">Installation<a class="headerlink" href="#installation" title="Permanent link">&para;</a></h2>
+<p>No extra dependencies required:</p>
 <div class="language-bash highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>pip<span class="w"> </span>install<span class="w"> </span>merchants-sdk
 </span></code></pre></div>
-<h2 id="uso">Uso<a class="headerlink" href="#uso" title="Permanent link">&para;</a></h2>
+<h2 id="usage">Usage<a class="headerlink" href="#usage" title="Permanent link">&para;</a></h2>
 <div class="language-python highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">merchants</span><span class="w"> </span><span class="kn">import</span> <span class="n">Client</span>
 </span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="kn">from</span><span class="w"> </span><span class="nn">merchants.providers.paypal</span><span class="w"> </span><span class="kn">import</span> <span class="n">PayPalProvider</span>
 </span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>
@@ -1601,77 +1601,77 @@
 </span><span id="__span-1-7"><a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="n">session</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">payments</span><span class="o">.</span><span class="n">create_checkout</span><span class="p">(</span>
 </span><span id="__span-1-8"><a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a>    <span class="n">amount</span><span class="o">=</span><span class="s2">&quot;49.99&quot;</span><span class="p">,</span>
 </span><span id="__span-1-9"><a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a>    <span class="n">currency</span><span class="o">=</span><span class="s2">&quot;USD&quot;</span><span class="p">,</span>
-</span><span id="__span-1-10"><a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a>    <span class="n">success_url</span><span class="o">=</span><span class="s2">&quot;https://example.com/exito&quot;</span><span class="p">,</span>
-</span><span id="__span-1-11"><a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a>    <span class="n">cancel_url</span><span class="o">=</span><span class="s2">&quot;https://example.com/cancelar&quot;</span><span class="p">,</span>
+</span><span id="__span-1-10"><a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a>    <span class="n">success_url</span><span class="o">=</span><span class="s2">&quot;https://example.com/success&quot;</span><span class="p">,</span>
+</span><span id="__span-1-11"><a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a>    <span class="n">cancel_url</span><span class="o">=</span><span class="s2">&quot;https://example.com/cancel&quot;</span><span class="p">,</span>
 </span><span id="__span-1-12"><a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a><span class="p">)</span>
-</span><span id="__span-1-13"><a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a><span class="nb">print</span><span class="p">(</span><span class="n">session</span><span class="o">.</span><span class="n">redirect_url</span><span class="p">)</span>  <span class="c1"># redirige al usuario a PayPal aquí</span>
+</span><span id="__span-1-13"><a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a><span class="nb">print</span><span class="p">(</span><span class="n">session</span><span class="o">.</span><span class="n">redirect_url</span><span class="p">)</span>  <span class="c1"># redirect the user to PayPal here</span>
 </span></code></pre></div>
 <div class="admonition info">
-<p class="admonition-title">Los tokens de acceso expiran</p>
-<p>Los tokens de acceso OAuth de PayPal tienen vida corta. En producción, implementa un mecanismo de renovación de tokens y pasa un token fresco al crear el proveedor.</p>
+<p class="admonition-title">Access tokens expire</p>
+<p>PayPal OAuth access tokens are short-lived. In production, implement a token refresh mechanism and pass a fresh token when creating the provider.</p>
 </div>
-<h2 id="manejo-de-montos">Manejo de Montos<a class="headerlink" href="#manejo-de-montos" title="Permanent link">&para;</a></h2>
-<p>PayPal acepta montos como cadenas decimales. El proveedor convierte los montos usando <code>to_decimal_string</code>:</p>
+<h2 id="amount-handling">Amount Handling<a class="headerlink" href="#amount-handling" title="Permanent link">&para;</a></h2>
+<p>PayPal accepts amounts as decimal strings. The provider converts amounts using <code>to_decimal_string</code>:</p>
 <div class="language-python highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">merchants</span><span class="w"> </span><span class="kn">import</span> <span class="n">to_decimal_string</span>
 </span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>
-</span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="n">to_decimal_string</span><span class="p">(</span><span class="s2">&quot;49.9&quot;</span><span class="p">)</span>  <span class="c1"># &quot;49.90&quot;</span>
-</span><span id="__span-2-4"><a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="n">to_decimal_string</span><span class="p">(</span><span class="mi">49</span><span class="p">)</span>      <span class="c1"># &quot;49.00&quot;</span>
+</span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="n">to_decimal_string</span><span class="p">(</span><span class="s2">&quot;49.9&quot;</span><span class="p">)</span>   <span class="c1"># &quot;49.90&quot;</span>
+</span><span id="__span-2-4"><a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="n">to_decimal_string</span><span class="p">(</span><span class="mi">49</span><span class="p">)</span>       <span class="c1"># &quot;49.00&quot;</span>
 </span></code></pre></div>
-<h2 id="estado-del-pago">Estado del Pago<a class="headerlink" href="#estado-del-pago" title="Permanent link">&para;</a></h2>
+<h2 id="payment-status">Payment Status<a class="headerlink" href="#payment-status" title="Permanent link">&para;</a></h2>
 <div class="language-python highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="n">status</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">payments</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;ORDER_ID&quot;</span><span class="p">)</span>
 </span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>
-</span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="nb">print</span><span class="p">(</span><span class="n">status</span><span class="o">.</span><span class="n">state</span><span class="p">)</span>     <span class="c1"># ej. PaymentState.SUCCEEDED</span>
-</span><span id="__span-3-4"><a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="nb">print</span><span class="p">(</span><span class="n">status</span><span class="o">.</span><span class="n">amount</span><span class="p">)</span>    <span class="c1"># ej. Decimal(&quot;49.99&quot;)</span>
-</span><span id="__span-3-5"><a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="nb">print</span><span class="p">(</span><span class="n">status</span><span class="o">.</span><span class="n">currency</span><span class="p">)</span>  <span class="c1"># ej. &quot;USD&quot;</span>
+</span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="nb">print</span><span class="p">(</span><span class="n">status</span><span class="o">.</span><span class="n">state</span><span class="p">)</span>       <span class="c1"># e.g. PaymentState.SUCCEEDED</span>
+</span><span id="__span-3-4"><a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="nb">print</span><span class="p">(</span><span class="n">status</span><span class="o">.</span><span class="n">amount</span><span class="p">)</span>      <span class="c1"># e.g. Decimal(&quot;49.99&quot;)</span>
+</span><span id="__span-3-5"><a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="nb">print</span><span class="p">(</span><span class="n">status</span><span class="o">.</span><span class="n">currency</span><span class="p">)</span>    <span class="c1"># e.g. &quot;USD&quot;</span>
 </span></code></pre></div>
-<h2 id="parseo-de-webhooks">Parseo de Webhooks<a class="headerlink" href="#parseo-de-webhooks" title="Permanent link">&para;</a></h2>
+<h2 id="webhook-parsing">Webhook Parsing<a class="headerlink" href="#webhook-parsing" title="Permanent link">&para;</a></h2>
 <div class="language-python highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="kn">import</span><span class="w"> </span><span class="nn">merchants</span>
 </span><span id="__span-4-2"><a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>
 </span><span id="__span-4-3"><a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="n">event</span> <span class="o">=</span> <span class="n">merchants</span><span class="o">.</span><span class="n">parse_event</span><span class="p">(</span><span class="n">payload</span><span class="p">,</span> <span class="n">provider</span><span class="o">=</span><span class="s2">&quot;paypal&quot;</span><span class="p">)</span>
-</span><span id="__span-4-4"><a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="nb">print</span><span class="p">(</span><span class="n">event</span><span class="o">.</span><span class="n">event_type</span><span class="p">)</span>   <span class="c1"># ej. &quot;PAYMENT.CAPTURE.COMPLETED&quot;</span>
-</span><span id="__span-4-5"><a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a><span class="nb">print</span><span class="p">(</span><span class="n">event</span><span class="o">.</span><span class="n">payment_id</span><span class="p">)</span>   <span class="c1"># ej. &quot;ORDER_ID&quot;</span>
+</span><span id="__span-4-4"><a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="nb">print</span><span class="p">(</span><span class="n">event</span><span class="o">.</span><span class="n">event_type</span><span class="p">)</span>   <span class="c1"># e.g. &quot;PAYMENT.CAPTURE.COMPLETED&quot;</span>
+</span><span id="__span-4-5"><a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a><span class="nb">print</span><span class="p">(</span><span class="n">event</span><span class="o">.</span><span class="n">payment_id</span><span class="p">)</span>   <span class="c1"># e.g. &quot;ORDER_ID&quot;</span>
 </span><span id="__span-4-6"><a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a><span class="nb">print</span><span class="p">(</span><span class="n">event</span><span class="o">.</span><span class="n">state</span><span class="p">)</span>        <span class="c1"># PaymentState.SUCCEEDED</span>
 </span></code></pre></div>
-<h2 id="parametros">Parámetros<a class="headerlink" href="#parametros" title="Permanent link">&para;</a></h2>
+<h2 id="parameters">Parameters<a class="headerlink" href="#parameters" title="Permanent link">&para;</a></h2>
 <table>
 <thead>
 <tr>
-<th>Parámetro</th>
-<th>Tipo</th>
-<th>Por defecto</th>
-<th>Descripción</th>
+<th>Parameter</th>
+<th>Type</th>
+<th>Default</th>
+<th>Description</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td><code>access_token</code></td>
 <td><code>str</code></td>
-<td>requerido</td>
-<td>Token de acceso OAuth de PayPal</td>
+<td>required</td>
+<td>PayPal OAuth access token</td>
 </tr>
 <tr>
 <td><code>base_url</code></td>
 <td><code>str</code></td>
 <td><code>"https://api-m.paypal.com"</code></td>
-<td>Override para pruebas</td>
+<td>Override for testing</td>
 </tr>
 <tr>
 <td><code>transport</code></td>
 <td><code>Transport \| None</code></td>
 <td><code>None</code></td>
-<td>Transporte HTTP personalizado</td>
+<td>Custom HTTP transport</td>
 </tr>
 </tbody>
 </table>
 <div class="admonition tip">
-<p class="admonition-title">Usa el sandbox para pruebas</p>
-<p>Reemplaza <code>base_url</code> con <code>"https://api-m.sandbox.paypal.com"</code> y usa credenciales de sandbox para probar sin procesar pagos reales.</p>
+<p class="admonition-title">Use the sandbox for testing</p>
+<p>Override <code>base_url</code> to <code>"https://api-m.sandbox.paypal.com"</code> and use sandbox credentials to test without processing real payments.</p>
 </div>
-<h2 id="mapeo-de-estados">Mapeo de Estados<a class="headerlink" href="#mapeo-de-estados" title="Permanent link">&para;</a></h2>
+<h2 id="state-mapping">State Mapping<a class="headerlink" href="#state-mapping" title="Permanent link">&para;</a></h2>
 <table>
 <thead>
 <tr>
-<th>Estado PayPal</th>
+<th>PayPal status</th>
 <th><code>PaymentState</code></th>
 </tr>
 </thead>
@@ -1723,7 +1723,7 @@
           <button type="button" class="md-top md-icon" data-md-component="top" hidden>
   
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
-  Volver al principio
+  Back to top
 </button>
         
       </main>
@@ -1755,7 +1755,7 @@
     
       
       
-      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.tabs", "navigation.tabs.sticky", "navigation.sections", "navigation.expand", "navigation.path", "navigation.indexes", "navigation.top", "search.suggest", "search.highlight", "content.tabs.link", "content.code.annotate", "content.code.copy"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copiado al portapapeles", "clipboard.copy": "Copiar al portapapeles", "search.result.more.one": "1 m\u00e1s en esta p\u00e1gina", "search.result.more.other": "# m\u00e1s en esta p\u00e1gina", "search.result.none": "No se encontraron documentos", "search.result.one": "1 documento encontrado", "search.result.other": "# documentos encontrados", "search.result.placeholder": "Teclee para comenzar b\u00fasqueda", "search.result.term.missing": "Falta", "select.version": "Seleccionar versi\u00f3n"}, "version": null}</script>
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.tabs", "navigation.tabs.sticky", "navigation.sections", "navigation.expand", "navigation.path", "navigation.indexes", "navigation.top", "search.suggest", "search.highlight", "content.tabs.link", "content.code.annotate", "content.code.copy"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
     
     
       <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
