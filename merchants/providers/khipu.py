@@ -106,6 +106,10 @@ class KhipuProvider(Provider):
             params["notify_url"] = notify_url
         if metadata and metadata.get("order_id"):
             params["transaction_id"] = str(metadata["order_id"])
+        if kwargs.get("payer_email"):
+            params["payer_email"] = kwargs["payer_email"]
+        if kwargs.get("expires_date"):
+            params["expires_date"] = kwargs["expires_date"]
         body = kwargs.get("body", "")
         if body:
             params["body"] = body
