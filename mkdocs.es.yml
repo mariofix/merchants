@@ -1,5 +1,5 @@
 site_name: merchants
-site_description: SDK de pagos con hosted-checkout independiente del framework para Python
+site_description: SDK de pagos para desarrolladores sin tiempo.
 site_url: https://mariofix.github.io/merchants/es/
 repo_name: mariofix/merchants
 repo_url: https://github.com/mariofix/merchants
