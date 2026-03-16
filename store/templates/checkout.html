@@ -1,0 +1,87 @@
+{% extends "base.html" %}
+{% block title %}checkout · merchants-store{% endblock %}
+
+{% block head %}
+<style>
+  .checkout-wrap { max-width: 480px; }
+
+  .checkout-wrap h1 {
+    font-family: var(--mono);
+    font-size: 1.4rem;
+    color: var(--gold);
+    margin-bottom: 2rem;
+  }
+
+  .order-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 1.5rem;
+    margin-bottom: 1.75rem;
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+  }
+  .order-emoji { font-size: 2.5rem; }
+  .order-info { flex: 1; }
+  .order-name { font-family: var(--mono); font-size: 1rem; margin-bottom: 0.25rem; }
+  .order-desc { font-size: 0.8rem; color: var(--muted); }
+  .order-price { font-family: var(--mono); font-size: 1.3rem; color: var(--gold); text-align: right; }
+
+  form { display: flex; flex-direction: column; gap: 1rem; }
+
+  label { font-size: 0.8rem; color: var(--muted); font-family: var(--mono); display: block; margin-bottom: 0.3rem; }
+
+  input[type="email"] {
+    width: 100%;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 0.65rem 0.9rem;
+    color: var(--text);
+    font-family: var(--sans);
+    font-size: 0.9rem;
+    transition: border-color 0.15s;
+  }
+  input[type="email"]:focus { outline: none; border-color: var(--gold-dim); }
+
+  .form-actions { display: flex; gap: 0.75rem; align-items: center; margin-top: 0.5rem; }
+
+  .disclaimer { margin-top: 1.25rem; font-size: 0.75rem; color: var(--muted); font-family: var(--mono); }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="checkout-wrap">
+  <h1>checkout</h1>
+
+  {% if error %}
+  <div class="alert alert-error">{{ error }}</div>
+  {% endif %}
+
+  <div class="order-card">
+    <div class="order-emoji">{{ product.emoji }}</div>
+    <div class="order-info">
+      <div class="order-name">{{ product.name }}</div>
+      <div class="order-desc">{{ product.description }}</div>
+    </div>
+    <div class="order-price">${{ product.price }}<br><small style="font-size:0.65rem;color:var(--muted)">{{ product.currency }}</small></div>
+  </div>
+
+  <form method="post">
+    <div>
+      <label for="email">email (optional)</label>
+      <input type="email" id="email" name="email" placeholder="you@example.com" autocomplete="email" />
+    </div>
+    <div class="form-actions">
+      <button type="submit" class="btn btn-primary">Pay ${{ product.price }}</button>
+      <a href="{{ url_for('catalog') }}" class="btn btn-ghost">Cancel</a>
+    </div>
+  </form>
+
+  <p class="disclaimer">
+    you will be redirected to the payment provider's hosted page.<br>
+    no card data passes through this server.
+  </p>
+</div>
+{% endblock %}

@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block title %}payment cancelled · merchants-store{% endblock %}
+
+{% block head %}
+<style>
+  .result-wrap { max-width: 480px; text-align: center; padding-top: 3rem; }
+  .result-icon { font-size: 3.5rem; margin-bottom: 1.25rem; opacity: 0.5; }
+  .result-wrap h1 { font-family: var(--mono); font-size: 1.5rem; color: var(--muted); margin-bottom: 0.6rem; }
+  .result-wrap p { color: var(--muted); font-size: 0.925rem; margin-bottom: 2rem; }
+  .result-actions { display: flex; gap: 0.75rem; justify-content: center; }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="result-wrap">
+  <div class="result-icon">✕</div>
+  <h1>payment cancelled</h1>
+  <p>No charge was made. You can return to the catalogue and try again whenever you're ready.</p>
+  <div class="result-actions">
+    <a href="{{ url_for('catalog') }}" class="btn btn-primary">Back to catalogue</a>
+  </div>
+</div>
+{% endblock %}

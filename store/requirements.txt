@@ -1,0 +1,3 @@
+merchants-sdk>=2026.3.1
+flask-merchants[admin]>=2026.3.1
+gunicorn>=21.0

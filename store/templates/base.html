@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{% block title %}merchants-store{% endblock %}</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Syne+Mono&family=Instrument+Sans:wght@400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:       #0d0d0d;
+      --surface:  #181818;
+      --border:   #2a2a2a;
+      --gold:     #e8b84b;
+      --gold-dim: #9a7a30;
+      --text:     #e2e2e2;
+      --muted:    #666;
+      --radius:   6px;
+      --mono:     'Syne Mono', monospace;
+      --sans:     'Instrument Sans', sans-serif;
+    }
+
+    html { font-size: 16px; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--sans);
+      line-height: 1.6;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ── Nav ── */
+    nav {
+      border-bottom: 1px solid var(--border);
+      padding: 0 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 56px;
+    }
+    .nav-brand {
+      font-family: var(--mono);
+      font-size: 1rem;
+      color: var(--gold);
+      text-decoration: none;
+      letter-spacing: 0.04em;
+    }
+    .nav-brand span { color: var(--muted); }
+    .nav-links { display: flex; gap: 1.5rem; }
+    .nav-links a {
+      color: var(--muted);
+      text-decoration: none;
+      font-size: 0.875rem;
+      transition: color 0.15s;
+    }
+    .nav-links a:hover { color: var(--text); }
+
+    /* ── Main ── */
+    main { flex: 1; padding: 3rem 2rem; max-width: 900px; width: 100%; margin: 0 auto; }
+
+    /* ── Footer ── */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 1.25rem 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 0.75rem;
+      color: var(--muted);
+      font-family: var(--mono);
+    }
+    footer a { color: var(--gold-dim); text-decoration: none; }
+    footer a:hover { color: var(--gold); }
+
+    /* ── Buttons ── */
+    .btn {
+      display: inline-block;
+      padding: 0.6rem 1.4rem;
+      border-radius: var(--radius);
+      font-family: var(--sans);
+      font-size: 0.9rem;
+      font-weight: 600;
+      text-decoration: none;
+      cursor: pointer;
+      border: none;
+      transition: opacity 0.15s, transform 0.1s;
+    }
+    .btn:active { transform: scale(0.98); }
+    .btn-primary { background: var(--gold); color: #0d0d0d; }
+    .btn-primary:hover { opacity: 0.88; }
+    .btn-ghost {
+      background: transparent;
+      color: var(--muted);
+      border: 1px solid var(--border);
+    }
+    .btn-ghost:hover { color: var(--text); border-color: var(--muted); }
+
+    /* ── Alert ── */
+    .alert {
+      padding: 0.75rem 1rem;
+      border-radius: var(--radius);
+      font-size: 0.875rem;
+      margin-bottom: 1.5rem;
+    }
+    .alert-error { background: #2a1010; border: 1px solid #5a2020; color: #f08080; }
+
+    /* ── Tag ── */
+    .tag {
+      display: inline-block;
+      font-family: var(--mono);
+      font-size: 0.7rem;
+      background: #1e1e1e;
+      border: 1px solid var(--border);
+      color: var(--muted);
+      padding: 0.15rem 0.5rem;
+      border-radius: 3px;
+      letter-spacing: 0.06em;
+    }
+    .tag-gold { border-color: var(--gold-dim); color: var(--gold); }
+  </style>
+  {% block head %}{% endblock %}
+</head>
+<body>
+  <nav>
+    <a class="nav-brand" href="{{ url_for('catalog') }}">merchants<span>-store</span></a>
+    <div class="nav-links">
+      <a href="{{ url_for('catalog') }}">catalogue</a>
+      <a href="/admin/">admin</a>
+      <a href="https://mariofix.github.io/merchants/" target="_blank" rel="noopener">docs</a>
+    </div>
+  </nav>
+
+  <main>{% block content %}{% endblock %}</main>
+
+  <footer>
+    <span>merchants-store · demo</span>
+    <a href="https://github.com/mariofix/merchants" target="_blank" rel="noopener">github.com/mariofix/merchants</a>
+  </footer>
+</body>
+</html>

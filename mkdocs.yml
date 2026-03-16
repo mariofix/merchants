@@ -103,6 +103,10 @@ nav:
       - Custom Transport: transport.md
       - Amount Helpers: amounts.md
       - Webhooks: webhooks.md
+  - Integrations:
+      - integrations/index.md
+      - Flask / Quart: integrations/flask.md
+      - Flask Store: integrations/flask-store.md
   - API Reference:
       - api-reference/index.md
       - Client: api-reference/client.md

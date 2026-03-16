@@ -1,0 +1,93 @@
+{% extends "base.html" %}
+{% block title %}catalogue · merchants-store{% endblock %}
+
+{% block head %}
+<style>
+  .catalog-header { margin-bottom: 2.5rem; }
+  .catalog-header h1 {
+    font-family: var(--mono);
+    font-size: 1.75rem;
+    color: var(--gold);
+    margin-bottom: 0.4rem;
+  }
+  .catalog-header p { color: var(--muted); font-size: 0.925rem; }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 1.25rem;
+  }
+
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    transition: border-color 0.2s;
+  }
+  .card:hover { border-color: var(--gold-dim); }
+
+  .card-emoji { font-size: 2rem; line-height: 1; }
+  .card-name {
+    font-family: var(--mono);
+    font-size: 1rem;
+    color: var(--text);
+  }
+  .card-desc { font-size: 0.875rem; color: var(--muted); flex: 1; }
+  .card-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 0.5rem;
+  }
+  .card-price {
+    font-family: var(--mono);
+    font-size: 1.1rem;
+    color: var(--gold);
+  }
+  .card-price span { font-size: 0.7rem; color: var(--muted); }
+
+  .notice {
+    margin-top: 3rem;
+    padding: 1rem 1.25rem;
+    background: #131309;
+    border: 1px solid #3a3510;
+    border-radius: var(--radius);
+    font-size: 0.8rem;
+    color: var(--muted);
+    font-family: var(--mono);
+  }
+  .notice strong { color: var(--gold); }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="catalog-header">
+  <h1>catalogue</h1>
+  <p>Select a product to initiate a hosted-checkout session via <strong>merchants-sdk</strong>.</p>
+</div>
+
+<div class="grid">
+  {% for product in products %}
+  <div class="card">
+    <div class="card-emoji">{{ product.emoji }}</div>
+    <div class="card-name">{{ product.name }}</div>
+    <div class="card-desc">{{ product.description }}</div>
+    <div class="card-footer">
+      <div class="card-price">
+        ${{ product.price }} <span>{{ product.currency }}</span>
+      </div>
+      <a class="btn btn-primary" href="{{ url_for('checkout', product_id=product.id) }}">Buy</a>
+    </div>
+  </div>
+  {% endfor %}
+</div>
+
+<div class="notice">
+  <strong>demo mode</strong> — payments are processed by <code>DummyProvider</code>.
+  No real card is charged. Swap the provider via the <code>MERCHANTS_PROVIDER</code> env var.
+</div>
+{% endblock %}
