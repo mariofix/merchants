@@ -7,6 +7,7 @@ from merchants.auth import ApiKeyAuth, AuthStrategy, TokenAuth
 from merchants.client import Client, PaymentsResource
 from merchants.models import (
     CheckoutSession,
+    PaymentModel,
     PaymentState,
     PaymentStatus,
     WebhookEvent,
@@ -41,6 +42,7 @@ __all__ = [
     "TokenAuth",
     # Models
     "CheckoutSession",
+    "PaymentModel",
     "PaymentState",
     "PaymentStatus",
     "WebhookEvent",
