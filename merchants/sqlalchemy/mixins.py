@@ -303,7 +303,10 @@ def pydantic_mixin_from_model(
         # Default value (only when field is not required)
         if not field_info.is_required():
             default = field_info.default
-            if default is not pydantic.fields.PydanticUndefined and default is not inspect.Parameter.empty:
+            if (
+                default is not pydantic.fields.PydanticUndefined
+                and default is not inspect.Parameter.empty
+            ):
                 col_kwargs["default"] = default
             elif field_info.default_factory is not None:
                 col_kwargs["default"] = field_info.default_factory

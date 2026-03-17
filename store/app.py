@@ -16,18 +16,17 @@ import os
 
 from flask import Flask, redirect, render_template, request, url_for
 from flask_admin import Admin
-from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
-from sqlalchemy import Integer
-
 from flask_merchants import FlaskMerchants
 from flask_merchants.contrib.sqla import PaymentModelView
 from flask_merchants.models import PaymentMixin
-
+from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy import Integer
+from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
 
 # ---------------------------------------------------------------------------
 # Database
 # ---------------------------------------------------------------------------
+
 
 class Base(DeclarativeBase):
     pass
@@ -77,6 +76,7 @@ PRODUCTS = [
 # App factory
 # ---------------------------------------------------------------------------
 
+
 def create_app() -> Flask:
     app = Flask(__name__)
 
@@ -98,9 +98,7 @@ def create_app() -> Flask:
 
     # Flask-Admin
     admin = Admin(app, name="Merchants Store", template_mode="bootstrap4")
-    admin.add_view(
-        PaymentModelView(Payment, db.session, ext=ext, name="Payments")
-    )
+    admin.add_view(PaymentModelView(Payment, db.session, ext=ext, name="Payments"))
 
     # Create tables
     with app.app_context():
@@ -129,9 +127,14 @@ def create_app() -> Flask:
                     success_url=url_for("payment_success", _external=True),
                     cancel_url=url_for("payment_cancel", _external=True),
                     email=request.form.get("email") or None,
-                    request_context={"product_id": product_id, "product_name": product["name"]},
+                    request_context={
+                        "product_id": product_id,
+                        "product_name": product["name"],
+                    },
                 )
-                redirect_url = payment.response_payload.get("redirect_url", url_for("payment_success"))
+                redirect_url = payment.response_payload.get(
+                    "redirect_url", url_for("payment_success")
+                )
                 return redirect(redirect_url)
             except Exception as exc:
                 return render_template("checkout.html", product=product, error=str(exc))

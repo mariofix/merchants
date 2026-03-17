@@ -75,7 +75,9 @@ class WebhookEvent(BaseModel):
 
 # Keys that are part of the standard JSON Schema vocabulary and must NOT be
 # mistakenly treated as SQLAlchemy column metadata.
-_JSON_SCHEMA_KEYS: frozenset[str] = frozenset({"title", "description", "examples", "default", "deprecated"})
+_JSON_SCHEMA_KEYS: frozenset[str] = frozenset(
+    {"title", "description", "examples", "default", "deprecated"}
+)
 
 
 def get_sa_metadata(field: FieldInfo) -> dict[str, Any]:
