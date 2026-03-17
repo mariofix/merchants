@@ -28,9 +28,11 @@ Typical usage (in a Flask or FastAPI app that has SQLAlchemy installed)::
 from __future__ import annotations
 
 import dataclasses
+import datetime
 import inspect
 import types
 import typing
+import uuid
 from decimal import Decimal
 from typing import Any, Union, get_args, get_origin
 
@@ -47,6 +49,21 @@ except ImportError as exc:
     ) from exc
 
 from merchants.models import get_sa_metadata
+
+# ---------------------------------------------------------------------------
+# Module-level lookup table: simple 1-to-1 Python type → SA type class
+# (callable with no arguments to produce a fresh type instance)
+# ---------------------------------------------------------------------------
+_PRIMITIVE_TYPE_MAP: dict[type, Any] = {
+    int: sa.Integer,
+    bool: sa.Boolean,
+    float: sa.Float,
+    Decimal: sa.Numeric,
+    bytes: sa.LargeBinary,
+    datetime.datetime: sa.DateTime,
+    datetime.date: sa.Date,
+    datetime.time: sa.Time,
+}
 
 # ---------------------------------------------------------------------------
 # Configuration dataclass
@@ -108,6 +125,25 @@ def _is_subclass_safe(py_type: Any, base: type) -> bool:
         return False
 
 
+def _json_or_raise(py_type: Any, label: str, json_fallback: bool) -> sa.JSON:
+    """Return ``JSON()`` when *json_fallback* is enabled, otherwise raise.
+
+    Args:
+        py_type: The Python type that has no direct SA mapping.
+        label: Human-readable category name used in the error message.
+        json_fallback: Whether to silently fall back to ``JSON()``.
+
+    Raises:
+        TypeError: When *json_fallback* is ``False``.
+    """
+    if json_fallback:
+        return sa.JSON()
+    raise TypeError(
+        f"No SQLAlchemy mapping for {label} {py_type!r}. "
+        "Set json_fallback=True in PydanticToSAMixinConfig to use JSON()."
+    )
+
+
 def _sa_type_for(
     py_type: Any,
     sa_hints: dict[str, Any],
@@ -127,9 +163,6 @@ def _sa_type_for(
         TypeError: When the type is unsupported and ``config.json_fallback``
             is ``False``.
     """
-    import datetime
-    import uuid
-
     # Explicit type override from field metadata
     if "type" in sa_hints:
         return sa_hints["type"]
@@ -139,61 +172,29 @@ def _sa_type_for(
         precision, scale = sa_hints["numeric"]
         return sa.Numeric(precision, scale)
 
-    # Unwrap generic origins (list[x], dict[k,v], etc.)
-    origin = get_origin(py_type)
+    # Simple 1:1 primitive mapping (replaces ~8 individual if-branches)
+    if py_type in _PRIMITIVE_TYPE_MAP:
+        return _PRIMITIVE_TYPE_MAP[py_type]()
 
-    # --- Primitive types ---
-    if py_type is int:
-        return sa.Integer()
+    # str: may carry an explicit length from sa_hints or config
     if py_type is str:
         length = sa_hints.get("varchar_len") or config.default_string_len
-        return sa.String(length) if length else sa.String()
-    if py_type is bool:
-        return sa.Boolean()
-    if py_type is float:
-        return sa.Float()
-    if py_type is Decimal:
-        return sa.Numeric()
-    if py_type is bytes:
-        return sa.LargeBinary()
+        return sa.String(length)  # sa.String(None) == sa.String()
 
-    # --- Date/time types ---
-    if py_type is datetime.datetime:
-        return sa.DateTime()
-    if py_type is datetime.date:
-        return sa.Date()
-    if py_type is datetime.time:
-        return sa.Time()
-
-    # --- UUID ---
+    # UUID: portability choice between String(36) and native Uuid
     if py_type is uuid.UUID:
         return sa.String(36) if config.uuid_as_string else sa.Uuid()
 
-    # --- Generic container types → JSON ---
-    if origin in (list, dict):
-        if config.json_fallback:
-            return sa.JSON()
-        raise TypeError(
-            f"No SQLAlchemy mapping for container type {py_type!r}. "
-            "Set json_fallback=True in PydanticToSAMixinConfig to use JSON()."
-        )
+    # Generic container types (list[x], dict[k, v]) → JSON
+    if get_origin(py_type) in (list, dict):
+        return _json_or_raise(py_type, "container type", config.json_fallback)
 
-    # --- Nested Pydantic models → JSON ---
+    # Nested Pydantic models → JSON
     if _is_subclass_safe(py_type, pydantic.BaseModel):
-        if config.json_fallback:
-            return sa.JSON()
-        raise TypeError(
-            f"No SQLAlchemy mapping for nested Pydantic model {py_type!r}. "
-            "Set json_fallback=True in PydanticToSAMixinConfig to use JSON()."
-        )
+        return _json_or_raise(py_type, "nested Pydantic model", config.json_fallback)
 
-    # --- Fallback ---
-    if config.json_fallback:
-        return sa.JSON()
-    raise TypeError(
-        f"No SQLAlchemy type mapping for Python type {py_type!r}. "
-        "Set json_fallback=True in PydanticToSAMixinConfig to use JSON()."
-    )
+    # Final catch-all
+    return _json_or_raise(py_type, "Python type", config.json_fallback)
 
 
 # ---------------------------------------------------------------------------
