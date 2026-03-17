@@ -176,8 +176,8 @@ def _sa_type_for(
     if py_type in _PRIMITIVE_TYPE_MAP:
         return _PRIMITIVE_TYPE_MAP[py_type]()
 
-    # str: may carry an explicit length from sa_hints or config
-    if py_type is str:
+    # str and str subclasses (e.g. str-based Enum types) → String
+    if isinstance(py_type, type) and issubclass(py_type, str):
         length = sa_hints.get("varchar_len") or config.default_string_len
         return sa.String(length)  # sa.String(None) == sa.String()
 
@@ -303,7 +303,10 @@ def pydantic_mixin_from_model(
         # Default value (only when field is not required)
         if not field_info.is_required():
             default = field_info.default
-            if default is not pydantic.fields.PydanticUndefined and default is not inspect.Parameter.empty:
+            if (
+                default is not pydantic.fields.PydanticUndefined
+                and default is not inspect.Parameter.empty
+            ):
                 col_kwargs["default"] = default
             elif field_info.default_factory is not None:
                 col_kwargs["default"] = field_info.default_factory

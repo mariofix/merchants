@@ -13,7 +13,10 @@ Typical usage::
 
 from __future__ import annotations
 
-from merchants.sqlalchemy.mixins import PydanticToSAMixinConfig, pydantic_mixin_from_model
+from merchants.sqlalchemy.mixins import (
+    PydanticToSAMixinConfig,
+    pydantic_mixin_from_model,
+)
 
 __all__ = [
     "PydanticToSAMixinConfig",

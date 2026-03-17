@@ -84,7 +84,9 @@ class TestGetSaMetadata:
 
     def test_namespaced_sa_key(self):
         class M(BaseModel):
-            email: str = Field(json_schema_extra={"sa": {"unique": True, "varchar_len": 320}})
+            email: str = Field(
+                json_schema_extra={"sa": {"unique": True, "varchar_len": 320}}
+            )
 
         result = get_sa_metadata(M.model_fields["email"])
         assert result == {"unique": True, "varchar_len": 320}
@@ -98,7 +100,9 @@ class TestGetSaMetadata:
 
     def test_json_schema_keys_excluded_from_flat_fallback(self):
         class M(BaseModel):
-            x: str = Field(json_schema_extra={"title": "My Title", "description": "A field"})
+            x: str = Field(
+                json_schema_extra={"title": "My Title", "description": "A field"}
+            )
 
         # Should NOT treat standard JSON-schema keys as SA metadata
         assert get_sa_metadata(M.model_fields["x"]) == {}
@@ -130,7 +134,9 @@ class TestPydanticMixinFromModelHappyPath:
         for key in ("email", "is_active", "age"):
             assert key in annotations
             # Mapped[...] wraps the original type
-            assert hasattr(annotations[key], "__class_getitem__") or "Mapped" in str(annotations[key])
+            assert hasattr(annotations[key], "__class_getitem__") or "Mapped" in str(
+                annotations[key]
+            )
 
     def test_email_unique(self):
         Mixin = pydantic_mixin_from_model(UserSchema)
@@ -191,7 +197,9 @@ class TestIncludeExclude:
         assert not hasattr(Mixin, "age")
 
     def test_include_and_exclude_together(self):
-        Mixin = pydantic_mixin_from_model(UserSchema, include={"email", "is_active"}, exclude={"email"})
+        Mixin = pydantic_mixin_from_model(
+            UserSchema, include={"email", "is_active"}, exclude={"email"}
+        )
         assert not hasattr(Mixin, "email")
         assert hasattr(Mixin, "is_active")
 
@@ -398,3 +406,168 @@ class TestIntegration:
             result = session.scalars(sa.select(Order)).one()
             assert result.order_ref == "ORD-001"
             assert result.currency == "USD"  # default applied
+
+
+# ---------------------------------------------------------------------------
+# Tests: str-subclass type mapping (e.g. str Enum → String)
+# ---------------------------------------------------------------------------
+
+
+class TestStrSubclassMapping:
+    def test_str_enum_maps_to_string(self):
+        from enum import Enum
+
+        class Status(str, Enum):
+            ACTIVE = "active"
+            INACTIVE = "inactive"
+
+        class M(BaseModel):
+            status: Status = Status.ACTIVE
+
+        Mixin = pydantic_mixin_from_model(M)
+        assert isinstance(Mixin.status.column.type, sa.String)
+
+    def test_str_enum_with_varchar_len(self):
+        from enum import Enum
+
+        class Color(str, Enum):
+            RED = "red"
+            GREEN = "green"
+
+        class M(BaseModel):
+            color: Color = Field(
+                default=Color.RED,
+                json_schema_extra={"sa": {"varchar_len": 16}},
+            )
+
+        Mixin = pydantic_mixin_from_model(M)
+        col_type = Mixin.color.column.type
+        assert isinstance(col_type, sa.String)
+        assert col_type.length == 16
+
+
+# ---------------------------------------------------------------------------
+# Tests: PaymentModel mixin generation
+# ---------------------------------------------------------------------------
+
+
+class TestPaymentModelMixin:
+    def test_mixin_has_all_expected_columns(self):
+        from merchants.models import PaymentModel
+
+        Mixin = pydantic_mixin_from_model(PaymentModel, mixin_name="PaymentMixin")
+        for field in (
+            "merchants_id",
+            "transaction_id",
+            "provider",
+            "amount",
+            "currency",
+            "state",
+            "email",
+            "extra_args",
+            "request_payload",
+            "response_payload",
+            "payment_object",
+            "success_url",
+            "cancel_url",
+        ):
+            assert hasattr(Mixin, field), f"Expected column '{field}' not found"
+
+    def test_amount_is_numeric(self):
+        from merchants.models import PaymentModel
+
+        Mixin = pydantic_mixin_from_model(PaymentModel)
+        col_type = Mixin.amount.column.type
+        assert isinstance(col_type, sa.Numeric)
+        assert col_type.precision == 19
+        assert col_type.scale == 4
+
+    def test_currency_varchar_3(self):
+        from merchants.models import PaymentModel
+
+        Mixin = pydantic_mixin_from_model(PaymentModel)
+        col_type = Mixin.currency.column.type
+        assert isinstance(col_type, sa.String)
+        assert col_type.length == 3
+
+    def test_state_is_string(self):
+        from merchants.models import PaymentModel
+
+        Mixin = pydantic_mixin_from_model(PaymentModel)
+        col_type = Mixin.state.column.type
+        assert isinstance(col_type, sa.String)
+        assert col_type.length == 32
+
+    def test_state_has_index(self):
+        from merchants.models import PaymentModel
+
+        Mixin = pydantic_mixin_from_model(PaymentModel)
+        assert Mixin.state.column.index is True
+
+    def test_merchants_id_unique_and_indexed(self):
+        from merchants.models import PaymentModel
+
+        Mixin = pydantic_mixin_from_model(PaymentModel)
+        assert Mixin.merchants_id.column.unique is True
+        assert Mixin.merchants_id.column.index is True
+
+    def test_merchants_id_varchar_36(self):
+        from merchants.models import PaymentModel
+
+        Mixin = pydantic_mixin_from_model(PaymentModel)
+        col_type = Mixin.merchants_id.column.type
+        assert isinstance(col_type, sa.String)
+        assert col_type.length == 36
+
+    def test_transaction_id_unique_and_indexed(self):
+        from merchants.models import PaymentModel
+
+        Mixin = pydantic_mixin_from_model(PaymentModel)
+        assert Mixin.transaction_id.column.unique is True
+        assert Mixin.transaction_id.column.index is True
+
+    def test_transaction_id_nullable(self):
+        from merchants.models import PaymentModel
+
+        Mixin = pydantic_mixin_from_model(PaymentModel)
+        assert Mixin.transaction_id.column.nullable is True
+
+    def test_email_has_index(self):
+        from merchants.models import PaymentModel
+
+        Mixin = pydantic_mixin_from_model(PaymentModel)
+        assert Mixin.email.column.index is True
+
+    def test_json_columns(self):
+        from merchants.models import PaymentModel
+
+        Mixin = pydantic_mixin_from_model(PaymentModel)
+        for field in ("extra_args", "request_payload", "response_payload", "payment_object"):
+            assert isinstance(getattr(Mixin, field).column.type, sa.JSON), (
+                f"Expected {field} to be JSON"
+            )
+
+    def test_integration_creates_table(self):
+        from merchants.models import PaymentModel
+
+        PaymentMixin = pydantic_mixin_from_model(PaymentModel, mixin_name="IntegPaymentMixin")
+
+        class Base(sa_orm.DeclarativeBase): ...
+
+        class Payment(Base, PaymentMixin):
+            __tablename__ = "payments"
+            id: sa_orm.Mapped[int] = sa_orm.mapped_column(primary_key=True)
+
+        engine = sa.create_engine("sqlite:///:memory:")
+        Base.metadata.create_all(engine)
+
+        inspector = sa.inspect(engine)
+        assert "payments" in inspector.get_table_names()
+        cols = {c["name"] for c in inspector.get_columns("payments")}
+        expected = {
+            "id", "merchants_id", "transaction_id", "provider",
+            "amount", "currency", "state", "email",
+            "extra_args", "request_payload", "response_payload",
+            "payment_object", "success_url", "cancel_url",
+        }
+        assert expected.issubset(cols)

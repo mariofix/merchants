@@ -73,9 +73,91 @@ class WebhookEvent(BaseModel):
     raw: dict[str, Any] = Field(default_factory=dict)
 
 
+class PaymentModel(BaseModel):
+    """Pydantic model representing a stored payment record.
+
+    This model mirrors the column layout used by *flask-merchants* and
+    *fastapi-merchants* so that those packages can derive their
+    ``PaymentMixin`` from it via
+    :func:`merchants.sqlalchemy.pydantic_mixin_from_model` without
+    duplicating field definitions::
+
+        from merchants.models import PaymentModel
+        from merchants.sqlalchemy import pydantic_mixin_from_model
+
+        PaymentMixin = pydantic_mixin_from_model(PaymentModel, mixin_name="PaymentMixin")
+
+    ``id``, ``created_at``, and ``updated_at`` are intentionally absent
+    because they appear in the default ``auto_exclude`` set of
+    :class:`~merchants.sqlalchemy.PydanticToSAMixinConfig` and are expected
+    to be defined directly on the ORM model or mixin by the downstream
+    package.
+    """
+
+    merchants_id: str = Field(
+        description="Internal payment identifier (UUID4) assigned by the application.",
+        json_schema_extra={"sa": {"unique": True, "index": True, "varchar_len": 36}},
+    )
+    transaction_id: str | None = Field(
+        default=None,
+        description="Provider-assigned session or payment identifier.",
+        json_schema_extra={"sa": {"unique": True, "index": True, "varchar_len": 255}},
+    )
+    provider: str = Field(
+        description='Payment provider key (e.g. "stripe", "khipu").',
+        json_schema_extra={"sa": {"index": True, "varchar_len": 64}},
+    )
+    amount: Decimal = Field(
+        description="Payment amount.",
+        json_schema_extra={"sa": {"numeric": (19, 4)}},
+    )
+    currency: str = Field(
+        description='ISO 4217 currency code (e.g. "USD").',
+        json_schema_extra={"sa": {"varchar_len": 3}},
+    )
+    state: PaymentState = Field(
+        default=PaymentState.PENDING,
+        description="Current payment lifecycle state.",
+        json_schema_extra={"sa": {"varchar_len": 32, "index": True}},
+    )
+    email: str | None = Field(
+        default=None,
+        description="Customer e-mail address.",
+        json_schema_extra={"sa": {"index": True, "varchar_len": 255}},
+    )
+    extra_args: dict[str, Any] = Field(
+        default_factory=dict,
+        description="Provider-specific keyword arguments passed at checkout creation.",
+    )
+    request_payload: dict[str, Any] = Field(
+        default_factory=dict,
+        description="Full request payload sent to the payment provider.",
+    )
+    response_payload: dict[str, Any] = Field(
+        default_factory=dict,
+        description="Raw response payload returned by the payment provider.",
+    )
+    payment_object: dict[str, Any] = Field(
+        default_factory=dict,
+        description="Parsed payment object received from the provider.",
+    )
+    success_url: str | None = Field(
+        default=None,
+        description="URL the user is redirected to after a successful payment.",
+        json_schema_extra={"sa": {"varchar_len": 2048}},
+    )
+    cancel_url: str | None = Field(
+        default=None,
+        description="URL the user is redirected to when cancelling.",
+        json_schema_extra={"sa": {"varchar_len": 2048}},
+    )
+
+
 # Keys that are part of the standard JSON Schema vocabulary and must NOT be
 # mistakenly treated as SQLAlchemy column metadata.
-_JSON_SCHEMA_KEYS: frozenset[str] = frozenset({"title", "description", "examples", "default", "deprecated"})
+_JSON_SCHEMA_KEYS: frozenset[str] = frozenset(
+    {"title", "description", "examples", "default", "deprecated"}
+)
 
 
 def get_sa_metadata(field: FieldInfo) -> dict[str, Any]:
