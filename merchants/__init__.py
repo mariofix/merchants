@@ -10,6 +10,7 @@ from merchants.models import (
     PaymentState,
     PaymentStatus,
     WebhookEvent,
+    get_sa_metadata,
 )
 from merchants.providers import (
     Provider,
@@ -43,6 +44,7 @@ __all__ = [
     "PaymentState",
     "PaymentStatus",
     "WebhookEvent",
+    "get_sa_metadata",
     # Providers
     "Provider",
     "ProviderInfo",
