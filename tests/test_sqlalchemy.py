@@ -457,16 +457,19 @@ class TestPaymentModelMixin:
 
         Mixin = pydantic_mixin_from_model(PaymentModel, mixin_name="PaymentMixin")
         for field in (
-            "payment_id",
+            "merchants_id",
+            "transaction_id",
+            "provider",
             "amount",
             "currency",
-            "provider",
             "state",
+            "email",
+            "extra_args",
+            "request_payload",
+            "response_payload",
+            "payment_object",
             "success_url",
             "cancel_url",
-            "email",
-            "request_context",
-            "response_payload",
         ):
             assert hasattr(Mixin, field), f"Expected column '{field}' not found"
 
@@ -501,24 +504,48 @@ class TestPaymentModelMixin:
         Mixin = pydantic_mixin_from_model(PaymentModel)
         assert Mixin.state.column.index is True
 
-    def test_payment_id_has_index(self):
+    def test_merchants_id_unique_and_indexed(self):
         from merchants.models import PaymentModel
 
         Mixin = pydantic_mixin_from_model(PaymentModel)
-        assert Mixin.payment_id.column.index is True
+        assert Mixin.merchants_id.column.unique is True
+        assert Mixin.merchants_id.column.index is True
 
-    def test_payment_id_nullable(self):
+    def test_merchants_id_varchar_36(self):
         from merchants.models import PaymentModel
 
         Mixin = pydantic_mixin_from_model(PaymentModel)
-        assert Mixin.payment_id.column.nullable is True
+        col_type = Mixin.merchants_id.column.type
+        assert isinstance(col_type, sa.String)
+        assert col_type.length == 36
 
-    def test_request_context_and_response_payload_are_json(self):
+    def test_transaction_id_unique_and_indexed(self):
         from merchants.models import PaymentModel
 
         Mixin = pydantic_mixin_from_model(PaymentModel)
-        assert isinstance(Mixin.request_context.column.type, sa.JSON)
-        assert isinstance(Mixin.response_payload.column.type, sa.JSON)
+        assert Mixin.transaction_id.column.unique is True
+        assert Mixin.transaction_id.column.index is True
+
+    def test_transaction_id_nullable(self):
+        from merchants.models import PaymentModel
+
+        Mixin = pydantic_mixin_from_model(PaymentModel)
+        assert Mixin.transaction_id.column.nullable is True
+
+    def test_email_has_index(self):
+        from merchants.models import PaymentModel
+
+        Mixin = pydantic_mixin_from_model(PaymentModel)
+        assert Mixin.email.column.index is True
+
+    def test_json_columns(self):
+        from merchants.models import PaymentModel
+
+        Mixin = pydantic_mixin_from_model(PaymentModel)
+        for field in ("extra_args", "request_payload", "response_payload", "payment_object"):
+            assert isinstance(getattr(Mixin, field).column.type, sa.JSON), (
+                f"Expected {field} to be JSON"
+            )
 
     def test_integration_creates_table(self):
         from merchants.models import PaymentModel
@@ -538,8 +565,9 @@ class TestPaymentModelMixin:
         assert "payments" in inspector.get_table_names()
         cols = {c["name"] for c in inspector.get_columns("payments")}
         expected = {
-            "id", "payment_id", "amount", "currency", "provider",
-            "state", "success_url", "cancel_url", "email",
-            "request_context", "response_payload",
+            "id", "merchants_id", "transaction_id", "provider",
+            "amount", "currency", "state", "email",
+            "extra_args", "request_payload", "response_payload",
+            "payment_object", "success_url", "cancel_url",
         }
         assert expected.issubset(cols)

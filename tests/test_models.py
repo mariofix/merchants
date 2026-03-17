@@ -67,33 +67,37 @@ class TestWebhookEvent:
 class TestPaymentModel:
     def test_minimal_construction(self):
         p = PaymentModel(
+            merchants_id="550e8400-e29b-41d4-a716-446655440000",
             amount=Decimal("9.99"),
             currency="USD",
             provider="stripe",
-            success_url="https://example.com/success",
         )
+        assert p.merchants_id == "550e8400-e29b-41d4-a716-446655440000"
         assert p.amount == Decimal("9.99")
         assert p.currency == "USD"
         assert p.provider == "stripe"
-        assert p.success_url == "https://example.com/success"
 
     def test_defaults(self):
         p = PaymentModel(
+            merchants_id="550e8400-e29b-41d4-a716-446655440000",
             amount=Decimal("1.00"),
             currency="EUR",
             provider="dummy",
-            success_url="https://example.com/ok",
         )
         assert p.state == PaymentState.PENDING
-        assert p.payment_id is None
+        assert p.transaction_id is None
         assert p.cancel_url is None
+        assert p.success_url is None
         assert p.email is None
-        assert p.request_context == {}
+        assert p.extra_args == {}
+        assert p.request_payload == {}
         assert p.response_payload == {}
+        assert p.payment_object == {}
 
     def test_full_construction(self):
         p = PaymentModel(
-            payment_id="sess_abc123",
+            merchants_id="550e8400-e29b-41d4-a716-446655440000",
+            transaction_id="sess_abc123",
             amount=Decimal("49.99"),
             currency="USD",
             provider="stripe",
@@ -101,22 +105,27 @@ class TestPaymentModel:
             success_url="https://example.com/success",
             cancel_url="https://example.com/cancel",
             email="user@example.com",
-            request_context={"product_id": "prod_001"},
+            extra_args={"timeout": 30},
+            request_payload={"product_id": "prod_001"},
             response_payload={"redirect_url": "https://checkout.stripe.com/..."},
+            payment_object={"id": "pi_abc", "status": "processing"},
         )
-        assert p.payment_id == "sess_abc123"
+        assert p.transaction_id == "sess_abc123"
         assert p.state == PaymentState.PROCESSING
         assert p.cancel_url == "https://example.com/cancel"
+        assert p.success_url == "https://example.com/success"
         assert p.email == "user@example.com"
-        assert p.request_context == {"product_id": "prod_001"}
+        assert p.extra_args == {"timeout": 30}
+        assert p.request_payload == {"product_id": "prod_001"}
         assert p.response_payload == {"redirect_url": "https://checkout.stripe.com/..."}
+        assert p.payment_object == {"id": "pi_abc", "status": "processing"}
 
     def test_state_validates_enum_values(self):
         p = PaymentModel(
+            merchants_id="550e8400-e29b-41d4-a716-446655440000",
             amount=Decimal("5.00"),
             currency="USD",
             provider="dummy",
-            success_url="https://example.com/ok",
             state=PaymentState.SUCCEEDED,
         )
         assert p.state == PaymentState.SUCCEEDED
