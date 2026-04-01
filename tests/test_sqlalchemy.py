@@ -542,15 +542,22 @@ class TestPaymentModelMixin:
         from merchants.models import PaymentModel
 
         Mixin = pydantic_mixin_from_model(PaymentModel)
-        for field in ("extra_args", "request_payload", "response_payload", "payment_object"):
-            assert isinstance(getattr(Mixin, field).column.type, sa.JSON), (
-                f"Expected {field} to be JSON"
-            )
+        for field in (
+            "extra_args",
+            "request_payload",
+            "response_payload",
+            "payment_object",
+        ):
+            assert isinstance(
+                getattr(Mixin, field).column.type, sa.JSON
+            ), f"Expected {field} to be JSON"
 
     def test_integration_creates_table(self):
         from merchants.models import PaymentModel
 
-        PaymentMixin = pydantic_mixin_from_model(PaymentModel, mixin_name="IntegPaymentMixin")
+        PaymentMixin = pydantic_mixin_from_model(
+            PaymentModel, mixin_name="IntegPaymentMixin"
+        )
 
         class Base(sa_orm.DeclarativeBase): ...
 
@@ -565,9 +572,19 @@ class TestPaymentModelMixin:
         assert "payments" in inspector.get_table_names()
         cols = {c["name"] for c in inspector.get_columns("payments")}
         expected = {
-            "id", "merchants_id", "transaction_id", "provider",
-            "amount", "currency", "state", "email",
-            "extra_args", "request_payload", "response_payload",
-            "payment_object", "success_url", "cancel_url",
+            "id",
+            "merchants_id",
+            "transaction_id",
+            "provider",
+            "amount",
+            "currency",
+            "state",
+            "email",
+            "extra_args",
+            "request_payload",
+            "response_payload",
+            "payment_object",
+            "success_url",
+            "cancel_url",
         }
         assert expected.issubset(cols)
