@@ -13,7 +13,7 @@ khipu = ["khipu-tools>=2024.1"]
 cli = ["typer>=0.9"]
 sqlalchemy = ["sqlalchemy>=2.0"]
 dev = [
-    "pytest>=7.4",
+    "pytest>=9.0.3",
     "pytest-cov",
     "ruff",
     "responses>=0.25",
