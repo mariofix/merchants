@@ -5,7 +5,7 @@ description = "Payments for people who have better things to do."
 readme = "README.md"
 license = { file = "LICENSE" }
 requires-python = ">=3.10"
-dependencies = ["pydantic>=2.0", "requests>=2.28"]
+dependencies = ["pydantic>=2.12.5", "requests>=2.28"]
 
 [project.optional-dependencies]
 flow = ["pyflowcl>=2024.1"]
