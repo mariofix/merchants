@@ -16,7 +16,7 @@ dev = [
     "pytest>=7.4",
     "pytest-cov",
     "ruff",
-    "responses>=0.25",
+    "responses>=0.26.0",
     "typer>=0.9",
     "sqlalchemy>=2.0",
     "pre-commit",
