@@ -9,9 +9,13 @@ updates:
     assignees:
       - "mariofix"
     commit-message:
-      prefix: "poetry prod"
-      prefix-development: "poetry dev"
+      prefix: "packages"
+      prefix-development: "dev-packages"
       include: "scope"
+    groups:
+      all-pip-updates:
+        patterns:
+          - "*"
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
@@ -19,6 +23,10 @@ updates:
     allow:
       - dependency-type: "all"
     commit-message:
-      prefix: "actions prod"
-      prefix-development: "actions dev"
+      prefix: "actions"
+      prefix-development: "dev-actions"
       include: "scope"
+    groups:
+      all-actions-updates:
+        patterns:
+          - "*"
