@@ -66,11 +66,13 @@ class Provider(ABC):
     url: str = ""
     #: Whether this provider accepts a webhook notification URL.
     #: Subclasses that support server-to-server webhook callbacks should
-    #: override this to ``True`` so that :meth:`PaymentMixin.create` will
-    #: automatically inject the calculated ``notify_url`` into the provider
+    #: override this to whatever the provider requiras as the webhook
+    # so that :meth:`PaymentMixin.create` will
+    #: automatically inject the calculated URL into the provider
     #: call.  Internal providers (e.g. ``saldo``, ``cafeteria``) should
-    #: leave this as ``False``.
-    accepts_notify_url: bool = False
+    #: leave this as ``None``.
+    accepts_notify_url: str | None = None
+
 
     def __init__(
         self,

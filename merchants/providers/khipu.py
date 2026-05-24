@@ -51,7 +51,7 @@ class KhipuProvider(Provider):
     version = "2016.3.0"
     description = "Khipu payment gateway for Chile, powered by khipu-tools."
     url = "https://khipu.com"
-    accepts_notify_url = True
+    accepts_notify_url = "notify_url"
 
     def __init__(
         self,

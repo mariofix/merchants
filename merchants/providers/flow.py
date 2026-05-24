@@ -52,6 +52,7 @@ class FlowProvider(Provider):
     version = "2026.5.0"
     description = "Flow.cl payment gateway for Chile, powered by pyflowcl."
     url = "https://www.flow.cl"
+    accepts_notify_url = "urlConfirmation"
 
     def __init__(
         self,
@@ -97,6 +98,8 @@ class FlowProvider(Provider):
         }
         if kwargs.get("email"):
             payment_data["email"] = kwargs["email"]
+        if kwargs.get("urlConfirmation"):
+            payment_data["urlConfirmation"] = kwargs["urlConfirmation"]
         try:
             logger.debug("flow.py: FlowProvider.create_checkout payment_data=%r", payment_data)
             response = flow_create(self._client, payment_data)
