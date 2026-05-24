@@ -3,8 +3,11 @@
 from __future__ import annotations
 
 import json
+import logging
 from decimal import Decimal
 from typing import Any
+
+logger = logging.getLogger(__name__)
 
 from merchants.amount import to_minor_units
 from merchants.models import CheckoutSession, PaymentState, PaymentStatus, WebhookEvent
@@ -46,7 +49,7 @@ class FlowProvider(Provider):
     key = "flow"
     name = "Flow.cl"
     author = "mariofix"
-    version = "2026.3.0"
+    version = "2026.5.0"
     description = "Flow.cl payment gateway for Chile, powered by pyflowcl."
     url = "https://www.flow.cl"
 
@@ -59,6 +62,7 @@ class FlowProvider(Provider):
         subject: str = "Order",
         confirmation_url: str = "",
     ) -> None:
+        logger.debug("flow.py: FlowProvider.__init__ called")
         self._client = ApiClient(
             api_url=api_url,
             api_key=api_key,
@@ -76,6 +80,11 @@ class FlowProvider(Provider):
         metadata: dict[str, Any] | None = None,
         **kwargs: Any,
     ) -> CheckoutSession:
+        logger.debug(
+            "flow.py: FlowProvider.create_checkout called with amount=%s currency=%s",
+            amount,
+            currency,
+        )
         # Flow expects integer amounts in CLP
         amount_int = to_minor_units(amount, decimals=0)
         payment_data: dict[str, Any] = {
@@ -87,10 +96,12 @@ class FlowProvider(Provider):
             "urlConfirmation": self._confirmation_url or success_url,
         }
         try:
+            logger.debug("flow.py: FlowProvider.create_checkout payment_data=%r", payment_data)
             response = flow_create(self._client, payment_data)
         except GenericError as exc:
             raise UserError(str(exc)) from exc
 
+        logger.debug("flow.py: FlowProvider.create_checkout response=%r", response)
         redirect_url = (
             f"{response.url}?token={response.token}"
             if response.url and response.token
@@ -107,6 +118,9 @@ class FlowProvider(Provider):
         )
 
     def get_payment(self, payment_id: str) -> PaymentStatus:
+        logger.debug(
+            "flow.py: FlowProvider.get_payment called with payment_id=%s", payment_id
+        )
         try:
             status = flow_get_status(self._client, payment_id)
         except GenericError as exc:
@@ -127,6 +141,7 @@ class FlowProvider(Provider):
         )
 
     def parse_webhook(self, payload: bytes, headers: dict[str, str]) -> WebhookEvent:
+        logger.debug("flow.py: FlowProvider.parse_webhook called")
         # Flow sends a form POST with a `token` field; payload may be form-encoded
         token = ""
         try:
