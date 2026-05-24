@@ -5,10 +5,10 @@ description = "Payments for people who have better things to do."
 readme = "README.md"
 license = { file = "LICENSE" }
 requires-python = ">=3.10"
-dependencies = ["pydantic>=2.13.3", "requests>=2.33.1"]
+dependencies = ["pydantic>=2.13.4", "requests>=2.34.2"]
 
 [project.optional-dependencies]
-flow = ["pyflowcl>=2026.3.0"]
+flow = ["pyflowcl>=2026.5.0"]
 khipu = ["khipu-tools>=2025.1.0"]
 cli = ["typer>=0.25.1"]
 sqlalchemy = ["sqlalchemy>=2.0.49"]
@@ -16,7 +16,7 @@ dev = [
     "pytest>=9.0.3",
     "pytest-cov",
     "ruff",
-    "responses>=0.26.0",
+    "responses>=0.26.1",
     "typer>=0.25.1",
     "sqlalchemy>=2.0.49",
     "pre-commit",
