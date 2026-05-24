@@ -101,7 +101,9 @@ class FlowProvider(Provider):
         if kwargs.get("urlConfirmation"):
             payment_data["urlConfirmation"] = kwargs["urlConfirmation"]
         try:
-            logger.debug("flow.py: FlowProvider.create_checkout payment_data=%r", payment_data)
+            logger.debug(
+                "flow.py: FlowProvider.create_checkout payment_data=%r", payment_data
+            )
             response = flow_create(self._client, payment_data)
         except GenericError as exc:
             raise UserError(str(exc)) from exc
