@@ -95,6 +95,8 @@ class FlowProvider(Provider):
             "urlReturn": success_url,
             "urlConfirmation": self._confirmation_url or success_url,
         }
+        if kwargs.get("email"):
+            payment_data["email"] = kwargs["email"]
         try:
             logger.debug("flow.py: FlowProvider.create_checkout payment_data=%r", payment_data)
             response = flow_create(self._client, payment_data)
