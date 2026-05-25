@@ -162,11 +162,21 @@ class FlowProvider(Provider):
             token = (qs.get("token") or [""])[0]
             data = {"token": token}
 
+        final_state = PaymentState.PENDING
+        try:
+            payment_info = self.get_payment(payment_id=token)
+            if final_state != payment_info.state:
+                final_state = payment_info.state
+                logger.debug(f"flow.py: new {final_state=}")
+        except Exception as e:
+            logger.warning(e)
+
+    
         return WebhookEvent(
             event_id=token or None,
             event_type="payment.notification",
             payment_id=token or None,
-            state=PaymentState.UNKNOWN,  # must call get_payment(token) to know state
+            state=final_state,
             provider=self.key,
             raw=data,
         )
