@@ -25,9 +25,9 @@ except ImportError as exc:  # pragma: no cover
 
 # Flow status codes: 1=Paid, 2=Rejected, 3=Pending, 4=Cancelled
 _FLOW_STATE_MAP: dict[int, PaymentState] = {
-    1: PaymentState.SUCCEEDED,
-    2: PaymentState.FAILED,
-    3: PaymentState.PENDING,
+    1: PaymentState.PENDING,
+    2: PaymentState.SUCCEEDED,
+    3: PaymentState.FAILED,
     4: PaymentState.CANCELLED,
 }
 
