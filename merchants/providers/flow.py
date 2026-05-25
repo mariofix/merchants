@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import json
 import logging
+from dataclasses import asdict
 from decimal import Decimal
 from typing import Any
 
@@ -122,6 +123,7 @@ class FlowProvider(Provider):
             metadata=metadata or {},
             raw={"token": response.token, "flowOrder": response.flowOrder},
             payload=payment_data,
+            full_object=asdict(response)
         )
 
     def get_payment(self, payment_id: str) -> PaymentStatus:
@@ -145,6 +147,7 @@ class FlowProvider(Provider):
                 "commerceOrder": status.commerceOrder,
                 "payer": status.payer,
             },
+            full_object=asdict(status)
         )
 
     def parse_webhook(self, payload: bytes, headers: dict[str, str]) -> WebhookEvent:
@@ -163,19 +166,22 @@ class FlowProvider(Provider):
             data = {"token": token}
 
         final_state = PaymentState.PENDING
+        event_type = "Payment.notification"
         try:
             payment_info = self.get_payment(payment_id=token)
             logger.debug(f"flow.py: new {payment_info=} {payment_info.state=} {payment_info.raw=}")
             if final_state != payment_info.state:
                 final_state = payment_info.state
-                logger.debug(f"flow.py: new {final_state=}")
+                event_type = "Payment.succeeded"
+                logger.debug(f"flow.py: new {final_state=} and {event_type=}")
         except Exception as e:
             logger.warning(e)
+
 
     
         return WebhookEvent(
             event_id=token or None,
-            event_type="payment.notification",
+            event_type=event_type,
             payment_id=token or None,
             state=final_state,
             provider=self.key,

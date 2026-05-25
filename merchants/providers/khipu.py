@@ -132,6 +132,7 @@ class KhipuProvider(Provider):
             metadata=metadata or {},
             raw=dict(result),
             payload=params,
+            full_object=result
         )
 
     def get_payment(self, payment_id: str) -> PaymentStatus:
@@ -154,6 +155,7 @@ class KhipuProvider(Provider):
             amount=Decimal(str(amount_val)) if amount_val is not None else None,
             currency=currency,
             raw=dict(result),
+            full_object=result
         )
 
     def parse_webhook(self, payload: bytes, headers: dict[str, str]) -> WebhookEvent:
@@ -206,7 +208,7 @@ class KhipuProvider(Provider):
         # Otherwise fall back to payment_status for backward compatibility.
         if data.get("conciliation_date"):
             state = PaymentState.SUCCEEDED
-            event_type = "payment.conciliated"
+            event_type = "payment.succeeded"
         elif "payment_status" in data:
             raw_state = str(data["payment_status"])
             state = _KHIPU_STATE_MAP.get(raw_state.lower(), PaymentState.UNKNOWN)

@@ -34,6 +34,7 @@ class CheckoutSession(BaseModel):
     raw: dict[str, Any] = Field(default_factory=dict)
     initial_state: PaymentState = PaymentState.PENDING
     payload: dict[str, Any] = Field(default_factory=dict)
+    full_object: dict[str, Any] = Field(default_factory=dict)
 
 
 class PaymentStatus(BaseModel):
@@ -46,6 +47,7 @@ class PaymentStatus(BaseModel):
     currency: str | None = None
     metadata: dict[str, Any] = Field(default_factory=dict)
     raw: dict[str, Any] = Field(default_factory=dict)
+    full_object: dict[str, Any] = Field(default_factory=dict)
 
     @property
     def is_final(self) -> bool:
