@@ -94,14 +94,15 @@ class FlowProvider(Provider):
             "currency": currency.upper(),
             "subject": self._subject,
             "urlReturn": success_url,
-            "urlConfirmation": self._confirmation_url or success_url,
         }
         if kwargs.get("email"):
             payment_data["email"] = kwargs["email"]
         if kwargs.get("urlConfirmation"):
             payment_data["urlConfirmation"] = kwargs["urlConfirmation"]
         try:
-            logger.debug("flow.py: FlowProvider.create_checkout payment_data=%r", payment_data)
+            logger.debug(
+                "flow.py: FlowProvider.create_checkout payment_data=%r", payment_data
+            )
             response = flow_create(self._client, payment_data)
         except GenericError as exc:
             raise UserError(str(exc)) from exc
@@ -120,6 +121,7 @@ class FlowProvider(Provider):
             currency=currency,
             metadata=metadata or {},
             raw={"token": response.token, "flowOrder": response.flowOrder},
+            payload=payment_data,
         )
 
     def get_payment(self, payment_id: str) -> PaymentStatus:

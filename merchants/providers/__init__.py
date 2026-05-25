@@ -73,7 +73,6 @@ class Provider(ABC):
     #: leave this as ``None``.
     accepts_notify_url: str | None = None
 
-
     def __init__(
         self,
         *,

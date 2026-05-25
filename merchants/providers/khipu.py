@@ -131,6 +131,7 @@ class KhipuProvider(Provider):
             currency=currency,
             metadata=metadata or {},
             raw=dict(result),
+            payload=params,
         )
 
     def get_payment(self, payment_id: str) -> PaymentStatus:
