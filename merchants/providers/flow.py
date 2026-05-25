@@ -165,6 +165,7 @@ class FlowProvider(Provider):
         final_state = PaymentState.PENDING
         try:
             payment_info = self.get_payment(payment_id=token)
+            logger.debug(f"flow.py: new {payment_info=} {payment_info.state=} {payment_info.raw=}")
             if final_state != payment_info.state:
                 final_state = payment_info.state
                 logger.debug(f"flow.py: new {final_state=}")
