@@ -132,7 +132,7 @@ class KhipuProvider(Provider):
             metadata=metadata or {},
             raw=dict(result),
             payload=params,
-            full_object=result
+            full_object=result,
         )
 
     def get_payment(self, payment_id: str) -> PaymentStatus:
@@ -155,7 +155,7 @@ class KhipuProvider(Provider):
             amount=Decimal(str(amount_val)) if amount_val is not None else None,
             currency=currency,
             raw=dict(result),
-            full_object=result
+            full_object=result,
         )
 
     def parse_webhook(self, payload: bytes, headers: dict[str, str]) -> WebhookEvent:
