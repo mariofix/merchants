@@ -10,15 +10,15 @@ dependencies = ["pydantic>=2.13.4", "requests>=2.34.2"]
 [project.optional-dependencies]
 flow = ["pyflowcl (>=2026.5.0,<2027.0.0)"]
 khipu = ["khipu-tools (>=2025.1.0,<2027.0.0)"]
-cli = ["typer>=0.27.0"]
-sqlalchemy = ["sqlalchemy>=2.0.51"]
+cli = ["typer>=0.27.1"]
+sqlalchemy = ["sqlalchemy>=2.0.52"]
 dev = [
   "pytest>=9.1.1",
   "pytest-cov",
   "ruff",
   "responses>=0.26.2",
-  "typer>=0.27.0",
-  "sqlalchemy>=2.0.51",
+  "typer>=0.27.1",
+  "sqlalchemy>=2.0.52",
   "pre-commit",
   "mkdocs>=1.6.1",
   "mkdocs-material>=9.7.7",
