@@ -88,7 +88,6 @@ class Provider(ABC):
     config_required: dict[str, str] | None = None
     #: Same mapping as ``config_required``, but for optional constructor kwargs.
     config_optional: dict[str, str] = {}
-    
 
     def __init__(
         self,

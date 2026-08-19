@@ -4,6 +4,7 @@ from __future__ import annotations
 
 from merchants.amount import from_minor_units, to_decimal_string, to_minor_units
 from merchants.auth import ApiKeyAuth, AuthStrategy, TokenAuth
+from merchants.autoload import load_providers_from_config
 from merchants.client import Client, PaymentsResource
 from merchants.models import (
     CheckoutSession,
@@ -31,7 +32,6 @@ from merchants.transport import (
 )
 from merchants.version import __version__
 from merchants.webhooks import WebhookVerificationError, parse_event, verify_signature
-from merchants.autoload import load_providers_from_config
 
 __all__ = [
     # Client
