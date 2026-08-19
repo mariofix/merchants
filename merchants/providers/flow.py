@@ -54,6 +54,8 @@ class FlowProvider(Provider):
     description = "Flow.cl payment gateway for Chile, powered by pyflowcl."
     url = "https://www.flow.cl"
     accepts_notify_url = "urlConfirmation"
+    config_required = {"api_key": "FLOW_API_KEY", "api_secret": "FLOW_SECRET_KEY"}
+    config_optional = {"api_url": "FLOW_API_URL"}
 
     def __init__(
         self,

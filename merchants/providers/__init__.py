@@ -72,6 +72,23 @@ class Provider(ABC):
     #: call.  Internal providers (e.g. ``saldo``, ``cafeteria``) should
     #: leave this as ``None``.
     accepts_notify_url: str | None = None
+    #: Maps constructor kwarg -> config key for :func:`merchants.autoload.load_providers_from_config`.
+    #: e.g. ``{"api_key": "FLOW_API_KEY", "api_secret": "FLOW_SECRET_KEY"}``.
+    #: A provider is only autoloaded once every key here is present in config.
+    #:
+    #: IMPORTANT: ``None`` and ``{}`` mean different things here.
+    #:   - ``None`` (the default) = this provider opts OUT of config-driven
+    #:     autoload entirely. Use this for providers that can't be reduced
+    #:     to flat config keys (e.g. ``GenericProvider``, which needs two
+    #:     hand-configured URLs) or that should only ever be registered
+    #:     explicitly in code.
+    #:   - ``{}`` = this provider takes NO required credentials and will
+    #:     autoload unconditionally whenever it's listed in `active`. This
+    #:     is rarely what you want — double-check before setting it.
+    config_required: dict[str, str] | None = None
+    #: Same mapping as ``config_required``, but for optional constructor kwargs.
+    config_optional: dict[str, str] = {}
+    
 
     def __init__(
         self,

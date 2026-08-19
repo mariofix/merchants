@@ -38,6 +38,7 @@ class PayPalProvider(Provider):
         "PayPal payment gateway integration (stub). Sends amounts as decimal strings."
     )
     url = "https://developer.paypal.com"
+    config_required = {"access_token": "PAYPAL_ACCESS_TOKEN"}
 
     def __init__(
         self,

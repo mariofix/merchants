@@ -51,6 +51,7 @@ class StripeProvider(Provider):
     version = "2026.3.0"
     description = "Stripe payment gateway integration (stub). Converts amounts to minor units (cents)."
     url = "https://stripe.com"
+    config_required = {"api_key": "STRIPE_API_KEY"}
 
     def __init__(
         self,

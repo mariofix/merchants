@@ -31,6 +31,7 @@ from merchants.transport import (
 )
 from merchants.version import __version__
 from merchants.webhooks import WebhookVerificationError, parse_event, verify_signature
+from merchants.autoload import load_providers_from_config
 
 __all__ = [
     # Client
@@ -71,4 +72,6 @@ __all__ = [
     "verify_signature",
     # Version
     "__version__",
+    # Provider Autoload
+    "load_providers_from_config",
 ]

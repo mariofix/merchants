@@ -1,3 +1,3 @@
 """Single source of truth for the merchants package version."""
 
-__version__ = "2026.5.1"
+__version__ = "2026.8.0"
