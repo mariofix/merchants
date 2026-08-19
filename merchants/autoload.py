@@ -106,7 +106,7 @@ def load_providers_from_config(
 
     Returns:
         The list of instantiated providers, in ``active`` order.
-        
+
     """
     entries = active if active is not None else list(_BUILTIN_PROVIDERS)
     instantiated: list[Provider] = []
