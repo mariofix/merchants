@@ -52,6 +52,9 @@ class KhipuProvider(Provider):
     description = "Khipu payment gateway for Chile, powered by khipu-tools."
     url = "https://khipu.com"
     accepts_notify_url = "notify_url"
+    config_required = {
+        "api_key": "KHIPU_API_KEY"
+    }  # nosec B105 -- config key name, not a credential value
 
     def __init__(
         self,
