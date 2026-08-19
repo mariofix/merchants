@@ -1,4 +1,5 @@
-"""Config-driven provider auto-loading.
+"""
+Config-driven provider auto-loading.
 
 Declares *which providers apply to this deployment* instead of hand-writing
 an ``if app.config.get("X_API_KEY")`` chain per provider. A provider is
@@ -86,7 +87,8 @@ def load_providers_from_config(
     active: list[str] | None = None,
     register: bool = True,
 ) -> list[Provider]:
-    """Instantiate every provider (built-in or custom) whose config keys are present.
+    """
+    Instantiate every provider (built-in or custom) whose config keys are present.
 
     Args:
         config: Any mapping (typically ``app.config``) holding provider
@@ -104,6 +106,7 @@ def load_providers_from_config(
 
     Returns:
         The list of instantiated providers, in ``active`` order.
+        
     """
     entries = active if active is not None else list(_BUILTIN_PROVIDERS)
     instantiated: list[Provider] = []

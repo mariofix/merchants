@@ -38,7 +38,9 @@ class PayPalProvider(Provider):
         "PayPal payment gateway integration (stub). Sends amounts as decimal strings."
     )
     url = "https://developer.paypal.com"
-    config_required = {"access_token": "PAYPAL_ACCESS_TOKEN"}
+    config_required = {
+        "access_token": "PAYPAL_ACCESS_TOKEN"
+    }  # nosec B105 -- config key name, not a credential value
 
     def __init__(
         self,

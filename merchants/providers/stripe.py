@@ -51,7 +51,9 @@ class StripeProvider(Provider):
     version = "2026.3.0"
     description = "Stripe payment gateway integration (stub). Converts amounts to minor units (cents)."
     url = "https://stripe.com"
-    config_required = {"api_key": "STRIPE_API_KEY"}
+    config_required = {
+        "api_key": "STRIPE_API_KEY"
+    }  # nosec B105 -- config key name, not a credential value
 
     def __init__(
         self,
