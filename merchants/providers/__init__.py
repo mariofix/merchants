@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import functools
 from abc import ABC, abstractmethod
 from decimal import Decimal
 from typing import Any
@@ -88,6 +89,39 @@ class Provider(ABC):
     config_required: dict[str, str] | None = None
     #: Same mapping as ``config_required``, but for optional constructor kwargs.
     config_optional: dict[str, str] = {}
+    #: Canonical field name -> this provider's expected create_checkout()
+    #: kwarg name, e.g. ``{"email": "payer_email"}``. Lets callers use a
+    #: single canonical field across providers regardless of what each
+    #: provider's API calls it. Fields not listed here pass through as-is.
+    checkout_fields: dict[str, str] = {}
+    #: Canonical names (keys of checkout_fields) that create_checkout()
+    #: requires. Missing fields raise UserError before any network call.
+    checkout_required: set[str] = set()
+
+    def __init_subclass__(cls, **kwargs: Any) -> None:
+        """Wrap each subclass's create_checkout with field validation/remapping.
+
+        Runs entirely inside the base class so callers of
+        ``client.payments.create_checkout(...)`` see no API change.
+        """
+        super().__init_subclass__(**kwargs)
+        if "create_checkout" not in cls.__dict__:
+            return
+        original = cls.__dict__["create_checkout"]
+
+        @functools.wraps(original)
+        def wrapped(self, amount, currency, success_url, cancel_url, metadata=None, **ckwargs):
+            missing = [f for f in self.checkout_required if f not in ckwargs]
+            if missing:
+                raise UserError(
+                    f"{self.key} requires: {', '.join(missing)}", code="missing_fields"
+                )
+            for canonical, provider_key in self.checkout_fields.items():
+                if canonical in ckwargs and canonical != provider_key:
+                    ckwargs[provider_key] = ckwargs.pop(canonical)
+            return original(self, amount, currency, success_url, cancel_url, metadata, **ckwargs)
+
+        cls.create_checkout = wrapped
 
     def __init__(
         self,

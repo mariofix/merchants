@@ -53,6 +53,9 @@ class FlowProvider(Provider):
     version = "2026.5.0"
     description = "Flow.cl payment gateway for Chile, powered by pyflowcl."
     url = "https://www.flow.cl"
+    # Flow's payment/create marks "email" as a required field.
+    checkout_fields = {"email": "email"}
+    checkout_required = {"email"}
     accepts_notify_url = "urlConfirmation"
     config_required = {
         "api_key": "FLOW_API_KEY",

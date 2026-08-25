@@ -52,6 +52,8 @@ class KhipuProvider(Provider):
     description = "Khipu payment gateway for Chile, powered by khipu-tools."
     url = "https://khipu.com"
     accepts_notify_url = "notify_url"
+    # Khipu's payer_email is optional per their Payments.create docs.
+    checkout_fields = {"email": "payer_email"}
     config_required = {
         "api_key": "KHIPU_API_KEY"
     }  # nosec B105 -- config key name, not a credential value
