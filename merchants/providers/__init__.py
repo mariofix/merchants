@@ -110,7 +110,9 @@ class Provider(ABC):
         original = cls.__dict__["create_checkout"]
 
         @functools.wraps(original)
-        def wrapped(self, amount, currency, success_url, cancel_url, metadata=None, **ckwargs):
+        def wrapped(
+            self, amount, currency, success_url, cancel_url, metadata=None, **ckwargs
+        ):
             missing = [f for f in self.checkout_required if f not in ckwargs]
             if missing:
                 raise UserError(
@@ -119,7 +121,9 @@ class Provider(ABC):
             for canonical, provider_key in self.checkout_fields.items():
                 if canonical in ckwargs and canonical != provider_key:
                     ckwargs[provider_key] = ckwargs.pop(canonical)
-            return original(self, amount, currency, success_url, cancel_url, metadata, **ckwargs)
+            return original(
+                self, amount, currency, success_url, cancel_url, metadata, **ckwargs
+            )
 
         cls.create_checkout = wrapped
 
