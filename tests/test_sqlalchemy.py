@@ -84,9 +84,7 @@ class TestGetSaMetadata:
 
     def test_namespaced_sa_key(self):
         class M(BaseModel):
-            email: str = Field(
-                json_schema_extra={"sa": {"unique": True, "varchar_len": 320}}
-            )
+            email: str = Field(json_schema_extra={"sa": {"unique": True, "varchar_len": 320}})
 
         result = get_sa_metadata(M.model_fields["email"])
         assert result == {"unique": True, "varchar_len": 320}
@@ -100,9 +98,7 @@ class TestGetSaMetadata:
 
     def test_json_schema_keys_excluded_from_flat_fallback(self):
         class M(BaseModel):
-            x: str = Field(
-                json_schema_extra={"title": "My Title", "description": "A field"}
-            )
+            x: str = Field(json_schema_extra={"title": "My Title", "description": "A field"})
 
         # Should NOT treat standard JSON-schema keys as SA metadata
         assert get_sa_metadata(M.model_fields["x"]) == {}
@@ -134,9 +130,7 @@ class TestPydanticMixinFromModelHappyPath:
         for key in ("email", "is_active", "age"):
             assert key in annotations
             # Mapped[...] wraps the original type
-            assert hasattr(annotations[key], "__class_getitem__") or "Mapped" in str(
-                annotations[key]
-            )
+            assert hasattr(annotations[key], "__class_getitem__") or "Mapped" in str(annotations[key])
 
     def test_email_unique(self):
         Mixin = pydantic_mixin_from_model(UserSchema)
@@ -197,9 +191,7 @@ class TestIncludeExclude:
         assert not hasattr(Mixin, "age")
 
     def test_include_and_exclude_together(self):
-        Mixin = pydantic_mixin_from_model(
-            UserSchema, include={"email", "is_active"}, exclude={"email"}
-        )
+        Mixin = pydantic_mixin_from_model(UserSchema, include={"email", "is_active"}, exclude={"email"})
         assert not hasattr(Mixin, "email")
         assert hasattr(Mixin, "is_active")
 
@@ -548,16 +540,12 @@ class TestPaymentModelMixin:
             "response_payload",
             "payment_object",
         ):
-            assert isinstance(
-                getattr(Mixin, field).column.type, sa.JSON
-            ), f"Expected {field} to be JSON"
+            assert isinstance(getattr(Mixin, field).column.type, sa.JSON), f"Expected {field} to be JSON"
 
     def test_integration_creates_table(self):
         from merchants.models import PaymentModel
 
-        PaymentMixin = pydantic_mixin_from_model(
-            PaymentModel, mixin_name="IntegPaymentMixin"
-        )
+        PaymentMixin = pydantic_mixin_from_model(PaymentModel, mixin_name="IntegPaymentMixin")
 
         class Base(sa_orm.DeclarativeBase): ...
 

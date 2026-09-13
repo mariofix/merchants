@@ -55,22 +55,27 @@ except merchants.UserError as e:
 ```python
 # Stripe
 from merchants.providers.stripe import StripeProvider
+
 client = Client(provider=StripeProvider(api_key="sk_test_…"))
 
 # PayPal
 from merchants.providers.paypal import PayPalProvider
+
 client = Client(provider=PayPalProvider(access_token="token_…"))
 
 # Flow.cl  (pip install merchants-sdk[flow])
 from merchants.providers.flow import FlowProvider
+
 client = Client(provider=FlowProvider(api_key="…", api_secret="…"))
 
 # Khipu  (pip install merchants-sdk[khipu])
 from merchants.providers.khipu import KhipuProvider
+
 client = Client(provider=KhipuProvider(api_key="…"))
 
 # Dummy – no credentials, random data for local dev
 from merchants.providers.dummy import DummyProvider
+
 client = Client(provider=DummyProvider())
 ```
 
@@ -103,7 +108,7 @@ client = Client(provider="stripe")
 ```python
 from merchants import list_providers
 
-print(list_providers())   # ['stripe', 'paypal', ...]
+print(list_providers())  # ['stripe', 'paypal', ...]
 ```
 
 ### Custom provider
@@ -113,6 +118,7 @@ See `examples/03_custom_provider.py` for a full example.
 ```python
 from merchants.providers import Provider, UserError
 from merchants.models import CheckoutSession, PaymentStatus, PaymentState, WebhookEvent
+
 
 class MyProvider(Provider):
     key = "my_gateway"
@@ -137,6 +143,7 @@ class MyProvider(Provider):
 
     def parse_webhook(self, payload, headers):
         from merchants.webhooks import parse_event
+
         return parse_event(payload, provider=self.key)
 ```
 
@@ -164,12 +171,12 @@ from merchants.providers.dummy import DummyProvider
 import merchants
 
 provider = DummyProvider()
-info = provider.get_info()   # returns a ProviderInfo pydantic model
+info = provider.get_info()  # returns a ProviderInfo pydantic model
 
-print(info.key)          # "dummy"
-print(info.name)         # "Dummy"
-print(info.author)       # "merchants team"
-print(info.model_dump()) # {'key': 'dummy', 'name': 'Dummy', ...}
+print(info.key)  # "dummy"
+print(info.name)  # "Dummy"
+print(info.author)  # "merchants team"
+print(info.model_dump())  # {'key': 'dummy', 'name': 'Dummy', ...}
 print(info.model_dump_json(indent=2))  # JSON string
 ```
 
@@ -190,6 +197,7 @@ for info in describe_providers():
 
 # Serialise the entire registry to JSON
 import json
+
 print(json.dumps([i.model_dump() for i in describe_providers()], indent=2))
 ```
 
@@ -213,9 +221,9 @@ except merchants.UserError as e:
 ```python
 status = client.payments.get("pi_3LHpu2…")
 
-print(status.state)        # e.g. PaymentState.SUCCEEDED
-print(status.is_final)     # True once payment is terminal
-print(status.is_success)   # True only when SUCCEEDED
+print(status.state)  # e.g. PaymentState.SUCCEEDED
+print(status.is_final)  # True once payment is terminal
+print(status.is_success)  # True only when SUCCEEDED
 ```
 
 ## Webhook Verification & Parsing
@@ -226,7 +234,7 @@ import merchants
 # 1. Verify signature (constant-time HMAC-SHA256)
 try:
     merchants.verify_signature(
-        payload=request.body,          # raw bytes
+        payload=request.body,  # raw bytes
         secret="whsec_…",
         signature=request.headers["Stripe-Signature"],
     )
@@ -237,7 +245,7 @@ except merchants.WebhookVerificationError:
 event = merchants.parse_event(request.body, provider="stripe")
 
 print(event.event_type)  # e.g. "payment_intent.succeeded"
-print(event.state)       # e.g. PaymentState.SUCCEEDED
+print(event.state)  # e.g. PaymentState.SUCCEEDED
 print(event.payment_id)  # e.g. "pi_3LHpu2…"
 ```
 
@@ -253,10 +261,10 @@ print(event.payment_id)  # e.g. "pi_3LHpu2…"
 from merchants import to_decimal_string, to_minor_units, from_minor_units
 from decimal import Decimal
 
-to_decimal_string(Decimal("9.5"))   # "9.50"
-to_minor_units("19.99")             # 1999
+to_decimal_string(Decimal("9.5"))  # "9.50"
+to_minor_units("19.99")  # 1999
 to_minor_units("1000", decimals=0)  # 1000  (JPY, no cents)
-from_minor_units(1999)              # Decimal("19.99")
+from_minor_units(1999)  # Decimal("19.99")
 ```
 
 ## Auth Strategies
@@ -274,7 +282,7 @@ client = Client(
 # Bearer token
 client = Client(
     provider=...,
-    auth=TokenAuth("my-token"),   # Authorization: Bearer my-token
+    auth=TokenAuth("my-token"),  # Authorization: Bearer my-token
 )
 ```
 
@@ -313,3 +321,9 @@ The `examples/` directory contains runnable scripts:
 | `01_simple_client.py` | Basic client setup with DummyProvider and Stripe |
 | `02_custom_httpx_transport.py` | Custom httpx-backed transport |
 | `03_custom_provider.py` | Building your own provider |
+
+### Falta
+
+- AutoRegistry y python-statemachine
+- complexiply
+- pydantic-settings

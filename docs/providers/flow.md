@@ -37,9 +37,9 @@ print(session.redirect_url)  # redirect the user to Flow here
 ```python
 status = client.payments.get("FLOW_ORDER_NUMBER")
 
-print(status.state)       # e.g. PaymentState.SUCCEEDED
-print(status.amount)      # e.g. Decimal("9990")
-print(status.currency)    # "CLP"
+print(status.state)  # e.g. PaymentState.SUCCEEDED
+print(status.amount)  # e.g. Decimal("9990")
+print(status.currency)  # "CLP"
 ```
 
 ## Webhook Parsing
@@ -48,9 +48,9 @@ print(status.currency)    # "CLP"
 import merchants
 
 event = merchants.parse_event(payload, provider="flow")
-print(event.event_type)   # "payment.notification"
-print(event.payment_id)   # Flow order number
-print(event.state)        # e.g. PaymentState.SUCCEEDED
+print(event.event_type)  # "payment.notification"
+print(event.payment_id)  # Flow order number
+print(event.state)  # e.g. PaymentState.SUCCEEDED
 ```
 
 ## Parameters

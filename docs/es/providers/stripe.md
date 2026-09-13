@@ -42,7 +42,7 @@ Stripe requiere montos en la **unidad monetaria más pequeña** (ej. centavos pa
 ```python
 from merchants import to_minor_units
 
-to_minor_units("19.99")             # 1999 (centavos USD)
+to_minor_units("19.99")  # 1999 (centavos USD)
 to_minor_units("1000", decimals=0)  # 1000 (JPY — sin subdivisión)
 ```
 
@@ -58,8 +58,8 @@ Después de que el usuario completa el checkout, obtén el estado del pago por `
 ```python
 status = client.payments.get("pi_3LHpu2…")
 
-print(status.state)       # PaymentState.SUCCEEDED
-print(status.is_final)    # True
+print(status.state)  # PaymentState.SUCCEEDED
+print(status.is_final)  # True
 print(status.is_success)  # True
 ```
 
@@ -69,9 +69,9 @@ print(status.is_success)  # True
 import merchants
 
 event = merchants.parse_event(payload, provider="stripe")
-print(event.event_type)   # ej. "payment_intent.succeeded"
-print(event.payment_id)   # ej. "pi_3LHpu2…"
-print(event.state)        # PaymentState.SUCCEEDED
+print(event.event_type)  # ej. "payment_intent.succeeded"
+print(event.payment_id)  # ej. "pi_3LHpu2…"
+print(event.state)  # PaymentState.SUCCEEDED
 ```
 
 !!! tip "Verifica antes de parsear"

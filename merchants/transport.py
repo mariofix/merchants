@@ -39,8 +39,10 @@ class Transport(ABC):
         *,
         headers: dict[str, str] | None = None,
         json: Any = None,
+        data: Any = None,
         params: dict[str, str] | None = None,
         timeout: float = 30.0,
+        auth: Any = None,
     ) -> HttpResponse:
         """Send an HTTP request and return an :class:`HttpResponse`.
 
@@ -65,8 +67,10 @@ class RequestsTransport(Transport):
         *,
         headers: dict[str, str] | None = None,
         json: Any = None,
+        data: Any = None,
         params: dict[str, str] | None = None,
         timeout: float = 30.0,
+        auth: Any = None,
     ) -> HttpResponse:
         try:
             resp = self._session.request(
@@ -74,8 +78,10 @@ class RequestsTransport(Transport):
                 url,
                 headers=headers,
                 json=json,
+                data=data,
                 params=params,
                 timeout=timeout,
+                auth=auth,
             )
         except requests.RequestException as exc:
             raise TransportError(str(exc)) from exc

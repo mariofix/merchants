@@ -72,8 +72,7 @@ def _resolve(entry: str) -> type[Provider] | None:
         module = importlib.import_module(module_path)
     except ImportError:
         logger.warning(
-            "Provider %r configured but its module/dependency isn't importable "
-            "— skipping (%s)",
+            "Provider %r configured but its module/dependency isn't importable — skipping (%s)",
             entry,
             module_path,
         )
@@ -126,16 +125,12 @@ def load_providers_from_config(
 
         missing = [cfg_key for cfg_key in required.values() if not config.get(cfg_key)]
         if missing:
-            logger.debug(
-                "Skipping provider %r — missing config keys: %s", entry, missing
-            )
+            logger.debug("Skipping provider %r — missing config keys: %s", entry, missing)
             continue  # not configured for this deployment
 
         kwargs = {kwarg: config[cfg_key] for kwarg, cfg_key in required.items()}
         kwargs |= {
-            kwarg: config[cfg_key]
-            for kwarg, cfg_key in provider_cls.config_optional.items()
-            if config.get(cfg_key)
+            kwarg: config[cfg_key] for kwarg, cfg_key in provider_cls.config_optional.items() if config.get(cfg_key)
         }
         provider = provider_cls(**kwargs)
         if register:

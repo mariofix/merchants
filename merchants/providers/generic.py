@@ -6,7 +6,7 @@ from decimal import Decimal
 from typing import Any
 
 from merchants.amount import to_decimal_string
-from merchants.models import CheckoutSession, PaymentState, PaymentStatus, WebhookEvent
+from merchants.models import CheckoutSession, PaymentStatus, WebhookEvent
 from merchants.providers import Provider, UserError, normalise_state
 from merchants.transport import RequestsTransport, Transport
 
@@ -28,9 +28,7 @@ class GenericProvider(Provider):
     name = "Generic"
     author = "mariofix"
     version = "2026.3.0"
-    description = (
-        "Generic REST endpoint provider for custom or in-house payment gateways."
-    )
+    description = "Generic REST endpoint provider for custom or in-house payment gateways."
     url = ""
 
     def __init__(
@@ -69,9 +67,7 @@ class GenericProvider(Provider):
             json=payload,
         )
         if not resp.ok:
-            raise UserError(
-                f"Provider returned {resp.status_code}", code=str(resp.status_code)
-            )
+            raise UserError(f"Provider returned {resp.status_code}", code=str(resp.status_code))
 
         body: dict[str, Any] = resp.body if isinstance(resp.body, dict) else {}
         return CheckoutSession(

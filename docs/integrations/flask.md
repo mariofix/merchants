@@ -57,6 +57,7 @@ from flask_merchants import FlaskMerchants
 
 merchants_ext = FlaskMerchants()  # initialise without app
 
+
 def create_app():
     app = Flask(__name__)
     app.config["MERCHANTS_URL_PREFIX"] = "/pay"
@@ -78,14 +79,18 @@ from sqlalchemy import Integer
 from flask_merchants import FlaskMerchants
 from flask_merchants.models import PaymentMixin
 
+
 class Base(DeclarativeBase):
     pass
 
+
 db = SQLAlchemy(model_class=Base)
+
 
 class Payment(PaymentMixin, db.Model):
     __tablename__ = "payments"
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
+
 
 app = Flask(__name__)
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///payments.db"
@@ -103,6 +108,7 @@ Once `db=` and `models=` are configured you can create payments directly:
 
 ```python
 from flask import redirect, url_for
+
 
 @app.route("/buy/<product_id>", methods=["POST"])
 def buy(product_id):
@@ -173,6 +179,7 @@ app.config["MERCHANTS_WEBHOOK_BASE_URL"] = "https://yourapp.example.com"
 
 ```python
 from flask_merchants import get_webhook_url
+
 notify_url = get_webhook_url("khipu")  # https://yourapp.example.com/pay/webhook/khipu
 ```
 

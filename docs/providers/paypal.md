@@ -41,8 +41,8 @@ PayPal accepts amounts as decimal strings. The provider converts amounts using `
 ```python
 from merchants import to_decimal_string
 
-to_decimal_string("49.9")   # "49.90"
-to_decimal_string(49)       # "49.00"
+to_decimal_string("49.9")  # "49.90"
+to_decimal_string(49)  # "49.00"
 ```
 
 ## Payment Status
@@ -50,9 +50,9 @@ to_decimal_string(49)       # "49.00"
 ```python
 status = client.payments.get("ORDER_ID")
 
-print(status.state)       # e.g. PaymentState.SUCCEEDED
-print(status.amount)      # e.g. Decimal("49.99")
-print(status.currency)    # e.g. "USD"
+print(status.state)  # e.g. PaymentState.SUCCEEDED
+print(status.amount)  # e.g. Decimal("49.99")
+print(status.currency)  # e.g. "USD"
 ```
 
 ## Webhook Parsing
@@ -61,9 +61,9 @@ print(status.currency)    # e.g. "USD"
 import merchants
 
 event = merchants.parse_event(payload, provider="paypal")
-print(event.event_type)   # e.g. "PAYMENT.CAPTURE.COMPLETED"
-print(event.payment_id)   # e.g. "ORDER_ID"
-print(event.state)        # PaymentState.SUCCEEDED
+print(event.event_type)  # e.g. "PAYMENT.CAPTURE.COMPLETED"
+print(event.payment_id)  # e.g. "ORDER_ID"
+print(event.state)  # PaymentState.SUCCEEDED
 ```
 
 ## Parameters

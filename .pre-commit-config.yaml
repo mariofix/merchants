@@ -16,15 +16,15 @@ repos:
       - id: check-merge-conflict
       - id: debug-statements
       - id: fix-byte-order-marker
+      - id: check-json
+      - id: check-executables-have-shebangs
+      - id: detect-private-key       # catches accidentally committed keys — cheap insurance
       - id: trailing-whitespace
-        exclude: ^flask_admin_tabler/static/
       - id: end-of-file-fixer
-        exclude: ^flask_admin_tabler/static/
   - repo: https://github.com/pycqa/isort
-    rev: 9.0.0b5
+    rev: 9.0.1
     hooks:
       - id: isort
-        args: ["--profile", "black", "--filter-files"]
   - repo: https://github.com/psf/black-pre-commit-mirror
     rev: 26.5.1
     hooks:
@@ -34,3 +34,15 @@ repos:
     hooks:
       - id: pyupgrade
         args: [--py310-plus]
+  - repo: https://github.com/PyCQA/flake8
+    rev: 7.3.0
+    hooks:
+      - id: flake8
+        additional_dependencies: ["flake8-pyproject"]
+
+  - repo: https://github.com/PyCQA/bandit
+    rev: 1.9.4
+    hooks:
+      - id: bandit
+        args: [-c, pyproject.toml]
+        additional_dependencies: ["bandit[toml]"]

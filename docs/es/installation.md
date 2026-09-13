@@ -59,6 +59,7 @@ Los extras de desarrollo incluyen `pytest`, `pytest-cov`, `ruff` y `responses`.
 
 ```python
 import merchants
+
 print(merchants.__version__)
 ```
 

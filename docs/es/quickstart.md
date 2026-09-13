@@ -77,8 +77,8 @@ Después de que el usuario completa (o cancela) el pago, obtén el estado actual
 ```python
 status = client.payments.get(session.session_id)
 
-print(status.state)       # ej. PaymentState.SUCCEEDED
-print(status.is_final)    # True cuando el pago está en estado terminal
+print(status.state)  # ej. PaymentState.SUCCEEDED
+print(status.is_final)  # True cuando el pago está en estado terminal
 print(status.is_success)  # True solo cuando el pago fue exitoso
 ```
 
@@ -102,7 +102,7 @@ merchants.verify_signature(
 # Parsea y normaliza el evento
 event = merchants.parse_event(request.body, provider="stripe")
 print(event.event_type)  # ej. "payment_intent.succeeded"
-print(event.state)       # ej. PaymentState.SUCCEEDED
+print(event.state)  # ej. PaymentState.SUCCEEDED
 ```
 
 !!! danger "Nunca omitas la verificación de firma"

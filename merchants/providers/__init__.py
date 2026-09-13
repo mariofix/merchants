@@ -113,9 +113,7 @@ class Provider(ABC):
         def wrapped(self, amount, currency, success_url, cancel_url, metadata=None, **ckwargs):
             missing = [f for f in self.checkout_required if f not in ckwargs]
             if missing:
-                raise UserError(
-                    f"{self.key} requires: {', '.join(missing)}", code="missing_fields"
-                )
+                raise UserError(f"{self.key} requires: {', '.join(missing)}", code="missing_fields")
             for canonical, provider_key in self.checkout_fields.items():
                 if canonical in ckwargs and canonical != provider_key:
                     ckwargs[provider_key] = ckwargs.pop(canonical)
@@ -209,9 +207,7 @@ def get_provider(key_or_instance: str | Provider) -> Provider:
         return _REGISTRY[key_or_instance]
     except KeyError:
         available = list(_REGISTRY.keys())
-        raise KeyError(
-            f"Provider {key_or_instance!r} not registered. " f"Available: {available}"
-        ) from None
+        raise KeyError(f"Provider {key_or_instance!r} not registered. Available: {available}") from None
 
 
 def list_providers() -> list[str]:

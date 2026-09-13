@@ -41,9 +41,9 @@ print(session.redirect_url)  # redirect the user to Khipu here
 ```python
 status = client.payments.get("KHIPU_PAYMENT_ID")
 
-print(status.state)       # e.g. PaymentState.SUCCEEDED
-print(status.amount)      # e.g. Decimal("15000")
-print(status.currency)    # "CLP"
+print(status.state)  # e.g. PaymentState.SUCCEEDED
+print(status.amount)  # e.g. Decimal("15000")
+print(status.currency)  # "CLP"
 ```
 
 ## Webhook Parsing
@@ -60,9 +60,9 @@ client = Client(provider=provider)
 
 # Access the provider directly to use parse_webhook
 event = client._provider.parse_webhook(request.body, dict(request.headers))
-print(event.event_type)   # "payment.conciliated" or "payment.notification"
-print(event.payment_id)   # Khipu payment ID
-print(event.state)        # e.g. PaymentState.SUCCEEDED
+print(event.event_type)  # "payment.conciliated" or "payment.notification"
+print(event.payment_id)  # Khipu payment ID
+print(event.state)  # e.g. PaymentState.SUCCEEDED
 ```
 
 !!! info "JSON and form-encoded both supported"

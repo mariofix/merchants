@@ -42,7 +42,7 @@ PayPal acepta montos como cadenas decimales. El proveedor convierte los montos u
 from merchants import to_decimal_string
 
 to_decimal_string("49.9")  # "49.90"
-to_decimal_string(49)      # "49.00"
+to_decimal_string(49)  # "49.00"
 ```
 
 ## Estado del Pago
@@ -50,8 +50,8 @@ to_decimal_string(49)      # "49.00"
 ```python
 status = client.payments.get("ORDER_ID")
 
-print(status.state)     # ej. PaymentState.SUCCEEDED
-print(status.amount)    # ej. Decimal("49.99")
+print(status.state)  # ej. PaymentState.SUCCEEDED
+print(status.amount)  # ej. Decimal("49.99")
 print(status.currency)  # ej. "USD"
 ```
 
@@ -61,9 +61,9 @@ print(status.currency)  # ej. "USD"
 import merchants
 
 event = merchants.parse_event(payload, provider="paypal")
-print(event.event_type)   # ej. "PAYMENT.CAPTURE.COMPLETED"
-print(event.payment_id)   # ej. "ORDER_ID"
-print(event.state)        # PaymentState.SUCCEEDED
+print(event.event_type)  # ej. "PAYMENT.CAPTURE.COMPLETED"
+print(event.payment_id)  # ej. "ORDER_ID"
+print(event.state)  # PaymentState.SUCCEEDED
 ```
 
 ## Parámetros

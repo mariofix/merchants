@@ -77,8 +77,8 @@ After the user completes (or cancels) the payment, retrieve the updated status:
 ```python
 status = client.payments.get(session.session_id)
 
-print(status.state)       # e.g. PaymentState.SUCCEEDED
-print(status.is_final)    # True once payment is terminal
+print(status.state)  # e.g. PaymentState.SUCCEEDED
+print(status.is_final)  # True once payment is terminal
 print(status.is_success)  # True only when SUCCEEDED
 ```
 
@@ -102,7 +102,7 @@ merchants.verify_signature(
 # Parse and normalise the event
 event = merchants.parse_event(request.body, provider="stripe")
 print(event.event_type)  # e.g. "payment_intent.succeeded"
-print(event.state)       # e.g. PaymentState.SUCCEEDED
+print(event.state)  # e.g. PaymentState.SUCCEEDED
 ```
 
 !!! danger "Never skip signature verification"

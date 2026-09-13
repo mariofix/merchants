@@ -59,6 +59,7 @@ Dev extras include `pytest`, `pytest-cov`, `ruff`, and `responses`.
 
 ```python
 import merchants
+
 print(merchants.__version__)
 ```
 

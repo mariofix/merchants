@@ -115,9 +115,7 @@ class TestProviderGetInfo:
     def test_generic_provider_info(self):
         t = MagicMock()
         t.send.return_value = HttpResponse(200, {}, {})
-        p = GenericProvider(
-            "https://a.com/checkout", "https://a.com/pay/{payment_id}", transport=t
-        )
+        p = GenericProvider("https://a.com/checkout", "https://a.com/pay/{payment_id}", transport=t)
         info = p.get_info()
         assert info.key == "generic"
         assert info.name == "Generic"
@@ -608,10 +606,7 @@ class TestCLIPaymentsWebhook:
 
         secret = "mysecret"
         payload = self._payload({"event_type": "payment.done", "payment_id": "pay_sig"})
-        sig = (
-            "sha256="
-            + hmac_mod.new(secret.encode(), payload, hashlib.sha256).hexdigest()
-        )
+        sig = "sha256=" + hmac_mod.new(secret.encode(), payload, hashlib.sha256).hexdigest()
 
         p = tmp_path / "signed.json"
         p.write_bytes(payload)
@@ -666,9 +661,7 @@ class TestCLIPaymentsWebhook:
 
     def test_webhook_registered_provider(self, tmp_path):
         register_provider(DummyProvider())
-        payload = self._payload(
-            {"event_type": "payment.simulated", "payment_id": "pay_rp"}
-        )
+        payload = self._payload({"event_type": "payment.simulated", "payment_id": "pay_rp"})
         p = tmp_path / "wh_reg.json"
         p.write_bytes(payload)
 

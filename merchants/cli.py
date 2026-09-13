@@ -139,9 +139,7 @@ def providers(
     keys = list_providers()
     if not keys:
         typer.echo("No providers are currently registered.")
-        typer.echo(
-            "Register one first, e.g.:  merchants.register_provider(DummyProvider())"
-        )
+        typer.echo("Register one first, e.g.:  merchants.register_provider(DummyProvider())")
         raise typer.Exit()
 
     infos = describe_providers()
@@ -153,8 +151,7 @@ def providers(
     # Default: table
     col_widths = (12, 20, 18, 10)
     header = (
-        f"{'Key':<{col_widths[0]}} {'Name':<{col_widths[1]}} "
-        f"{'Author':<{col_widths[2]}} {'Version':<{col_widths[3]}}"
+        f"{'Key':<{col_widths[0]}} {'Name':<{col_widths[1]}} {'Author':<{col_widths[2]}} {'Version':<{col_widths[3]}}"
     )
     separator = "-" * sum(col_widths + (3,) * len(col_widths))
     typer.echo(header)
@@ -211,16 +208,11 @@ def payments_checkout(
         "dummy",
         "--provider",
         "-p",
-        help="Provider key (e.g. 'stripe', 'dummy'). "
-        "Built-in providers read credentials from environment variables.",
+        help="Provider key (e.g. 'stripe', 'dummy'). Built-in providers read credentials from environment variables.",
         metavar="KEY",
     ),
-    amount: str = typer.Option(
-        ..., "--amount", "-a", help="Payment amount (e.g. '19.99')."
-    ),
-    currency: str = typer.Option(
-        "USD", "--currency", "-c", help="ISO-4217 currency code."
-    ),
+    amount: str = typer.Option(..., "--amount", "-a", help="Payment amount (e.g. '19.99')."),
+    currency: str = typer.Option("USD", "--currency", "-c", help="ISO-4217 currency code."),
     success_url: str = typer.Option(
         "https://example.com/success",
         "--success-url",
@@ -267,9 +259,7 @@ def payments_checkout(
     from merchants.providers import UserError
 
     try:
-        session = provider.create_checkout(
-            amount_decimal, currency, success_url, cancel_url, meta or None
-        )
+        session = provider.create_checkout(amount_decimal, currency, success_url, cancel_url, meta or None)
     except UserError as exc:
         typer.echo(f"Payment error: {exc}", err=True)
         raise typer.Exit(1)
@@ -298,9 +288,7 @@ def payments_checkout(
 
 @payments_app.command("get")
 def payments_get(
-    payment_id: str = typer.Argument(
-        ..., help="Provider-specific payment or session ID."
-    ),
+    payment_id: str = typer.Argument(..., help="Provider-specific payment or session ID."),
     provider_key: str = typer.Option(
         "dummy",
         "--provider",
