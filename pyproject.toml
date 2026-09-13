@@ -1,6 +1,6 @@
 [project]
 name = "merchants-sdk"
-version = "2026.9.0"
+version = "2026.9.1"
 description = "Payments for people who have better things to do."
 readme = "README.md"
 license = { file = "LICENSE" }

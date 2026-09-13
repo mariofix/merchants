@@ -129,13 +129,9 @@ class Provider(ABC):
                 raise UserError(f"{self.key} requires: {', '.join(missing)}", code="missing_fields")
             for canonical, provider_key in self.checkout_fields.items():
                 if canonical in ckwargs and canonical != provider_key:
-                    logger.debug(
-                        f"[{self.key}] Remapping checkout kwarg {canonical=} to {provider_key=}"
-                    )
+                    logger.debug(f"[{self.key}] Remapping checkout kwarg {canonical=} to {provider_key=}")
                     ckwargs[provider_key] = ckwargs.pop(canonical)
-            logger.debug(
-                f"[{self.key}] Forwarding to {type(self).__name__}.{original.__name__} with {ckwargs=}"
-            )
+            logger.debug(f"[{self.key}] Forwarding to {type(self).__name__}.{original.__name__} with {ckwargs=}")
             return original(self, amount, currency, success_url, cancel_url, metadata, **ckwargs)
 
         cls.create_checkout = wrapped

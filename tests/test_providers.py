@@ -86,8 +86,8 @@ class TestStripeProvider:
         assert session.redirect_url == "https://stripe.com/pay/cs_test_123"
         assert session.provider == "stripe"
         # Verify minor-units were sent
-        payload = transport.send.call_args.kwargs["json"]
-        assert payload["line_items"][0]["price_data"]["unit_amount"] == 1999
+        payload = transport.send.call_args.kwargs["data"]
+        assert payload["line_items[0][price_data][unit_amount]"] == 1999
 
     def test_create_checkout_failure(self):
         body = {"error": {"message": "Invalid API key"}}
@@ -112,8 +112,8 @@ class TestStripeProvider:
             "https://example.com/ok",
             "https://example.com/cancel",
         )
-        payload = transport.send.call_args.kwargs["json"]
-        assert payload["line_items"][0]["price_data"]["unit_amount"] == 1000
+        payload = transport.send.call_args.kwargs["data"]
+        assert payload["line_items[0][price_data][unit_amount]"] == 1000
 
 
 class TestPayPalProvider:
@@ -131,7 +131,7 @@ class TestPayPalProvider:
             ],
         }
         transport = self._make_transport(201, body)
-        provider = PayPalProvider("token_xyz", transport=transport)
+        provider = PayPalProvider("client_id", "secret_key", transport=transport)
         session = provider.create_checkout(
             Decimal("29.99"),
             "EUR",
@@ -146,7 +146,7 @@ class TestPayPalProvider:
     def test_create_checkout_failure(self):
         body = {"message": "Unauthorized"}
         transport = self._make_transport(401, body)
-        provider = PayPalProvider("bad_token", transport=transport)
+        provider = PayPalProvider("client_id", "secret_key", transport=transport)
         with pytest.raises(UserError):
             provider.create_checkout(
                 Decimal("10.00"),

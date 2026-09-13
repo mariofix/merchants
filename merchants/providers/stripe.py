@@ -70,7 +70,6 @@ class StripeProvider(Provider):
     description = "Stripe payment gateway integration (stub). Converts amounts to minor units (cents)."
     url = "https://docs.stripe.com"
     config_required = {"api_key": "STRIPE_API_KEY"}  # nosec B105 -- config key name, not a credential value
-    checkout_required = {"mode", "line_items", "return_url", "success_url"}
     checkout_fields = {"email": "customer_email"}
 
     def __init__(

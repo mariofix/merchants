@@ -102,12 +102,12 @@ class TestProviderGetInfo:
         info = p.get_info()
         assert info.key == "stripe"
         assert info.name == "Stripe"
-        assert info.url == "https://stripe.com"
+        assert info.url == "https://docs.stripe.com"
 
     def test_paypal_provider_info(self):
         t = MagicMock()
         t.send.return_value = HttpResponse(200, {}, {})
-        p = PayPalProvider("token", transport=t)
+        p = PayPalProvider("client_id", "secret_key", transport=t)
         info = p.get_info()
         assert info.key == "paypal"
         assert info.name == "PayPal"
