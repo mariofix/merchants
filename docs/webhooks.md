@@ -11,7 +11,7 @@ import merchants
 
 try:
     merchants.verify_signature(
-        payload=request.body,          # raw bytes
+        payload=request.body,  # raw bytes
         secret="whsec_…",
         signature=request.headers["Stripe-Signature"],
     )
@@ -54,9 +54,9 @@ import merchants
 event = merchants.parse_event(request.body, provider="stripe")
 
 print(event.event_type)  # e.g. "payment_intent.succeeded"
-print(event.state)       # e.g. PaymentState.SUCCEEDED
+print(event.state)  # e.g. PaymentState.SUCCEEDED
 print(event.payment_id)  # e.g. "pi_3LHpu2…"
-print(event.provider)    # "stripe"
+print(event.provider)  # "stripe"
 ```
 
 !!! note "Best-effort parsing"
@@ -87,6 +87,7 @@ Here is a complete webhook handler using Django-style pseudo-code:
 ```python
 import merchants
 from merchants import WebhookVerificationError
+
 
 def webhook_view(request):
     # 1. Verify signature

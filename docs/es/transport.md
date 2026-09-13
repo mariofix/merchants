@@ -53,8 +53,12 @@ class HttpxTransport(Transport):
     ) -> HttpResponse:
         try:
             resp = self._client.request(
-                method, url,
-                headers=headers, json=json, params=params, timeout=timeout,
+                method,
+                url,
+                headers=headers,
+                json=json,
+                params=params,
+                timeout=timeout,
             )
         except httpx.RequestError as exc:
             raise TransportError(str(exc)) from exc
@@ -104,8 +108,7 @@ class Transport(ABC):
         json: Any = None,
         params: dict[str, str] | None = None,
         timeout: float = 30.0,
-    ) -> HttpResponse:
-        ...
+    ) -> HttpResponse: ...
 ```
 
 ### `HttpResponse`

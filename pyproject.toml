@@ -1,28 +1,28 @@
 [project]
 name = "merchants-sdk"
-version = "2026.5.1"
+version = "2026.9.0"
 description = "Payments for people who have better things to do."
 readme = "README.md"
 license = { file = "LICENSE" }
 requires-python = ">=3.10,<4.0"
-dependencies = ["pydantic>=2.13.4", "requests>=2.34.2"]
+dependencies = ["pydantic>=2.13.5", "requests>=2.34.2"]
 
 [project.optional-dependencies]
 flow = ["pyflowcl (>=2026.5.0,<2027.0.0)"]
 khipu = ["khipu-tools (>=2025.1.0,<2027.0.0)"]
-cli = ["typer>=0.27.1"]
+cli = ["typer>=0.27.2"]
 sqlalchemy = ["sqlalchemy>=2.0.52"]
 dev = [
-  "pytest>=9.1.1",
-  "pytest-cov",
-  "ruff",
-  "responses>=0.26.2",
-  "typer>=0.27.1",
-  "sqlalchemy>=2.0.52",
-  "pre-commit",
-  "mkdocs>=1.6.1",
-  "mkdocs-material>=9.7.7",
-  "mkdocstrings[python]>=1.0.6",
+    "pytest>=9.1.1",
+    "pytest-cov",
+    "responses>=0.26.3",
+    "typer>=0.27.2",
+    "sqlalchemy>=2.0.52",
+    "pre-commit",
+    "mkdocs>=1.6.1",
+    "mkdocs-material>=9.7.7",
+    "mkdocstrings[python]>=1.0.6",
+
 ]
 
 [project.urls]
@@ -46,9 +46,20 @@ merchants = "merchants.cli:app"
 testpaths = ["tests"]
 addopts = "-v"
 
-[tool.ruff]
+[tool.black]
 line-length = 119
-target-version = "py310"
+target-version = ["py310"]
 
-[tool.ruff.lint]
-select = ["E", "F", "I", "UP"]
+[tool.isort]
+profile = "black"
+line_length = 119
+known_first_party = ["merchants"]
+
+[tool.flake8]
+max-line-length = 119
+extend-ignore = ["E203", "W503"]                   # black-compatible
+exclude = [".git", "__pycache__", "build", "dist"]
+
+[tool.bandit]
+exclude_dirs = ["tests", "alembic"]
+skips = ["B101", "B113", "B608", "B311"]

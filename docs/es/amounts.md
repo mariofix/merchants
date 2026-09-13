@@ -18,10 +18,10 @@ Convierte un monto a una cadena decimal canónica con dos decimales. Adecuado pa
 from merchants import to_decimal_string
 from decimal import Decimal
 
-to_decimal_string("19.99")        # "19.99"
-to_decimal_string(Decimal("9.5")) # "9.50"
-to_decimal_string(100)            # "100.00"
-to_decimal_string(19.999)         # "20.00"  (redondeo half-up)
+to_decimal_string("19.99")  # "19.99"
+to_decimal_string(Decimal("9.5"))  # "9.50"
+to_decimal_string(100)  # "100.00"
+to_decimal_string(19.999)  # "20.00"  (redondeo half-up)
 ```
 
 !!! warning "Evita entradas `float`"
@@ -34,10 +34,10 @@ Convierte un monto decimal a la unidad monetaria más pequeña (ej. centavos par
 ```python
 from merchants import to_minor_units
 
-to_minor_units("19.99")              # 1999
+to_minor_units("19.99")  # 1999
 to_minor_units("1.005", decimals=2)  # 101  (redondeo half-up)
-to_minor_units("1000", decimals=0)   # 1000 (JPY — sin subdivisión)
-to_minor_units(Decimal("0.50"))      # 50
+to_minor_units("1000", decimals=0)  # 1000 (JPY — sin subdivisión)
+to_minor_units(Decimal("0.50"))  # 50
 ```
 
 **Parámetros:**
@@ -55,9 +55,9 @@ Convierte un entero en unidades mínimas de vuelta a un `Decimal`. Útil para le
 from merchants import from_minor_units
 from decimal import Decimal
 
-from_minor_units(1999)               # Decimal("19.99")
-from_minor_units(50)                 # Decimal("0.50")
-from_minor_units(1000, decimals=0)   # Decimal("1000")
+from_minor_units(1999)  # Decimal("19.99")
+from_minor_units(50)  # Decimal("0.50")
+from_minor_units(1000, decimals=0)  # Decimal("1000")
 ```
 
 **Parámetros:**
@@ -73,7 +73,7 @@ Todos los helpers usan redondeo `ROUND_HALF_UP` (el estándar para cálculos fin
 
 ```python
 to_decimal_string("19.995")  # "20.00"
-to_minor_units("1.005")      # 101
+to_minor_units("1.005")  # 101
 ```
 
 ## Monedas de Cero Decimales
@@ -81,8 +81,8 @@ to_minor_units("1.005")      # 101
 Para monedas sin subdivisión (ej. JPY), pasa `decimals=0`:
 
 ```python
-to_minor_units("1000", decimals=0)   # 1000
-from_minor_units(1000, decimals=0)   # Decimal("1000")
+to_minor_units("1000", decimals=0)  # 1000
+from_minor_units(1000, decimals=0)  # Decimal("1000")
 ```
 
 !!! info "Monedas de cero decimales en Stripe"

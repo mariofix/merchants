@@ -20,9 +20,7 @@ try:
     from pyflowcl.Payment import create as flow_create
     from pyflowcl.Payment import getStatus as flow_get_status
 except ImportError as exc:  # pragma: no cover
-    raise ImportError(
-        "pyflowcl is required for FlowProvider. Install it with: pip install pyflowcl"
-    ) from exc
+    raise ImportError("pyflowcl is required for FlowProvider. Install it with: pip install pyflowcl") from exc
 
 # Flow status codes: 1=Paid, 2=Rejected, 3=Pending, 4=Cancelled
 _FLOW_STATE_MAP: dict[int, PaymentState] = {
@@ -50,10 +48,18 @@ class FlowProvider(Provider):
     key = "flow"
     name = "Flow.cl"
     author = "mariofix"
-    version = "2026.5.0"
+    version = "2026.9.0"
     description = "Flow.cl payment gateway for Chile, powered by pyflowcl."
     url = "https://www.flow.cl"
+    # Flow's payment/create marks "email" as a required field.
+    checkout_fields = {"email": "email"}
+    checkout_required = {"apiKey", "commerceOrder", "subject", "amount", "email", "urlConfirmation", "urlReturn", "s"}
     accepts_notify_url = "urlConfirmation"
+    config_required = {
+        "api_key": "FLOW_API_KEY",
+        "api_secret": "FLOW_SECRET_KEY",
+    }  # nosec B105 -- config key name, not a credential value
+    config_optional = {"api_url": "FLOW_API_URL"}
 
     def __init__(
         self,
@@ -101,19 +107,13 @@ class FlowProvider(Provider):
         if kwargs.get("urlConfirmation"):
             payment_data["urlConfirmation"] = kwargs["urlConfirmation"]
         try:
-            logger.debug(
-                "flow.py: FlowProvider.create_checkout payment_data=%r", payment_data
-            )
+            logger.debug("flow.py: FlowProvider.create_checkout payment_data=%r", payment_data)
             response = flow_create(self._client, payment_data)
         except GenericError as exc:
             raise UserError(str(exc)) from exc
 
         logger.debug("flow.py: FlowProvider.create_checkout response=%r", response)
-        redirect_url = (
-            f"{response.url}?token={response.token}"
-            if response.url and response.token
-            else ""
-        )
+        redirect_url = f"{response.url}?token={response.token}" if response.url and response.token else ""
         return CheckoutSession(
             session_id=str(response.token or ""),
             redirect_url=redirect_url,
@@ -127,9 +127,7 @@ class FlowProvider(Provider):
         )
 
     def get_payment(self, payment_id: str) -> PaymentStatus:
-        logger.debug(
-            "flow.py: FlowProvider.get_payment called with payment_id=%s", payment_id
-        )
+        logger.debug("flow.py: FlowProvider.get_payment called with payment_id=%s", payment_id)
         try:
             status = flow_get_status(self._client, payment_id)
         except GenericError as exc:
@@ -169,9 +167,7 @@ class FlowProvider(Provider):
         event_type = "Payment.notification"
         try:
             payment_info = self.get_payment(payment_id=token)
-            logger.debug(
-                f"flow.py: new {payment_info=} {payment_info.state=} {payment_info.raw=}"
-            )
+            logger.debug(f"flow.py: new {payment_info=} {payment_info.state=} {payment_info.raw=}")
             if final_state != payment_info.state:
                 final_state = payment_info.state
                 event_type = "Payment.succeeded"

@@ -41,6 +41,7 @@ class MyProvider(Provider):
 
     def parse_webhook(self, payload: bytes, headers: dict[str, str]) -> WebhookEvent:
         from merchants.webhooks import parse_event
+
         return parse_event(payload, provider=self.key)
 ```
 
@@ -89,6 +90,7 @@ register_provider(MyProvider())
 
 # Now usable by key
 from merchants import Client
+
 client = Client(provider="my_gateway")
 ```
 
@@ -103,9 +105,9 @@ Use `normalise_state` to convert arbitrary status strings to `PaymentState` valu
 from merchants.providers import normalise_state
 from merchants.models import PaymentState
 
-state = normalise_state("paid")     # PaymentState.SUCCEEDED
+state = normalise_state("paid")  # PaymentState.SUCCEEDED
 state = normalise_state("pending")  # PaymentState.PENDING
-state = normalise_state("xyzzy")    # PaymentState.UNKNOWN
+state = normalise_state("xyzzy")  # PaymentState.UNKNOWN
 ```
 
 Or define your own mapping:

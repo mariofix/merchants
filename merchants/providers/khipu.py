@@ -18,9 +18,7 @@ from merchants.webhooks import WebhookVerificationError, verify_khipu_signature
 try:
     import khipu_tools
 except ImportError as exc:  # pragma: no cover
-    raise ImportError(
-        "khipu-tools is required for KhipuProvider. Install it with: pip install khipu-tools"
-    ) from exc
+    raise ImportError("khipu-tools is required for KhipuProvider. Install it with: pip install khipu-tools") from exc
 
 # Khipu payment statuses
 _KHIPU_STATE_MAP: dict[str, PaymentState] = {
@@ -48,10 +46,14 @@ class KhipuProvider(Provider):
     key = "khipu"
     name = "Khipu"
     author = "mariofix"
-    version = "2016.3.0"
+    version = "2016.9.0"
     description = "Khipu payment gateway for Chile, powered by khipu-tools."
     url = "https://khipu.com"
     accepts_notify_url = "notify_url"
+    # Khipu's payer_email is optional per their Payments.create docs.
+    checkout_fields = {"email": "payer_email"}
+    checkout_required = {"amount", "currency", "subject"}
+    config_required = {"api_key": "KHIPU_API_KEY"}  # nosec B105 -- config key name, not a credential value
 
     def __init__(
         self,
@@ -106,8 +108,8 @@ class KhipuProvider(Provider):
             params["notify_url"] = notify_url
         if metadata and metadata.get("order_id"):
             params["transaction_id"] = str(metadata["order_id"])
-        if kwargs.get("payer_email"):
-            params["payer_email"] = kwargs["payer_email"]
+        if kwargs.get("email"):
+            params["email"] = kwargs["email"]
         if kwargs.get("expires_date"):
             params["expires_date"] = kwargs["expires_date"]
         body = kwargs.get("body", "")
@@ -136,9 +138,7 @@ class KhipuProvider(Provider):
         )
 
     def get_payment(self, payment_id: str) -> PaymentStatus:
-        logger.debug(
-            "khipu.py: KhipuProvider.get_payment called with payment_id=%s", payment_id
-        )
+        logger.debug("khipu.py: KhipuProvider.get_payment called with payment_id=%s", payment_id)
         try:
             result = khipu_tools.Payments.get(payment_id=payment_id)
         except Exception as exc:
@@ -183,15 +183,11 @@ class KhipuProvider(Provider):
         logger.debug("khipu.py: KhipuProvider.parse_webhook called")
 
         # Verify signature when a webhook secret is configured
-        sig_header = headers.get("X-Khipu-Signature") or headers.get(
-            "x-khipu-signature", ""
-        )
+        sig_header = headers.get("X-Khipu-Signature") or headers.get("x-khipu-signature", "")
         if self._webhook_secret and sig_header:
             verify_khipu_signature(payload, self._webhook_secret, sig_header)
         elif self._webhook_secret and not sig_header:
-            raise WebhookVerificationError(
-                "Webhook secret is configured but x-khipu-signature header is missing."
-            )
+            raise WebhookVerificationError("Webhook secret is configured but x-khipu-signature header is missing.")
 
         try:
             data: dict[str, Any] = json.loads(payload)

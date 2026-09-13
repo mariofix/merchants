@@ -41,6 +41,7 @@ class MiProveedor(Provider):
 
     def parse_webhook(self, payload: bytes, headers: dict[str, str]) -> WebhookEvent:
         from merchants.webhooks import parse_event
+
         return parse_event(payload, provider=self.key)
 ```
 
@@ -89,6 +90,7 @@ register_provider(MiProveedor())
 
 # Ahora usable por clave
 from merchants import Client
+
 client = Client(provider="mi_gateway")
 ```
 
@@ -103,9 +105,9 @@ Usa `normalise_state` para convertir cadenas de estado arbitrarias a valores `Pa
 from merchants.providers import normalise_state
 from merchants.models import PaymentState
 
-state = normalise_state("paid")     # PaymentState.SUCCEEDED
+state = normalise_state("paid")  # PaymentState.SUCCEEDED
 state = normalise_state("pending")  # PaymentState.PENDING
-state = normalise_state("xyzzy")    # PaymentState.UNKNOWN
+state = normalise_state("xyzzy")  # PaymentState.UNKNOWN
 ```
 
 O define tu propio mapeo:

@@ -69,6 +69,7 @@ class HmacAuth(AuthStrategy):
 
     def apply(self, headers: dict[str, str]) -> dict[str, str]:
         import hashlib, hmac, time
+
         ts = str(int(time.time()))
         sig = hmac.new(self._secret.encode(), ts.encode(), hashlib.sha256).hexdigest()
         headers["X-Timestamp"] = ts

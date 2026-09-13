@@ -3,8 +3,12 @@
 from __future__ import annotations
 
 import json
+import logging
 from decimal import Decimal
 from typing import Any
+
+logger = logging.getLogger(__name__)
+logger.setLevel("DEBUG")
 
 from merchants.amount import from_minor_units, to_minor_units
 from merchants.models import CheckoutSession, PaymentStatus, WebhookEvent
@@ -27,17 +31,31 @@ _ZERO_DECIMAL_CURRENCIES = {
 }
 
 
+def _flatten_params(d: dict[str, Any], prefix: str = "") -> dict[str, Any]:
+    """Flatten a nested dict into Stripe bracket-notation for form encoding."""
+    out: dict[str, Any] = {}
+    for k, v in d.items():
+        key = f"{prefix}[{k}]" if prefix else k
+        if isinstance(v, dict):
+            out.update(_flatten_params(v, key))
+        elif isinstance(v, list):
+            for i, item in enumerate(v):
+                if isinstance(item, dict):
+                    out.update(_flatten_params(item, f"{key}[{i}]"))
+                else:
+                    out[f"{key}[{i}]"] = item
+        else:
+            out[key] = v
+    return out
+
+
 class StripeProvider(Provider):
-    """Stripe-like provider stub.
+    """StripeProvider for merchants-sdk (no stripe sdk).
 
     Demonstrates:
     - Converting amounts to/from minor units (cents).
     - ``Authorization: Bearer <key>`` auth header.
     - Stripe-style status strings in state normalisation.
-
-    .. note::
-        This is a stub - it does not call the real Stripe API.
-        Replace ``base_url`` and inject a real transport to connect to Stripe.
 
     Args:
         api_key: Stripe secret key (``sk_test_…``).
@@ -48,9 +66,12 @@ class StripeProvider(Provider):
     key = "stripe"
     name = "Stripe"
     author = "mariofix"
-    version = "2026.3.0"
+    version = "2026.9.1"
     description = "Stripe payment gateway integration (stub). Converts amounts to minor units (cents)."
-    url = "https://stripe.com"
+    url = "https://docs.stripe.com"
+    config_required = {"api_key": "STRIPE_API_KEY"}  # nosec B105 -- config key name, not a credential value
+    checkout_required = {"mode", "line_items", "return_url", "success_url"}
+    checkout_fields = {"email": "customer_email"}
 
     def __init__(
         self,
@@ -59,6 +80,7 @@ class StripeProvider(Provider):
         *,
         transport: Transport | None = None,
     ) -> None:
+        logger.debug("stripe.py: StripeProvider.__init__ called")
         self._api_key = api_key
         self._base_url = base_url.rstrip("/")
         self._transport = transport or RequestsTransport()
@@ -78,6 +100,7 @@ class StripeProvider(Provider):
         metadata: dict[str, Any] | None = None,
         **kwargs: Any,
     ) -> CheckoutSession:
+        logger.debug(f"stripe.py: StripeProvider.create_checkout called with {amount=} {currency=}")
         decimals = self._currency_decimals(currency)
         unit_amount = to_minor_units(amount, decimals=decimals)
         payload: dict[str, Any] = {
@@ -97,18 +120,16 @@ class StripeProvider(Provider):
             "cancel_url": cancel_url,
             "metadata": metadata or {},
         }
+        logger.debug(f"stripe.py: StripeProvider.create_checkout.checkout_session {payload=}")
         resp = self._transport.send(
             "POST",
             f"{self._base_url}/v1/checkout/sessions",
             headers=self._headers(),
-            json=payload,
+            data=_flatten_params(payload),
         )
+        logger.debug(f"stripe.py: StripeProvider.create_checkout.checkout_session {resp=}")
         if not resp.ok:
-            body_msg = (
-                resp.body.get("error", {}).get("message", "")
-                if isinstance(resp.body, dict)
-                else ""
-            )
+            body_msg = resp.body.get("error", {}).get("message", "") if isinstance(resp.body, dict) else ""
             raise UserError(
                 body_msg or f"Stripe error {resp.status_code}",
                 code=str(resp.status_code),
@@ -126,9 +147,10 @@ class StripeProvider(Provider):
         )
 
     def get_payment(self, payment_id: str) -> PaymentStatus:
+        logger.debug(f"stripe.py: StripeProvider.get_payment called with {payment_id=}")
         resp = self._transport.send(
             "GET",
-            f"{self._base_url}/v1/payment_intents/{payment_id}",
+            f"{self._base_url}/v1/checkout/sessions/{payment_id}",
             headers=self._headers(),
         )
         body: dict[str, Any] = resp.body if isinstance(resp.body, dict) else {}
@@ -136,11 +158,7 @@ class StripeProvider(Provider):
         currency = str(body.get("currency", ""))
         amount_minor = body.get("amount")
         decimals = self._currency_decimals(currency)
-        amount_decimal = (
-            from_minor_units(int(amount_minor), decimals=decimals)
-            if amount_minor is not None
-            else None
-        )
+        amount_decimal = from_minor_units(int(amount_minor), decimals=decimals) if amount_minor is not None else None
         return PaymentStatus(
             payment_id=payment_id,
             state=normalise_state(raw_state),
@@ -151,6 +169,8 @@ class StripeProvider(Provider):
         )
 
     def parse_webhook(self, payload: bytes, headers: dict[str, str]) -> WebhookEvent:
+        logger.debug("stripe.py: StripeProvider.parse_webhook called")
+
         try:
             data: dict[str, Any] = json.loads(payload)
         except ValueError:

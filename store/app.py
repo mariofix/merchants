@@ -81,9 +81,7 @@ def create_app() -> Flask:
     app = Flask(__name__)
 
     app.config["SECRET_KEY"] = os.environ.get("SECRET_KEY", "dev-secret-change-me")
-    app.config["SQLALCHEMY_DATABASE_URI"] = os.environ.get(
-        "DATABASE_URL", "sqlite:///store.db"
-    )
+    app.config["SQLALCHEMY_DATABASE_URI"] = os.environ.get("DATABASE_URL", "sqlite:///store.db")
     app.config["MERCHANTS_URL_PREFIX"] = "/pay"
 
     # Optional: set a webhook base URL so providers can call back
@@ -132,9 +130,7 @@ def create_app() -> Flask:
                         "product_name": product["name"],
                     },
                 )
-                redirect_url = payment.response_payload.get(
-                    "redirect_url", url_for("payment_success")
-                )
+                redirect_url = payment.response_payload.get("redirect_url", url_for("payment_success"))
                 return redirect(redirect_url)
             except Exception as exc:
                 return render_template("checkout.html", product=product, error=str(exc))

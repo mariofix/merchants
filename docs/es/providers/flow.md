@@ -37,8 +37,8 @@ print(session.redirect_url)  # redirige al usuario a Flow aquí
 ```python
 status = client.payments.get("NUMERO_ORDEN_FLOW")
 
-print(status.state)     # ej. PaymentState.SUCCEEDED
-print(status.amount)    # ej. Decimal("9990")
+print(status.state)  # ej. PaymentState.SUCCEEDED
+print(status.amount)  # ej. Decimal("9990")
 print(status.currency)  # "CLP"
 ```
 
@@ -48,9 +48,9 @@ print(status.currency)  # "CLP"
 import merchants
 
 event = merchants.parse_event(payload, provider="flow")
-print(event.event_type)   # "payment.notification"
-print(event.payment_id)   # Número de orden Flow
-print(event.state)        # ej. PaymentState.SUCCEEDED
+print(event.event_type)  # "payment.notification"
+print(event.payment_id)  # Número de orden Flow
+print(event.state)  # ej. PaymentState.SUCCEEDED
 ```
 
 ## Parámetros

@@ -4,6 +4,7 @@ from __future__ import annotations
 
 from merchants.amount import from_minor_units, to_decimal_string, to_minor_units
 from merchants.auth import ApiKeyAuth, AuthStrategy, TokenAuth
+from merchants.autoload import load_providers_from_config
 from merchants.client import Client, PaymentsResource
 from merchants.models import (
     CheckoutSession,
@@ -71,4 +72,6 @@ __all__ = [
     "verify_signature",
     # Version
     "__version__",
+    # Provider Autoload
+    "load_providers_from_config",
 ]

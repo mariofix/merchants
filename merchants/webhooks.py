@@ -89,9 +89,7 @@ def verify_khipu_signature(
             s_value = val
 
     if not t_value or not s_value:
-        raise WebhookVerificationError(
-            "Malformed x-khipu-signature header: missing t= or s= component."
-        )
+        raise WebhookVerificationError("Malformed x-khipu-signature header: missing t= or s= component.")
 
     # Build the signed string: "<timestamp>.<body>"
     to_hash = f"{t_value}.".encode() + payload
