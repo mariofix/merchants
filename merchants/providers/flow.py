@@ -48,7 +48,7 @@ class FlowProvider(Provider):
     key = "flow"
     name = "Flow.cl"
     author = "mariofix"
-    version = "2026.5.0"
+    version = "2026.9.0"
     description = "Flow.cl payment gateway for Chile, powered by pyflowcl."
     url = "https://www.flow.cl"
     # Flow's payment/create marks "email" as a required field.

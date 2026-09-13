@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import json
+import logging
 from decimal import Decimal
 from typing import Any
 
@@ -11,57 +12,16 @@ from merchants.models import CheckoutSession, PaymentStatus, WebhookEvent
 from merchants.providers import Provider, UserError, normalise_state
 from merchants.transport import RequestsTransport, Transport
 
+logger = logging.getLogger(__name__)
+
 
 class PayPalProvider(Provider):
-    """PayPal-like provider stub.
-
-    ```
-    import requests
-
-    url = "https://api-m.sandbox.paypal.com/v2/checkout/orders"
-    body = \"\"\"{
-    "intent": "CAPTURE",
-    "purchase_units": [
-        {
-        "amount": {
-            "currency_code": "USD",
-            "value": "29"
-        },
-        "custom_id": "30-minutos-latam",
-        "description": "30 Minutos"
-        }
-    ],
-    "processing_instruction": "ORDER_COMPLETE_ON_PAYMENT_APPROVAL",
-    "payer": {
-        "email_address": "email@domain.cl"
-    },
-    "application_context": {
-        "brand_name": "Fonotarot",
-        "locale": "es",
-        "return_url": "https://fonotarot.com/exito",
-        "user_action": "PAY_NOW",
-        "cancel_url": "https://fonotarot.com/falla",
-        "shipping_preference": "NO_SHIPPING",
-        "landing_page": "BILLING"
-    }
-    }\"\"\"
-    response = requests.request("POST", url, data = body, headers = {
-    "Content-Type": "application/json",
-    "PayPal-Request-Id": uuid.UUID4,
-    "Prefer": "return=representation",
-    "Authorization": "Bearer __TOKEN__"
-    })
-
-    ```
+    """PayPalProvider for merchants-sdk (no paypalserversdk).
 
     Demonstrates:
     - Sending amounts as decimal strings (e.g. ``"19.99"``).
     - ``Authorization: Bearer <token>`` auth header.
     - PayPal-style status strings in state normalisation.
-
-    .. note::
-        This is a stub - it does not call the real PayPal API.
-        Replace ``base_url`` and inject a real transport to connect to PayPal.
 
     Args:
         access_token: OAuth access token.
@@ -72,13 +32,14 @@ class PayPalProvider(Provider):
     key = "paypal"
     name = "PayPal"
     author = "mariofix"
-    version = "2026.3.0"
-    description = "PayPal payment gateway integration (stub). Sends amounts as decimal strings."
+    version = "2026.9.1"
+    description = "PayPal payment gateway integration. Sends amounts as decimal strings."
     url = "https://developer.paypal.com"
     config_required = {
-        "client_id": "PAYPAL_CLIENT_ID",
-        "access_token": "PAYPAL_ACCESS_TOKEN",
-    }  # nosec B105 -- config key name, not a credential value
+        "client_id": "PAYPAL_CLIENT_ID",  # nosec B105 -- config key name, not a credential value
+        "access_token": "PAYPAL_ACCESS_TOKEN",  # nosec B105 -- config key name, not a credential value
+    }
+    checkout_fields = {"email": "email"}
 
     def __init__(
         self,
@@ -138,7 +99,7 @@ class PayPalProvider(Provider):
                     "description": metadata.get("description") if metadata else None,
                 }
             ],
-            "payer": {"email_address": metadata.get("email") if metadata else None},
+            "payer": {"email_address": kwargs.get("email")},
             "processing_instruction": "ORDER_COMPLETE_ON_PAYMENT_APPROVAL",
             "application_context": {
                 "return_url": success_url,
@@ -148,7 +109,7 @@ class PayPalProvider(Provider):
                 "landing_page": "BILLING",
             },
         }
-
+        logger.debug(f"paypal.py: PayPalProvider.create_checkout {payload=}")
         resp = self._transport.send(
             "POST",
             f"{self._base_url}/v2/checkout/orders",

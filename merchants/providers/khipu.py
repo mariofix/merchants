@@ -46,7 +46,7 @@ class KhipuProvider(Provider):
     key = "khipu"
     name = "Khipu"
     author = "mariofix"
-    version = "2016.3.0"
+    version = "2016.9.0"
     description = "Khipu payment gateway for Chile, powered by khipu-tools."
     url = "https://khipu.com"
     accepts_notify_url = "notify_url"
@@ -108,8 +108,8 @@ class KhipuProvider(Provider):
             params["notify_url"] = notify_url
         if metadata and metadata.get("order_id"):
             params["transaction_id"] = str(metadata["order_id"])
-        if kwargs.get("payer_email"):
-            params["payer_email"] = kwargs["payer_email"]
+        if kwargs.get("email"):
+            params["email"] = kwargs["email"]
         if kwargs.get("expires_date"):
             params["expires_date"] = kwargs["expires_date"]
         body = kwargs.get("body", "")

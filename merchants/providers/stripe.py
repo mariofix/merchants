@@ -50,16 +50,12 @@ def _flatten_params(d: dict[str, Any], prefix: str = "") -> dict[str, Any]:
 
 
 class StripeProvider(Provider):
-    """Stripe-like provider stub.
+    """StripeProvider for merchants-sdk (no stripe sdk).
 
     Demonstrates:
     - Converting amounts to/from minor units (cents).
     - ``Authorization: Bearer <key>`` auth header.
     - Stripe-style status strings in state normalisation.
-
-    .. note::
-        This is a stub - it does not call the real Stripe API.
-        Replace ``base_url`` and inject a real transport to connect to Stripe.
 
     Args:
         api_key: Stripe secret key (``sk_test_…``).
@@ -70,10 +66,12 @@ class StripeProvider(Provider):
     key = "stripe"
     name = "Stripe"
     author = "mariofix"
-    version = "2026.3.0"
+    version = "2026.9.1"
     description = "Stripe payment gateway integration (stub). Converts amounts to minor units (cents)."
-    url = "https://stripe.com"
+    url = "https://docs.stripe.com"
     config_required = {"api_key": "STRIPE_API_KEY"}  # nosec B105 -- config key name, not a credential value
+    checkout_required = {"mode", "line_items", "return_url", "success_url"}
+    checkout_fields = {"email": "customer_email"}
 
     def __init__(
         self,

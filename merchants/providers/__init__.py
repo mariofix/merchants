@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import functools
+import logging
 from abc import ABC, abstractmethod
 from decimal import Decimal
 from typing import Any
@@ -10,6 +11,8 @@ from typing import Any
 from pydantic import BaseModel, model_validator
 
 from merchants.models import CheckoutSession, PaymentState, PaymentStatus, WebhookEvent
+
+logger = logging.getLogger(__name__)
 
 
 class UserError(Exception):
@@ -106,17 +109,33 @@ class Provider(ABC):
         """
         super().__init_subclass__(**kwargs)
         if "create_checkout" not in cls.__dict__:
+            logger.debug(f"{cls.__name__} has no create_checkout; skipping wrap")
             return
         original = cls.__dict__["create_checkout"]
+        logger.debug(
+            f"Registered provider subclass {cls.__name__} with {cls.checkout_required=} {cls.checkout_fields=}"
+        )
 
         @functools.wraps(original)
         def wrapped(self, amount, currency, success_url, cancel_url, metadata=None, **ckwargs):
+            logger.debug(
+                f"[{self.key}] create_checkout called with {amount=} {currency=} {success_url=} {cancel_url=} {metadata=} {ckwargs=}"
+            )
             missing = [f for f in self.checkout_required if f not in ckwargs]
             if missing:
+                logger.debug(
+                    f"[{self.key}] Checkout validation failed: {missing=} {self.checkout_required=} {ckwargs=}"
+                )
                 raise UserError(f"{self.key} requires: {', '.join(missing)}", code="missing_fields")
             for canonical, provider_key in self.checkout_fields.items():
                 if canonical in ckwargs and canonical != provider_key:
+                    logger.debug(
+                        f"[{self.key}] Remapping checkout kwarg {canonical=} to {provider_key=}"
+                    )
                     ckwargs[provider_key] = ckwargs.pop(canonical)
+            logger.debug(
+                f"[{self.key}] Forwarding to {type(self).__name__}.{original.__name__} with {ckwargs=}"
+            )
             return original(self, amount, currency, success_url, cancel_url, metadata, **ckwargs)
 
         cls.create_checkout = wrapped
