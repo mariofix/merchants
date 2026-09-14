@@ -37,7 +37,7 @@ class PayPalProvider(Provider):
     url = "https://developer.paypal.com"
     config_required = {
         "client_id": "PAYPAL_CLIENT_ID",  # nosec B105 -- config key name, not a credential value
-        "access_token": "PAYPAL_ACCESS_TOKEN",  # nosec B105 -- config key name, not a credential value
+        "secret_key": "PAYPAL_SECRET_KEY",  # nosec B105 -- config key name, not a credential value
     }
     checkout_fields = {"email": "email"}
 
