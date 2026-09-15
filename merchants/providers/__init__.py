@@ -253,6 +253,7 @@ _STATE_MAP: dict[str, PaymentState] = {
     "canceled": PaymentState.CANCELLED,
     "cancelled": PaymentState.CANCELLED,
     "failed": PaymentState.FAILED,
+    "checkout.session.completed": PaymentState.SUCCEEDED,
     # PayPal-style
     "created": PaymentState.PENDING,
     "approved": PaymentState.PROCESSING,

@@ -10,7 +10,6 @@ from decimal import Decimal
 from typing import Any
 
 logger = logging.getLogger(__name__)
-logger.setLevel("DEBUG")
 
 from merchants.amount import from_minor_units, to_minor_units
 from merchants.models import CheckoutSession, PaymentStatus, WebhookEvent
