@@ -38,6 +38,7 @@ class PayPalProvider(Provider):
     config_required = {
         "client_id": "PAYPAL_CLIENT_ID",  # nosec B105 -- config key name, not a credential value
         "secret_key": "PAYPAL_SECRET_KEY",  # nosec B105 -- config key name, not a credential value
+        "base_url": "PAYPAL_BASE_URL",
     }
     checkout_fields = {"email": "email"}
 
@@ -49,6 +50,7 @@ class PayPalProvider(Provider):
         *,
         transport: Transport | None = None,
     ) -> None:
+        logger.debug("paypal.py: PaypalProvider.__init__ called")
         self._client_id = client_id
         self._secret_key = secret_key
         self._base_url = base_url.rstrip("/")
@@ -62,7 +64,7 @@ class PayPalProvider(Provider):
 
     def _get_token(self) -> str:
         """Creates a PayPal bearer token"""
-
+        logger.debug("paypal.py: PaypalProvider._get_token called")
         resp = self._transport.send(
             "POST",
             f"{self._base_url}/v1/oauth2/token",
@@ -70,9 +72,11 @@ class PayPalProvider(Provider):
             data={"grant_type": "client_credentials"},
             auth=(self._client_id, self._secret_key),
         )
+        logger.debug(f"paypal.py: PaypalProvider._get_token {resp=}")
 
         if not resp.ok:
-            raise UserError("could not get access_token from paypal")
+            raise UserError(f"paypal.py: PaypalProvider._get_token {resp.ok=}")
+        
         body: dict[str, Any] = resp.body if isinstance(resp.body, dict) else {}
         self._access_token = body.get("access_token", False)
         return self._access_token
