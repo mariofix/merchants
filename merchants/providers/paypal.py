@@ -72,10 +72,9 @@ class PayPalProvider(Provider):
             data={"grant_type": "client_credentials"},
             auth=(self._client_id, self._secret_key),
         )
-        logger.debug(f"paypal.py: PaypalProvider._get_token {resp=}")
 
         if not resp.ok:
-            raise UserError(f"paypal.py: PaypalProvider._get_token {resp.ok=}")
+            raise UserError(f"paypal.py: PaypalProvider._get_token {resp.ok=} {resp.status_code=} {resp.body=}")
         
         body: dict[str, Any] = resp.body if isinstance(resp.body, dict) else {}
         self._access_token = body.get("access_token", False)
@@ -99,8 +98,8 @@ class PayPalProvider(Provider):
                         "currency_code": currency.upper(),
                         "value": to_decimal_string(amount),
                     },
-                    "custom_id": metadata.get("slug") if metadata else None,
-                    "description": metadata.get("description") if metadata else None,
+                    "custom_id": metadata.get("order_id") if metadata else None,
+                    "description": kwargs.get("subject"),
                 }
             ],
             "payer": {"email_address": kwargs.get("email")},
