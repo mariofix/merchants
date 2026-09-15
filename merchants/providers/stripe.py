@@ -185,7 +185,7 @@ class StripeProvider(Provider):
             data = {}
         event_type = str(data.get("type", "unknown"))
         obj = data.get("data", {}).get("object", {})
-        raw_state = str(obj.get("status", "unknown"))
+        raw_state = str(obj.get("event_type", "unknown"))
         payment_id = obj.get("id") or obj.get("payment_intent")
         return WebhookEvent(
             event_id=data.get("id"),
