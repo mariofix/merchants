@@ -176,8 +176,7 @@ class StripeProvider(Provider):
         logger.debug("stripe.py: StripeProvider.parse_webhook called")
 
         if not self._verify_signature(payload, headers):
-
-            logger.warning(
+            logger.error(
                 "stripe.py: StripeProvider.parse_webhook signature verification failed, you may want to verify this"
             )
 
