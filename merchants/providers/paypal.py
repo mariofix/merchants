@@ -64,7 +64,7 @@ class PayPalProvider(Provider):
 
     def _get_token(self) -> str:
         """Creates a PayPal bearer token"""
-        logger.debug("paypal.py: PaypalProvider._get_token called")
+        logger.debug(f"paypal.py: PaypalProvider._get_token called POST {self._base_url}/v1/oauth2/token")
         resp = self._transport.send(
             "POST",
             f"{self._base_url}/v1/oauth2/token",
