@@ -75,7 +75,7 @@ class PayPalProvider(Provider):
 
         if not resp.ok:
             raise UserError(f"paypal.py: PaypalProvider._get_token {resp.ok=} {resp.status_code=} {resp.body=}")
-        
+
         body: dict[str, Any] = resp.body if isinstance(resp.body, dict) else {}
         self._access_token = body.get("access_token", False)
         return self._access_token

@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+import hashlib
+import hmac
 import json
 import logging
 from decimal import Decimal
@@ -70,17 +72,20 @@ class StripeProvider(Provider):
     description = "Stripe payment gateway integration (stub). Converts amounts to minor units (cents)."
     url = "https://docs.stripe.com"
     config_required = {"api_key": "STRIPE_API_KEY"}  # nosec B105 -- config key name, not a credential value
+    config_optional = {"api_secret": "STRIPE_API_SECRET"}  # nosec B105 -- config key name, not a credential value
     checkout_fields = {"email": "customer_email"}
 
     def __init__(
         self,
         api_key: str,
         base_url: str = "https://api.stripe.com",
+        api_secret: str | None = None,
         *,
         transport: Transport | None = None,
     ) -> None:
         logger.debug("stripe.py: StripeProvider.__init__ called")
         self._api_key = api_key
+        self._api_secret = api_secret
         self._base_url = base_url.rstrip("/")
         self._transport = transport or RequestsTransport()
 
@@ -170,6 +175,12 @@ class StripeProvider(Provider):
     def parse_webhook(self, payload: bytes, headers: dict[str, str]) -> WebhookEvent:
         logger.debug("stripe.py: StripeProvider.parse_webhook called")
 
+        if not self._verify_signature(payload, headers):
+
+            logger.warning(
+                "stripe.py: StripeProvider.parse_webhook signature verification failed, you may want to verify this"
+            )
+
         try:
             data: dict[str, Any] = json.loads(payload)
         except ValueError:
@@ -186,3 +197,26 @@ class StripeProvider(Provider):
             provider=self.key,
             raw=data,
         )
+
+    def _verify_signature(self, payload: bytes, headers: dict[str, str]) -> bool:
+        """Verify Stripe-Signature header per https://docs.stripe.com/webhooks/signature.
+
+        Returns True (and skips verification) when no webhook secret is configured.
+        """
+        if not self._api_secret:
+            logger.warning(
+                "stripe.py: STRIPE_API_SECRET not configured, skipping webhook "
+                "signature verification. See https://docs.stripe.com/webhooks/signature"
+            )
+            return True
+
+        sig_header = headers.get("Stripe-Signature") or headers.get("stripe-signature", "")
+        parts = dict(item.split("=", 1) for item in sig_header.split(",") if "=" in item)
+        timestamp, v1_sig = parts.get("t"), parts.get("v1")
+        if not timestamp or not v1_sig:
+            logger.debug("stripe.py: missing t/v1 in Stripe-Signature header")
+            return False
+
+        signed_payload = f"{timestamp}.{payload.decode()}".encode()
+        expected_sig = hmac.new(self._api_secret.encode(), signed_payload, hashlib.sha256).hexdigest()
+        return hmac.compare_digest(expected_sig, v1_sig)
