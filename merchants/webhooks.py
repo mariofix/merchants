@@ -43,8 +43,7 @@ def verify_signature(
 
     # Strip optional prefix from provided signature
     provided = signature
-    if provided.startswith(header_prefix):
-        provided = provided[len(header_prefix) :]
+    provided = provided.removeprefix(header_prefix)
 
     if not hmac.compare_digest(expected_hex, provided):
         raise WebhookVerificationError("Webhook signature verification failed.")
